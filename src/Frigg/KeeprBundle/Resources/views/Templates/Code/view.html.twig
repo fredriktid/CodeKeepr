@@ -1,0 +1,9 @@
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% block title -%}
+	{{ object.title }}
+{%- endblock title %}
+
+{% block body %}
+	{% include 'FriggKeeprBundle:Templates:Parts/accordion.html.twig' with {'collection': [object], 'expand_first': 1} %}
+{%- endblock body %}

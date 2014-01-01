@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 Error</title>
+		<link href="{{ asset('bundles/hollendercode/css/bootstrap.css') }}" rel="stylesheet" media="screen">
+		<link href="{{ asset('bundles/hollendercode/css/bootstrap-responsive.css') }}" rel="stylesheet" media="screen">
+		<style>
+		.center {text-align: center; margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto;}
+		.container-fluid {margin-top: 50px;}
+		</style>	
+    </head>
+    <body>
+		<div class="container-fluid">
+			<div class="center">
+				<h1>Not Found <small><font face="Tahoma" color="red">Error 404</font></small></h1>
+				<br />
+				<p>Remain calm. The fact is that this page doesn't exist. Atleast not anymore, who knows why</b></p>
+				<a href="{{ path('home') }}" class="btn btn-large btn-info"><i class="icon-home icon-white"></i> I wanna go back</a>
+			</div>
+		</div>
+	</body>
+</html>

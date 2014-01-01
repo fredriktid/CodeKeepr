@@ -1,0 +1,91 @@
+legend {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#sidebar input.input-medium {
+	margin-bottom: 5px;
+}
+
+h1 {
+    font-family: 'Lobster', Georgia, Times, serif;
+    font-size: 40px;
+}
+
+h1 a, h1 a:hover {
+	color: #444;
+	text-decoration: none;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.nav-wrap {
+    border-bottom: 1px solid #EEE;
+}
+
+.nav-pills {
+    margin: 0;
+}
+
+.nav-section {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.nav-logo {
+    margin: 10px 20px 0 0;
+}
+
+.new-form textarea {
+	width: 600px;
+	height: 200px;
+}
+
+.post-tags a:link,
+.post-tags a:hover,
+.post-tags a:visited {
+    text-decoration: none;
+}
+
+.accordion-heading .accordion-toggle {
+    display: inline-block;
+    padding: 8px 4px;
+}
+
+.accordion-heading .accordion-language {
+    padding: 8px 0 8px 12px;
+}
+
+pre.prettyprint {
+	margin-bottom: 5px;
+}
+
+.well {
+	padding: 5px !important;
+}
+
+.sidebar-nav-fixed {
+     position:fixed;
+     top:60px;
+     width:21.97%;
+ }
+
+ @media (max-width: 767px) {
+     .sidebar-nav-fixed {
+         width:auto;
+     }
+ }
+
+ @media (max-width: 979px) {
+     .sidebar-nav-fixed {
+         position:static;
+        width: auto;
+     }
+ }
+
+ .accordion-credit {
+    margin: -10px 15px 5px 0;
+ }

@@ -1,0 +1,13 @@
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% block body -%}
+    {% if collection %}
+        <div class="accordion" id="accordion2">
+            {% for post in collection %}
+                {% include 'FriggKeeprBundle:Post:accordion.html.twig' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-info">Nothing here yet</p>
+    {% endif %}
+{% endblock %}

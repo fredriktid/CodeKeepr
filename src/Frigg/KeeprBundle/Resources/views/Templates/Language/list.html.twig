@@ -1,0 +1,5 @@
+{% if collection %}
+	{% for item in collection %}
+		<li{% if current_path is defined and current_path == path('language_view', {'id': item.id}) %} class="active"{% endif %}><a href="{{ path('language_view', {'id': item.id}) }}">{{ item.name }}</a></li>
+	{% endfor %}
+{% endif %}

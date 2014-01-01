@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<orm-designer version="2.2.1.736" name="CodeKeepr" mvc="Symfony2" orm="Doctrine2" uuid="4a14caae-a97d-46aa-bcac-5fd4c6bc12d0">
+  <external-module storage-path="../src/Frigg/KeeprBundle/Entity/Entity.module.xml"/>
+  <visual-data>
+    <module uuid="08564a2d-5d94-4cc3-a6b1-f9fca411f917" bk-color="4294702841" position-x="271" position-y="186" size-x="319" size-x2="107" size-y="280" size-y2="100"/>
+    <project uuid="4a14caae-a97d-46aa-bcac-5fd4c6bc12d0" size-x="98" size-x2="843" size-y="144" size-y2="557"/>
+    <entity uuid="81b8bfd2-3479-4ae6-8d2f-97596ed30f9d" position-x="-175" position-y="-154" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <entity uuid="f87c92d2-c593-4525-bc84-e4a7fe24ec16" position-x="20" position-y="40" size-x="0" size-x2="67" size-y="0" size-y2="31"/>
+  </visual-data>
+</orm-designer>

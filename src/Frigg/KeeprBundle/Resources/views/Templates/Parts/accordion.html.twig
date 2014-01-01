@@ -1,0 +1,30 @@
+
+{% if collection %}
+	<div class="accordion" id="accordion2">
+		{% for item in collection if item.isPrivate == false %}
+			<div class="accordion-group">
+				<div class="accordion-heading">
+					<div class="accordion-toggle pull-right">
+						<a href="{{ path('language_view', {id: item.language.id}) }}">{{ item.language.name }}</a>
+					</div>
+					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#code-{{ item.id }}">
+						{{ item.title }}
+					</a>
+				</div>
+				<div id="code-{{ item.id }}" class="accordion-body collapse{% if loop.first and expand_first is defined %} in{% endif %}">
+					<div class="accordion-inner">
+<pre class="prettyprint lang-{{  item.language.identifier }}">
+{{ item.content|trim }}
+</pre>
+					</div>
+					<div class="accordion-credit pull-right">
+						<small>Filed by <a href="{{ path('user_view', {id: item.user.id}) }}">{{ item.user.username }}</a> - <a href="{{ path('code_view', {id: item.id}) }}">Link</a></small>
+					</div>
+				</div>
+			</div>
+		{% else %}
+				<p>Nothing here yet...</p>
+		{% endfor %}
+
+	</div>
+{% endif %}

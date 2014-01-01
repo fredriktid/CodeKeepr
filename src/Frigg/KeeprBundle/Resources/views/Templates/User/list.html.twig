@@ -1,0 +1,6 @@
+{% if collection %}
+	{{ app.request.attributes.get('_route') }}
+	{% for item in collection %}
+		<li><a href="{{ path('user_view', {id: item.id}) }}">{{ item.username }}</a></li>
+	{% endfor %}
+{% endif %}

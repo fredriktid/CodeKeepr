@@ -1,0 +1,8 @@
+Frigg\KeeprBundle\Entity\Code:
+    properties:
+        title:
+            - NotBlank: ~
+        content:
+            - NotBlank: ~
+        language:
+            - NotBlank: ~
