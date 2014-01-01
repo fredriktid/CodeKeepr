@@ -4,6 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Tag
 {
@@ -15,23 +16,28 @@ class Tag
     private $id;
 
     /**
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(type="string", unique=false, length=255)
      */
     private $name;
 
     /**
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(type="string", unique=false, length=255)
      */
-    private $date;
+    private $identifier;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\TagType", inversedBy="Tags")
-     * @ORM\JoinColumn(name="tag_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="tag_type_id", referencedColumnName="id", nullable=true)
      */
     private $TagType;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Post", inversedBy="Tags")
+     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Post", inversedBy="Tags", cascade={"persist"})
      * @ORM\JoinTable(
      *     name="PostToTag",
      *     joinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false)},
@@ -39,7 +45,6 @@ class Tag
      * )
      */
     private $Posts;
-
 
     /**
      * Constructor
@@ -73,6 +78,7 @@ class Tag
     public function setName($name)
     {
         $this->name = $name;
+        $this->setIdentifier($name);
 
         return $this;
     }
@@ -88,26 +94,72 @@ class Tag
     }
 
     /**
-     * Set date
+     * Sanitize a string to create an identifier
      *
-     * @param string $date
+     * @param string $string
+     * @return string
+     */
+    public function sanitize($string)
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
+    }
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
      * @return Tag
      */
-    public function setDate($date)
+    public function setIdentifier($identifier)
     {
-        $this->date = $date;
+        $this->identifier = $this->sanitize($identifier);
 
         return $this;
     }
 
     /**
-     * Get date
+     * Get identifier
      *
      * @return string
      */
-    public function getDate()
+    public function getIdentifier()
     {
-        return $this->date;
+        return $this->identifier;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updateTimestamps()
+    {
+        // update created time
+        if ($this->getCreatedAt() == null) {
+            $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+        }
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Flight
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
 
     /**
@@ -141,7 +193,7 @@ class Tag
      */
     public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
     {
-        $this->Posts[] = $posts;
+        $this->Posts->add($posts);
 
         return $this;
     }

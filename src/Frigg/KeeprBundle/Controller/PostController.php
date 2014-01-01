@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Frigg\KeeprBundle\Entity\Post;
+use Frigg\KeeprBundle\Entity\Tag;
 use Frigg\KeeprBundle\Form\PostType;
 
 /**
@@ -29,7 +30,10 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $collection = $em->getRepository('FriggKeeprBundle:Post')->findAll();
+        $collection = $em->getRepository('FriggKeeprBundle:Post')->findBy(
+            array(),
+            array('created_at' => 'DESC')
+        );
 
         return array(
             'collection' => $collection,
@@ -49,10 +53,33 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            // set user
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
-            $em = $this->getDoctrine()->getManager();
+            // re-use existing tags based on identifier
+            // does not cascade on persist because we don't want duplicate tags
+            foreach ($entity->getTags() as $currentTag) {
+                $tagName = $currentTag->getName();
+                if (!$currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($currentTag->getIdentifier())) {
+                    $currentTag = new Tag;
+                    $currentTag->setName($tagName);
+                    $currentTag->addPost($entity);
+                    $em->persist($currentTag);
+                    $em->flush();
+                    $entity->addTag($currentTag);
+                } else {
+                    if (!$currentTag->getPosts()->contains($entity)) {
+                        //$currentTag->addPost($entity);
+                        //$em->persist($currentTag);
+                        //$em->flush();
+                        $entity->addTag($currentTag);
+                    }
+                }
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -184,11 +211,15 @@ class PostController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Post entity.');
+        }
+
+        $originalTags = new ArrayCollection();
+        foreach ($entity->getTags() as $tag) {
+            $originalTags->add($tag);
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -196,8 +227,16 @@ class PostController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+            foreach ($originalTags as $tag) {
+                if (false === $entity->getTags()->contains($tag)) {
+                    //$tag->getPosts()->removeElement($entity);
+                    $tag->removePost($entity);
+                    $em->persist($tag);
+                    //$em->remove($tag);
+                }
+            }
 
+            $em->flush();
             return $this->redirect($this->generateUrl('post_edit', array('id' => $id)));
         }
 

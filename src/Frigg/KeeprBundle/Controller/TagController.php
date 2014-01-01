@@ -2,7 +2,7 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
-
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,14 +27,12 @@ class TagController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('FriggKeeprBundle:Tag')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
-
 
     /**
      * Groups and ranks all tags
@@ -43,46 +41,55 @@ class TagController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function groupAction()
+    public function groupAction(Request $request)
     {
+        $currentRoute = $request->query->get('route');
+
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
-        $group = $qb->select('t.id, t.name, COUNT(p.id) AS post_count')
+        $group = $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
            ->from('FriggKeeprBundle:Post', 'p')
            ->leftJoin('p.Tags', 't')
            ->where('t.id IS NOT NULL')
            ->orderBy('post_count', 'DESC')
-           ->groupBy('t.id')
+           ->groupBy('t.identifier')
            ->getQuery()->getResult();
 
         $group = (!$group ? array() : $group);
 
         return array(
+            'current_route' => $currentRoute,
             'group' => $group,
         );
     }
 
-
     /**
      * Finds and displays a Tag entity.
      *
-     * @Route("/{id}", name="tag_show")
+     * @Route("/{identifier}", name="tag_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction($identifier)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $tag = $em->getRepository('FriggKeeprBundle:Tag')->find($id);
-
-        if (!$tag) {
+        if (!$tag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
 
+        $qb = $em->createQueryBuilder();
+        $posts = $qb->select('p')
+           ->from('FriggKeeprBundle:Post', 'p')
+           ->leftJoin('p.Tags', 't')
+           ->where('t.identifier = :identifier')
+           ->orderBy('p.created_at', 'DESC')
+           ->setParameter('identifier', $identifier)
+           ->getQuery()->getResult();
+
         return array(
             'tag' => $tag,
+            'posts' => $posts,
         );
     }
 }

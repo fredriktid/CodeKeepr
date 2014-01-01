@@ -20,7 +20,7 @@ class User extends BaseUser
      */
     protected $id;
 
-    /** 
+    /**
      * @ORM\OneToMany(targetEntity="Frigg\KeeprBundle\Entity\Post", mappedBy="User")
      */
     private $Posts;
@@ -49,7 +49,7 @@ class User extends BaseUser
     public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
     {
         $this->Posts[] = $posts;
-    
+
         return $this;
     }
 
@@ -66,7 +66,7 @@ class User extends BaseUser
     /**
      * Get Posts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPosts()
     {

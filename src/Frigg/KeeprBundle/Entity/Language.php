@@ -66,6 +66,7 @@ class Language
     public function setName($name)
     {
         $this->name = $name;
+        $this->setIdentifier($name);
 
         return $this;
     }
@@ -80,15 +81,26 @@ class Language
         return $this->name;
     }
 
+   /**
+     * Sanitize a string to create an identifier
+     *
+     * @param string $string
+     * @return string
+     */
+    public function sanitize($string)
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
+    }
+
     /**
      * Set identifier
      *
      * @param string $identifier
-     * @return Language
+     * @return Post
      */
     public function setIdentifier($identifier)
     {
-        $this->identifier = $identifier;
+        $this->identifier = $this->sanitize($identifier);
 
         return $this;
     }

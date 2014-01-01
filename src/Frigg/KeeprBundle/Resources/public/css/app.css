@@ -74,6 +74,12 @@ h1 a, h1 a:hover {
     padding: 8px 0 8px 12px;
 }
 
+ul.tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
 pre.prettyprint {
 	margin-bottom: 5px;
 }

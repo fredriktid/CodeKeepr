@@ -30,11 +30,11 @@ class TagType
     {
         $this->Tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -50,14 +50,14 @@ class TagType
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -73,7 +73,7 @@ class TagType
     public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
     {
         $this->Tags[] = $tags;
-    
+
         return $this;
     }
 
@@ -90,7 +90,7 @@ class TagType
     /**
      * Get Tags
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTags()
     {

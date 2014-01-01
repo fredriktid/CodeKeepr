@@ -3,9 +3,9 @@
 {% block title %}{{ tag.name }}{% endblock %}
 
 {% block body -%}
-    {% if tag %}
+    {% if posts %}
         <div class="accordion" id="accordion2">
-            {% for post in tag.posts %}
+            {% for post in posts %}
                 {% include 'FriggKeeprBundle:Post:accordion.html.twig' %}
             {% endfor %}
         </div>

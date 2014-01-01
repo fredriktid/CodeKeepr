@@ -1,8 +1,9 @@
 {% if group %}
+    {{ current_route }}
     <ul class="nav nav-list">
     {% for tag in group %}
         <li class="nav-header btn">
-            <a href="{{ path('tag_show', {'id': tag.id}) }}">{{ tag.name }} ({{ tag.post_count }})</a>
+            <a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">{{ tag.name }} ({{ tag.post_count }})</a>
         </li>
     {% endfor %}
     </ul>

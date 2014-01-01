@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\PostRepository")
  */
 class Post
 {
@@ -29,9 +30,14 @@ class Post
     private $modified_at;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $topic;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=false, nullable=false)
+     */
+    private $identifier;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -45,7 +51,7 @@ class Post
     private $User;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Tag", mappedBy="Posts")
+     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Tag", mappedBy="Posts", cascade={"persist"})
      */
     private $Tags;
 
@@ -63,6 +69,11 @@ class Post
         $this->Tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->topic;
+    }
+
     /**
      * Id
      *
@@ -71,6 +82,40 @@ class Post
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Sanitize a string to create an identifier
+     *
+     * @param string $string
+     * @return string
+     */
+    public function sanitize($string)
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
+    }
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
+     * @return Post
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $this->sanitize($identifier);
+
+        return $this;
+    }
+
+    /**
+     * Get identifier
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 
     /**
@@ -132,7 +177,6 @@ class Post
         return $this->modified_at;
     }
 
-
     /**
      * Set topic
      *
@@ -142,7 +186,7 @@ class Post
     public function setTopic($topic)
     {
         $this->topic = $topic;
-
+        $this->setIdentifier($topic);
         return $this;
     }
 

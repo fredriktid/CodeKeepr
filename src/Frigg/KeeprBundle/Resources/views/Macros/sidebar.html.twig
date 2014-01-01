@@ -1,9 +1,0 @@
-{% macro users(collection, route, route_params) %}
-	{% if collection %}
-		{% set route = route|default('/') %}
-		{% set params = route_params|default(['bar']) %}
-		{% for item in collection %}
-			<li{% if item.id == params.0 and route == 'user_view' %} class="active"{% endif %}><a href="{{ path('user_view', {id: item.id}) }}">{{ item.username }}</a></li>
-		{% endfor %}
-	{% endif %}
-{% endmacro %}

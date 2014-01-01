@@ -11,6 +11,7 @@
 		{% block stylesheets %}{% endblock %}
     </head>
     <body>
+    	{% set currentRoute = app.request.attributes.get('_route') %}
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span2">
@@ -20,33 +21,33 @@
 						</h1>
 					</div>
 					<div class="sidebar-nav">
-						{{ render(controller('FriggKeeprBundle:Tag:group')) }}
+						{{ render(controller('FriggKeeprBundle:Tag:group', {'route': currentRoute})) }}
 					</div>
 				</div>
 				<div class="span10">
 					<div class="nav-section">
 						<ul class="nav nav-pills">
-						{% if is_granted('ROLE_USER') %}
-							<li><a href="{{ path('post_new') }}">+ Add code</a></li>
-							<li><a href="#">+ Profile</a></li>
-							<li><a href="{{ path('fos_user_security_logout') }}">+ Logout</a></li>
-						{% else %}
-							<li><a href="{{ path('fos_user_security_login') }}">+ Login</a></li>
-							<li><a href="{{ path('fos_user_registration_register') }}">+ Register</a></li>
-						{% endif %}
-						</ul>
-					</div>
-					<div class="nav-section pull-right">
-						<ul class="nav nav-pills">
 							<li>
 								<div class="input-append">
 							  		<input style="width: 200px;" id="appendedInputButton" type="text">
-							  		<button class="btn" type="button">Search</button>
+							  		<button class="btn" type="button"><i class="icon-search"></i></button>
 								</div>
 							</li>
 						</ul>
 					</div>
-
+					<div class="nav-section">
+						<ul class="nav nav-pills">
+						{% if is_granted('ROLE_USER') %}
+							<li><a href="{{ path('post_new') }}"><i class="icon-plus"></i> Add code</a></li>
+							<li><a href="#"><i class="icon-user"></i> My code</a></li>
+							<li><a href="#"><i class="icon-share-alt"></i> Share page</a></li>
+							<li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-arrow-right"></i> Logout</a></li>
+						{% else %}
+							<li><a href="{{ path('fos_user_security_login') }}"><i class="icon-arrow-left"></i> Login</a></li>
+							<li><a href="{{ path('fos_user_registration_register') }}"><i class="icon-edit"></i> Register</a></li>
+						{% endif %}
+						</ul>
+					</div>
 					{% block body %}{% endblock %}
 				</div>
 			</div>
