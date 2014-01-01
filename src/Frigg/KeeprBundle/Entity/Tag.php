@@ -193,7 +193,9 @@ class Tag
      */
     public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
     {
-        $this->Posts->add($posts);
+        if (!$this->Posts->contains($posts)) {
+            $this->Posts->add($posts);
+        }
 
         return $this;
     }

@@ -254,7 +254,9 @@ class Post
      */
     public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
     {
-        $this->Tags[] = $tags;
+        if (!$this->Tags->contains($tags)) {
+            $this->Tags->add($tags);
+        }
 
         return $this;
     }
