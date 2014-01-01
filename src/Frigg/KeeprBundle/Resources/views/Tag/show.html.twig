@@ -1,30 +1,15 @@
-{% extends '::base.html.twig' %}
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% block title %}{{ tag.name }}{% endblock %}
 
 {% block body -%}
-    <h1>Tag</h1>
-
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ entity.date }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('tag') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    {% if tag %}
+        <div class="accordion" id="accordion2">
+            {% for post in tag.posts %}
+                {% include 'FriggKeeprBundle:Post:accordion.html.twig' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-info">Nothing here yet</p>
+    {% endif %}
 {% endblock %}

@@ -75,14 +75,14 @@ class TagController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggKeeprBundle:Tag')->find($id);
+        $tag = $em->getRepository('FriggKeeprBundle:Tag')->find($id);
 
-        if (!$entity) {
+        if (!$tag) {
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
 
         return array(
-            'entity'      => $entity,
+            'tag' => $tag,
         );
     }
 }
