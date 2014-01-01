@@ -37,7 +37,7 @@ class Tag
     private $TagType;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Post", inversedBy="Tags", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Post", inversedBy="Tags")
      * @ORM\JoinTable(
      *     name="PostToTag",
      *     joinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false)},

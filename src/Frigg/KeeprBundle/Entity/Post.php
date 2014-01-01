@@ -51,7 +51,7 @@ class Post
     private $User;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Tag", mappedBy="Posts", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Frigg\KeeprBundle\Entity\Tag", mappedBy="Posts")
      */
     private $Tags;
 

@@ -49,6 +49,7 @@ class PostController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Post();
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -59,25 +60,21 @@ class PostController extends Controller
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
-            // re-use existing tags based on identifier
-            // does not cascade on persist because we don't want duplicate tags
-            foreach ($entity->getTags() as $currentTag) {
-                $tagName = $currentTag->getName();
-                if (!$currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($currentTag->getIdentifier())) {
-                    $currentTag = new Tag;
-                    $currentTag->setName($tagName);
+            // process tags
+            foreach ($entity->getTags() as $tag) {
+                // if the tag already exists we need to remove the new one from the collection
+                // and associate the existing tag with the new post entity
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                    $entity->getTags()->removeElement($tag);
+                    $entity->addTag($currentTag);
                     $currentTag->addPost($entity);
                     $em->persist($currentTag);
-                    $em->flush();
-                    $entity->addTag($currentTag);
-                } else {
-                    if (!$currentTag->getPosts()->contains($entity)) {
-                        //$currentTag->addPost($entity);
-                        //$em->persist($currentTag);
-                        //$em->flush();
-                        $entity->addTag($currentTag);
-                    }
+                    continue;
                 }
+
+                // if it does not exist, associate and persist
+                $tag->addPost($entity);
+                $em->persist($tag);
             }
 
             $em->persist($entity);
