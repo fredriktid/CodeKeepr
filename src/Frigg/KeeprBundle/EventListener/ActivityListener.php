@@ -8,7 +8,8 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 
 class ActivityListener
 {
-    protected $container;
+    protected $container = null;
+    protected $entity = null;
     protected $validEntities = array(
         'Post'
     );
@@ -18,23 +19,53 @@ class ActivityListener
         $this->container = $container;
     }
 
-    protected function isValidEntity($entity)
+    public function setEntity($entity)
     {
-        $classChunks = explode('\\', get_class($entity));
+        $this->entity = $entity;
+    }
+
+    protected function isValidEntity()
+    {
+        if (!is_object($this->entity)) {
+            return false;
+        }
+
+        $classChunks = explode('\\', get_class($this->entity));
         return in_array(end($classChunks), $this->validEntities);
     }
 
     public function postPersist(LifecycleEventArgs $arguments)
     {
-        $entity = $arguments->getEntity();
-        if (!$this->isValidEntity($entity)) {
+        $this->setEntity($arguments->getEntity());
+        if (!$this->isValidEntity()) {
             return;
         }
 
+        $identifier = sprintf('%s-%d', $this->entity->sanitize($this->entity->getTopic()), $this->entity->getId());
+        $this->persistIdentifier('setIdentifier', $identifier);
+    }
+
+    public function postUpdate(LifecycleEventArgs $arguments)
+    {
+        $this->setEntity($arguments->getEntity());
+        if (!$this->isValidEntity()) {
+            return;
+        }
+
+        $identifier = sprintf('%s-%d', $this->entity->sanitize($this->entity->getTopic()), $this->entity->getId());
+        $this->persistIdentifier('setIdentifier', $identifier);
+    }
+
+    protected function persistIdentifier($method, $identifier)
+    {
+        if (!method_exists($this->entity, $method)) {
+            return;
+        }
+
+        call_user_func(array($this->entity, $method), $identifier);
+
         $em = $this->container->get('doctrine.orm.entity_manager');
-        $identifier = sprintf('%s-%d', $entity->sanitize($entity->getTopic()), $entity->getId());
-        $entity->setIdentifier($identifier);
-        $em->persist($entity);
+        $em->persist($this->entity);
         $em->flush();
     }
 }
