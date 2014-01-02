@@ -43,7 +43,7 @@ class TagController extends Controller
      */
     public function groupAction(Request $request)
     {
-        $limit = 20;
+        $limit = 10;
         $currentRoute = $request->query->get('route');
 
         $em = $this->getDoctrine()->getManager();
@@ -77,12 +77,13 @@ class TagController extends Controller
     public function showAction($identifier)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$tag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
+        if (!$entity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
 
+        $limit = 20;
         $qb = $em->createQueryBuilder();
-        $posts = $qb->select('p')
+        $collection = $qb->select('p')
            ->from('FriggKeeprBundle:Post', 'p')
            ->leftJoin('p.Tags', 't')
            ->where('t.identifier = :identifier')
@@ -90,9 +91,17 @@ class TagController extends Controller
            ->setParameter('identifier', $identifier)
            ->getQuery()->getResult();
 
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $collection,
+            $this->get('request')->query->get('page', 1),
+            $limit
+        );
+
         return array(
-            'tag' => $tag,
-            'posts' => $posts,
+            'entity' => $entity,
+            'collection' => $pagination,
+            'limit' => $limit
         );
     }
 }

@@ -1,15 +1,18 @@
 {% extends "FriggKeeprBundle::layout.html.twig" %}
 
-{% block title %}{{ tag.name }}{% endblock %}
+{% block title %}{{ entity.name }}{% endblock %}
 
 {% block body -%}
-    {% if posts %}
+    {% if collection %}
         <div class="accordion" id="accordion2">
-            {% for post in posts %}
-                {% include 'FriggKeeprBundle:Post:accordion.html.twig' %}
+            {% for item in collection %}
+                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'full': false}) }}
             {% endfor %}
+            <div class="pull-right">
+                {{ knp_pagination_render(collection) }}
+            </div>
         </div>
     {% else %}
-        <p class="text-info">Nothing here yet</p>
+        <p class="text-info">No posts yet</p>
     {% endif %}
 {% endblock %}

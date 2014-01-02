@@ -8,6 +8,9 @@
             {% for item in collection %}
                 {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'full': false}) }}
             {% endfor %}
+            <div class="pull-right">
+                {{ knp_pagination_render(collection) }}
+            </div>
         </div>
     {% else %}
         <p class="text-info">No posts yet</p>

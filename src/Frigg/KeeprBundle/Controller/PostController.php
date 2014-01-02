@@ -29,6 +29,7 @@ class PostController extends Controller
      */
     public function indexAction()
     {
+        $limit = 20;
         $em = $this->getDoctrine()->getManager();
 
         $collection = $em->getRepository('FriggKeeprBundle:Post')->findBy(
@@ -36,8 +37,16 @@ class PostController extends Controller
             array('created_at' => 'DESC')
         );
 
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $collection,
+            $this->get('request')->query->get('page', 1),
+            $limit
+        );
+
         return array(
-            'collection' => $collection,
+            'collection' => $pagination,
+            'limit' => $limit
         );
     }
 
@@ -329,6 +338,4 @@ class PostController extends Controller
             ->getForm()
         ;
     }
-
-
 }
