@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class RegistrationConfirmListener implements EventSubscriberInterface
+class RegistrationListener implements EventSubscriberInterface
 {
     private $router;
 
