@@ -55,7 +55,7 @@ class TagController extends Controller
            ->where('t.id IS NOT NULL')
            ->orderBy('post_count', 'DESC')
            ->groupBy('t.identifier')
-           ->setMaxResults(20)
+           ->setMaxResults($limit)
            ->getQuery()->getResult();
 
         $group = (!$group ? array() : $group);

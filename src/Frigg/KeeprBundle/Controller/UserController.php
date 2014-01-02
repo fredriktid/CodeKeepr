@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Entity\Post;
 use Frigg\KeeprBundle\Entity\Tag;
-use Frigg\KeeprBundle\Form\PostType;
 
 /**
  * User controller.
