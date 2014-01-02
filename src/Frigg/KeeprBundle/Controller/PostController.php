@@ -29,14 +29,13 @@ class PostController extends Controller
      */
     public function indexAction()
     {
-        $limit = 20;
         $em = $this->getDoctrine()->getManager();
-
         $collection = $em->getRepository('FriggKeeprBundle:Post')->findBy(
             array(),
             array('created_at' => 'DESC')
         );
 
+        $limit = 20;
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $collection,
@@ -46,12 +45,13 @@ class PostController extends Controller
 
         return array(
             'collection' => $pagination,
-            'limit' => $limit
+            'limit' => $limit,
+            'title' => 'Home'
         );
     }
 
     /**
-     * Lists all Post entities.
+     * Main navigation menu for posts
      *
      * @Route("/navigation/{currentRoute}", name="post_navigation")
      * @Method("GET")
@@ -146,6 +146,13 @@ class PostController extends Controller
     public function newAction()
     {
         $entity = new Post();
+        // voter goes here...
+        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl(
+                'fos_user_security_login'
+            ));
+        }
+
         $form   = $this->createCreateForm($entity);
 
         return array(

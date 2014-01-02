@@ -3,10 +3,10 @@
 {% block title %}{{ entity.name }}{% endblock %}
 
 {% block body -%}
-    {% if collection %}
+    {% if collection.getTotalItemCount %}
         <div class="accordion" id="accordion2">
             {% for item in collection %}
-                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'full': false}) }}
+                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'view': 'line'}) }}
             {% endfor %}
             <div class="pull-right">
                 {{ knp_pagination_render(collection) }}

@@ -32,7 +32,7 @@ class RegistrationListener implements EventSubscriberInterface
 
     public function onRegistrationSuccess(FormEvent $event)
     {
-        $url = $this->router->generate('codekeepr_home');
+        $url = $this->router->generate('home');
         $event->setResponse(new RedirectResponse($url));
     }
 }

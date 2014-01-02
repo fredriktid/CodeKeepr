@@ -15,13 +15,13 @@
 				{{ post.topic }}
 			</a>
 		</div>
-		<div id="{{ post.identifier }}" class="accordion-body collapse{% if full is defined and full %} in{% endif %} ">
+		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %} ">
 			<div class="accordion-inner">
 			<pre class="prettyprint"><code class="language-{{ post.language.identifier }}">{{ post.content|trim }}</code></pre>
 			</div>
 			<div class="accordion-credit">
-				{% if full is not defined or full is empty %}
-					<a href="{{ path('post_show', {'id': post.id}) }}" title="Permalink"><i class="icon-fullscreen"></i></a>
+				{% if full is not defined or full == 'line' %}
+					<a href="{{ path('post_show', {'id': post.id}) }}" title="Permanent link"><i class="icon-fullscreen"></i></a>
 				{% endif %}
 				<a href="" title="Star" class="not"><i class="icon-star"></i></a>
 				<a href="" title="Share" class="not"><i class="icon-share"></i></a>
