@@ -35,7 +35,7 @@ class Post
     private $topic;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=false, nullable=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     private $identifier;
 
@@ -103,7 +103,7 @@ class Post
      */
     public function setIdentifier($identifier)
     {
-        $this->identifier = $this->sanitize($identifier);
+        $this->identifier = $identifier;
 
         return $this;
     }
@@ -186,7 +186,6 @@ class Post
     public function setTopic($topic)
     {
         $this->topic = $topic;
-        $this->setIdentifier($topic);
         return $this;
     }
 

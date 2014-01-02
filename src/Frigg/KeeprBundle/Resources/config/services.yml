@@ -1,6 +1,15 @@
 services:
-    codekeepr.registration_complet:
+    codekeepr.registration:
         class: Frigg\KeeprBundle\EventListener\RegistrationListener
         arguments: [@router]
         tags:
             - { name: kernel.event_subscriber }
+
+    codekeepr.activity:
+        class: Frigg\KeeprBundle\EventListener\ActivityListener
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+            #- { name: doctrine.event_listener, event: preRemove, method: preRemove }
+            #- { name: doctrine.event_listener, event: prePersist, method: prePersist }
+            #- { name: doctrine.event_listener, event: postUpdate, method: postUpdate }

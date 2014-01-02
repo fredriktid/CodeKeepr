@@ -21,18 +21,18 @@
 			</div>
 			<div class="accordion-credit">
 				{% if full is not defined or full == 'line' %}
-					<a href="{{ path('post_show', {'id': post.id}) }}" title="{{ 'Permanent link'|trans }}"><i class="icon-fullscreen"></i></a>
+					<a href="{{ path('post_show', {'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}"><i class="icon-fullscreen"></i></a>
 				{% endif %}
 				<a href="" title="{{ 'Star'|trans }}" class="not"><i class="icon-star"></i></a>
 				<a href="" title="{{ 'Share'|trans }}" class="not"><i class="icon-share"></i></a>
 				{% if is_granted('ROLE_USER') %}
 					{% if post.User.id == app.user.id or is_granted('ROLE_ADMIN') %}
-						<a href="{{ path('post_edit', {'id': post.id}) }}" title="{{ 'Edit'|trans }}"><i class="icon-edit"></i></a>
-						<a href="{{ path('post_edit', {'id': post.id}) }}" title="{{ 'Delete'|trans }}"><i class="icon-trash"></i></a>
+						<a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Edit'|trans }}"><i class="icon-edit"></i></a>
+						<a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Delete'|trans }}"><i class="icon-trash"></i></a>
 					{% endif %}
 				{% endif %}
 				<div class="pull-right">
-					<span class="muted"><small><a href="" class="not">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="" class="not">{{ post.user.username }}</a></small></span>
+					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="" class="not">{{ post.user.username }}</a></small></span>
 				</div>
 			</div>
 		</div>

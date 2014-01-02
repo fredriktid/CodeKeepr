@@ -1,5 +1,5 @@
 <ul class="nav nav-links nav-pills">
-    <li{% if current_route in ['home', 'post', 'post_show'] %} class="active"{% endif %}><a href="{{ path('post') }}"><i class="icon-list"></i> Posts</a></li>
+    <li{% if current_route in ['home', 'post', 'post_show', 'post_date'] %} class="active"{% endif %}><a href="{{ path('post') }}"><i class="icon-list"></i> Posts</a></li>
     {% if is_granted('ROLE_USER') %}
         <li{% if current_route in ['post_new', 'post_edit'] %} class="active"{% endif %}><a href="{{ path('post_new') }}"><i class="icon-plus"></i> Add code</a></li>
         <li{% if current_route in ['tag', 'tag_show'] %} class="active"{% endif %}><a href="{{ path('tag') }}"><i class="icon-tag"></i> Tags</a></li>

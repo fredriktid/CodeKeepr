@@ -65,6 +65,22 @@ class PostController extends Controller
     }
 
     /**
+     * Posts by date
+     *
+     * @Route("/date/{date}", name="post_date")
+     * @Method("GET")
+     * @Template()
+     */
+    public function dateAction(Request $request, $date)
+    {
+        // todo...
+        return array(
+            'title' => $date,
+            'collection' => array()
+        );
+    }
+
+    /**
      * Creates a new Post entity.
      *
      * @Route("/", name="post_create")
@@ -107,7 +123,7 @@ class PostController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('post_show', array(
-                'id' => $entity->getId()
+                'identifier' => $entity->getIdentifier()
             )));
         }
 
@@ -158,33 +174,33 @@ class PostController extends Controller
         $form = $this->createCreateForm($entity);
 
         return array(
-            'title' => $this->get('translator')->trans('Add code'),
+            'title'  => $this->get('translator')->trans('Add code'),
             'entity' => $entity,
-            'form' => $form->createView()
+            'form'   => $form->createView()
         );
     }
 
     /**
      * Finds and displays a Post entity.
      *
-     * @Route("/{id}", name="post_show")
+     * @Route("/{identifier}", name="post_show")
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction($identifier)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
+        $entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
-            'title' => $entity->getTopic(),
+            'title'  => $entity->getTopic(),
             'entity' => $entity,
             'delete_form' => $deleteForm->createView()
         );
@@ -193,15 +209,15 @@ class PostController extends Controller
     /**
      * Displays a form to edit an existing Post entity.
      *
-     * @Route("/{id}/edit", name="post_edit")
+     * @Route("/{identifier}/edit", name="post_edit")
      * @Method("GET")
      * @Template("FriggKeeprBundle:Post:new.html.twig")
      */
-    public function editAction($id)
+    public function editAction($identifier)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
+        $entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
 
         if (!$entity) {
             throw $this->createNotFoundException(
@@ -210,7 +226,7 @@ class PostController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
             'title'  => $this->get('translator')->trans('Edit'),
@@ -230,7 +246,9 @@ class PostController extends Controller
     private function createEditForm(Post $entity)
     {
         $form = $this->createForm(new PostType(), $entity, array(
-            'action' => $this->generateUrl('post_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('post_update', array(
+                'identifier' => $entity->getIdentifier()
+            )),
             'method' => 'PUT',
         ));
 
@@ -243,14 +261,14 @@ class PostController extends Controller
     /**
      * Edits an existing Post entity.
      *
-     * @Route("/{id}", name="post_update")
+     * @Route("/{identifier}", name="post_update")
      * @Method("PUT")
      * @Template("FriggKeeprBundle:Post:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, $identifier)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
+        $entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
 
         if (!$entity) {
             throw $this->createNotFoundException(
@@ -263,7 +281,7 @@ class PostController extends Controller
             $originalTags->add($tag);
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($entity->getId());
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -297,7 +315,7 @@ class PostController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('post_show', array(
-                'id' => $id
+                'identifier' => $entity->getIdentifier()
             )));
         }
 
