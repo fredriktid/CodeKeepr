@@ -43,6 +43,7 @@ class TagController extends Controller
      */
     public function groupAction(Request $request)
     {
+        $limit = 20;
         $currentRoute = $request->query->get('route');
 
         $em = $this->getDoctrine()->getManager();
@@ -54,6 +55,7 @@ class TagController extends Controller
            ->where('t.id IS NOT NULL')
            ->orderBy('post_count', 'DESC')
            ->groupBy('t.identifier')
+           ->setMaxResults(20)
            ->getQuery()->getResult();
 
         $group = (!$group ? array() : $group);
@@ -61,6 +63,7 @@ class TagController extends Controller
         return array(
             'current_route' => $currentRoute,
             'group' => $group,
+            'limit' => $limit
         );
     }
 

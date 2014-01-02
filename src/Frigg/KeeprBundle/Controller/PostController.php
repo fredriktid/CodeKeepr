@@ -40,6 +40,21 @@ class PostController extends Controller
             'collection' => $collection,
         );
     }
+
+    /**
+     * Lists all Post entities.
+     *
+     * @Route("/navigation/{currentRoute}", name="post_navigation")
+     * @Method("GET")
+     * @Template()
+     */
+    public function navigationAction(Request $request, $currentRoute)
+    {
+        return array(
+            'current_route' => $currentRoute
+        );
+    }
+
     /**
      * Creates a new Post entity.
      *
@@ -314,4 +329,6 @@ class PostController extends Controller
             ->getForm()
         ;
     }
+
+
 }

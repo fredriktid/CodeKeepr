@@ -45,6 +45,10 @@ h1 a, h1 a:hover {
     margin-top: 10px;
 }
 
+.align-center {
+    text-align: center;
+}
+
 .nav-wrap {
     margin-bottom: 5px;
     padding-bottom: 5px;
@@ -118,6 +122,10 @@ ul.tags {
 
 ul.tags div {
     display: inline-block;
+}
+
+a.muted:hover {
+    text-decoration: none;
 }
 
 pre.prettyprint {
