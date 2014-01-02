@@ -37,7 +37,9 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id);
         if (!$userEntity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find User entity.')
+            );
         }
 
         $limit = 20;
@@ -60,7 +62,7 @@ class UserController extends Controller
         return array(
             'entity' => $userEntity,
             'collection' => $pagination,
-            'title' => 'User posts'
+            'title' => $this->get('translator')->trans('User posts')
         );
     }
 
@@ -83,7 +85,9 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id);
         if (!$userEntity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find User entity.')
+            );
         }
 
         // soon...

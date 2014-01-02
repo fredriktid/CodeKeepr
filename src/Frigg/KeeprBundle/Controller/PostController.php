@@ -46,7 +46,7 @@ class PostController extends Controller
         return array(
             'collection' => $pagination,
             'limit' => $limit,
-            'title' => 'Home'
+            'title' => $this->get('translator')->trans('Home')
         );
     }
 
@@ -131,7 +131,9 @@ class PostController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array(
+            'label' => $this->get('translator')->trans('Create')
+        ));
 
         return $form;
     }
@@ -145,7 +147,6 @@ class PostController extends Controller
      */
     public function newAction()
     {
-        $entity = new Post();
         // voter goes here...
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl(
@@ -153,11 +154,13 @@ class PostController extends Controller
             ));
         }
 
-        $form   = $this->createCreateForm($entity);
+        $entity = new Post();
+        $form = $this->createCreateForm($entity);
 
         return array(
+            'title' => $this->get('translator')->trans('Add code'),
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView()
         );
     }
 
@@ -181,8 +184,9 @@ class PostController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'title' => $entity->getTopic(),
+            'entity' => $entity,
+            'delete_form' => $deleteForm->createView()
         );
     }
 
@@ -200,16 +204,19 @@ class PostController extends Controller
         $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Post entity.');
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find Post entity')
+            );
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
+            'title'  => $this->get('translator')->trans('Edit'),
             'entity' => $entity,
-            'form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView()
         );
     }
 
@@ -227,7 +234,9 @@ class PostController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array(
+            'label' => $this->get('translator')->trans('Update')
+        ));
 
         return $form;
     }
@@ -244,7 +253,9 @@ class PostController extends Controller
         $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Post entity.');
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find Post entity')
+            );
         }
 
         $originalTags = new ArrayCollection();
@@ -293,7 +304,7 @@ class PostController extends Controller
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView()
         );
     }
     /**
@@ -312,7 +323,9 @@ class PostController extends Controller
             $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Post entity.');
+                throw $this->createNotFoundException(
+                    $this->get('translator')->trans('Unable to find Post entity')
+                );
             }
 
             foreach ($entity->getTags() as $tag) {
@@ -337,10 +350,12 @@ class PostController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('post_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('post_delete', array(
+                'id' => $id
+            )))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array(
-                'label' => 'Delete'
+                'label' => $this->get('translator')->trans('Delete')
             ))
             ->getForm()
         ;

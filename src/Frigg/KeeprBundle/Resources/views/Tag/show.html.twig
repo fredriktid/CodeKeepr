@@ -1,6 +1,6 @@
 {% extends "FriggKeeprBundle::layout.html.twig" %}
 
-{% block title %}{{ entity.name }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body -%}
     {% if collection.getTotalItemCount %}
@@ -13,6 +13,6 @@
             </div>
         </div>
     {% else %}
-        <p class="text-info">No posts yet</p>
+        <p class="muted">{{ 'No posts yet'|trans }}</p>
     {% endif %}
 {% endblock %}

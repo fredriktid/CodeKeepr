@@ -1,12 +1,12 @@
 {% extends "FriggKeeprBundle::layout.html.twig" %}
 
-{% block title %}Add code{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body -%}
     <div class="row-fluid">
         <div class="span10">
             {{ form_start(form) }}
-                {{ form_widget(form.topic, {'attr': {'class': 'span9', 'placeholder': 'Topic of submission...'}}) }}
+                {{ form_widget(form.topic, {'attr': {'class': 'span9', 'placeholder': 'Topic of submission...'|trans}}) }}
                 {{ form_widget(form.Language, {'attr': {'class': 'span3'}}) }}
                 {{ form_widget(form.content, {'attr': {'class': 'span12', 'style': 'height: 400px'}}) }}
                 <ul class="tags pull-left" data-prototype="{{ form_widget(form.Tags.vars.prototype.name)|e }}">
@@ -23,7 +23,7 @@
             <div class="span10">
                 <hr>
                 {{ form_start(delete_form) }}
-                    {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger'}, 'label': 'Delete this post'}) }}
+                    {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger'}, 'label': 'Delete this post'|trans}) }}
                 {{ form_end(delete_form) }}
             </div>
         </div>
@@ -34,4 +34,3 @@
     {{ parent() }}
     <script src="{{ asset('bundles/friggkeepr/js/post.js') }}"></script>
 {% endblock %}
-
