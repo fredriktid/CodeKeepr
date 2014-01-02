@@ -1,10 +1,30 @@
+html, body {
+    height: 100%;
+}
+
+#wrap {
+    min-height: 100%;
+}
+
+#main {
+    overflow: auto;
+    padding-bottom: 35px;
+}
+
+.footer {
+    position: relative;
+    margin-top: -31px;
+    height: 20px;
+    clear: both;
+    padding: 5px 0;
+    background: inherit;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+}
+
 legend {
 	font-size: 14px;
 	font-weight: bold;
-}
-
-#sidebar input.input-medium {
-	margin-bottom: 5px;
 }
 
 h1 {
@@ -21,6 +41,10 @@ h1 a, h1 a:hover {
     display: inline-block;
 }
 
+.margin-top {
+    margin-top: 10px;
+}
+
 .nav-wrap {
     margin-bottom: 5px;
     padding-bottom: 5px;
@@ -28,6 +52,10 @@ h1 a, h1 a:hover {
 
 .nav-pills {
     margin: 0;
+}
+
+.nav-links {
+    margin: 0 0 0 5px;
 }
 
 .nav-section {
@@ -55,6 +83,10 @@ h1 a, h1 a:hover {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
+#sidebar input.input-medium {
+    margin-bottom: 5px;
+}
+
 .accordion-tags a:link,
 .accordion-tags a:hover,
 .accordion-tags a:visited {
@@ -74,10 +106,18 @@ h1 a, h1 a:hover {
     padding: 8px 0 8px 12px;
 }
 
+.accordion-credit {
+    margin: -10px 15px 5px 15px;
+}
+
 ul.tags {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+ul.tags div {
+    display: inline-block;
 }
 
 pre.prettyprint {
@@ -89,24 +129,24 @@ pre.prettyprint {
 }
 
 .sidebar-nav-fixed {
-     position:fixed;
-     top:60px;
-     width:21.97%;
- }
+    position: fixed;
+    top: 60px;
+    width: 21.97%;
+}
 
- @media (max-width: 767px) {
-     .sidebar-nav-fixed {
-         width:auto;
-     }
- }
+@media (max-width: 767px) {
+    .sidebar-nav-fixed {
+        width:auto;
+    }
+}
 
- @media (max-width: 979px) {
-     .sidebar-nav-fixed {
-         position:static;
+@media (max-width: 979px) {
+    .sidebar-nav-fixed {
+        position:static;
         width: auto;
-     }
- }
+    }
+}
 
- .accordion-credit {
-    margin: -10px 15px 5px 0;
- }
+.btn-tag-delete {
+    margin: -10px 0 0 5px;
+}

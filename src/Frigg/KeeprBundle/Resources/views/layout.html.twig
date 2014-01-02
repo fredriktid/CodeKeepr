@@ -12,49 +12,58 @@
     </head>
     <body>
     	{% set currentRoute = app.request.attributes.get('_route') %}
-		<div class="container-fluid">
-			<div class="row-fluid">
-				<div class="span2">
-					<div class="nav-section">
-						<h1 class="nav-logo">
-							<a href="{{ path('codekeepr_home') }}">CodeKeepr</a>
-						</h1>
+    	<div id="wrap">
+			<div id="main" class="container-fluid">
+				<div class="row-fluid">
+					<div class="span2">
+						<div class="nav-section">
+							<h1 class="nav-logo">
+								<a href="{{ path('codekeepr_home') }}">CodeKeepr</a>
+							</h1>
+						</div>
+						<div class="sidebar-nav">
+							{{ render(controller('FriggKeeprBundle:Tag:group', {'route': currentRoute})) }}
+						</div>
 					</div>
-					<div class="sidebar-nav">
-						{{ render(controller('FriggKeeprBundle:Tag:group', {'route': currentRoute})) }}
+					<div class="span10">
+						<div class="nav-section">
+							<ul class="nav nav-pills">
+								<li>
+									<div class="input-append">
+								  		<input style="width: 200px;" id="appendedInputButton" type="text">
+								  		<button class="btn" type="button"><i class="icon-search"></i></button>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="nav-section">
+							<ul class="nav nav-links nav-pills">
+							{% if is_granted('ROLE_USER') %}
+								<li><a href="{{ path('post_new') }}"><i class="icon-plus"></i> Add code</a></li>
+								<li><a href="#" class="not"><i class="icon-user"></i> My code</a></li>
+								<li><a href="#" class="not"><i class="icon-star"></i> Starred</a></li>
+								<li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-arrow-right"></i> Logout</a></li>
+							{% else %}
+								<li><a href="{{ path('fos_user_security_login') }}"><i class="icon-user"></i> Login</a></li>
+								<li><a href="{{ path('fos_user_registration_register') }}"><i class="icon-ok-sign"></i> Register</a></li>
+							{% endif %}
+							</ul>
+						</div>
+						<div class="row-fluid">
+							{% block body %}{% endblock %}
+						</div>
 					</div>
-				</div>
-				<div class="span10">
-					<div class="nav-section">
-						<ul class="nav nav-pills">
-							<li>
-								<div class="input-append">
-							  		<input style="width: 200px;" id="appendedInputButton" type="text">
-							  		<button class="btn" type="button"><i class="icon-search"></i></button>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="nav-section">
-						<ul class="nav nav-pills">
-						{% if is_granted('ROLE_USER') %}
-							<li><a href="{{ path('post_new') }}"><i class="icon-plus"></i> Add code</a></li>
-							<li><a href="#"><i class="icon-user"></i> My code</a></li>
-							<li><a href="#"><i class="icon-share-alt"></i> Share page</a></li>
-							<li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-arrow-right"></i> Logout</a></li>
-						{% else %}
-							<li><a href="{{ path('fos_user_security_login') }}"><i class="icon-arrow-left"></i> Login</a></li>
-							<li><a href="{{ path('fos_user_registration_register') }}"><i class="icon-edit"></i> Register</a></li>
-						{% endif %}
-						</ul>
-					</div>
-					{% block body %}{% endblock %}
 				</div>
 			</div>
 		</div>
+		<footer class="footer">
+			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&repo=CodeKeepr&type=fork&size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
+			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&repo=CodeKeepr&type=follow&size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
+		</footer>
 		<script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 		<script src="{{ asset('bundles/friggkeepr/js/bootstrap.js') }}"></script>
 		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
+		<script src="{{ asset('bundles/friggkeepr/js/app.js') }}"></script>
 		{% block javascripts %}{% endblock %}
 	</body>
 </html>

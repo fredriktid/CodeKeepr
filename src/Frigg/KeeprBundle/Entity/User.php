@@ -41,6 +41,45 @@ class User extends BaseUser
     }
 
     /**
+     * Override to exclude username
+     *
+     * @param string $email
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        return $this;
+    }
+
+    /**
+     * Override to set email and username
+     *
+     * @param string $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        $this->username = $email;
+
+        return $this;
+    }
+
+    /**
+     * Override to set canonical email and username
+     *
+     * @param string $emailCanonical
+     * @return User
+     */
+    public function setEmailCanonical($emailCanonical)
+    {
+        $this->emailCanonical = $emailCanonical;
+        $this->usernameCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+    /**
      * Add Posts
      *
      * @param \Frigg\KeeprBundle\Entity\Post $posts

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Entity\Post;
 use Frigg\KeeprBundle\Entity\Tag;
 use Frigg\KeeprBundle\Form\PostType;
@@ -62,8 +63,8 @@ class PostController extends Controller
 
             // process tags
             foreach ($entity->getTags() as $tag) {
-                // if the tag already exists we need to remove the new one from the collection
-                // and associate the existing tag with the new post entity
+                // if the tag already exists we need to remove the new one from the form collection
+                // and then associate the existing tag with the this post instead
                 if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
                     $entity->getTags()->removeElement($tag);
                     $entity->addTag($currentTag);
@@ -72,11 +73,12 @@ class PostController extends Controller
                     continue;
                 }
 
-                // if it does not exist, associate and persist
+                // but if it doest exist, associate and persist new tag
                 $tag->addPost($entity);
                 $em->persist($tag);
             }
 
+            // lastly persist and save the new post entity
             $em->persist($entity);
             $em->flush();
 
@@ -87,7 +89,7 @@ class PostController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form'   => $form->createView()
         );
     }
 
@@ -158,7 +160,7 @@ class PostController extends Controller
      *
      * @Route("/{id}/edit", name="post_edit")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:new.html.twig")
      */
     public function editAction($id)
     {
@@ -174,8 +176,8 @@ class PostController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -224,17 +226,37 @@ class PostController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            // remove tags
             foreach ($originalTags as $tag) {
                 if (false === $entity->getTags()->contains($tag)) {
-                    //$tag->getPosts()->removeElement($entity);
                     $tag->removePost($entity);
                     $em->persist($tag);
-                    //$em->remove($tag);
                 }
             }
 
+            // add tags
+            foreach ($entity->getTags() as $tag) {
+                // if the tag already exists we need to remove the new one from the form collection
+                // and then associate the existing tag with the this post instead
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                    $entity->getTags()->removeElement($tag);
+                    $entity->addTag($currentTag);
+                    $currentTag->addPost($entity);
+                    $em->persist($currentTag);
+                    continue;
+                }
+
+                // but if it doest exist, associate and persist new tag
+                $tag->addPost($entity);
+                $em->persist($tag);
+            }
+
+            $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('post_edit', array('id' => $id)));
+
+            return $this->redirect($this->generateUrl('post_show', array(
+                'id' => $id
+            )));
         }
 
         return array(
@@ -262,6 +284,11 @@ class PostController extends Controller
                 throw $this->createNotFoundException('Unable to find Post entity.');
             }
 
+            foreach ($entity->getTags() as $tag) {
+                $tag->removePost($entity);
+                $em->persist($tag);
+            }
+
             $em->remove($entity);
             $em->flush();
         }
@@ -281,7 +308,9 @@ class PostController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('post_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete'
+            ))
             ->getForm()
         ;
     }

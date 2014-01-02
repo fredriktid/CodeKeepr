@@ -1,0 +1,20 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form) }}    <div>
+        <label for="email">Email</label>
+        {{ form_widget(form.email, {'attr': {'id': 'email'}}) }}
+        {{ form_widget(form.username, {'attr': {'style': 'display: none', 'value': 'placeholder'}}) }}
+    </div>
+    <div>
+        <label for="password">Password</label>
+        {{ form_widget(form.plainPassword.first) }}
+    </div>
+    <div>
+        <label for="password">Repeat password</label>
+        {{ form_widget(form.plainPassword.second) }}
+    </div>
+    <div>
+        {{ form_widget(form._token) }}
+        <input class="btn" type="submit" value="{{ 'Register'|trans }}" />
+    </div>
+{{ form_end(form) }}

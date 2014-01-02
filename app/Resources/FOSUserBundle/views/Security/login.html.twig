@@ -1,0 +1,36 @@
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    {% if error %}
+        <div class="alert fade in">
+            {{ error|trans }}
+        </div>
+    {% endif %}
+    <form action="{{ path("fos_user_security_check") }}" method="post">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+        </div>
+        <div>
+            <label for="username">Password</label>
+            <input type="password" id="password" name="_password" required="required" />
+        </div>
+        <div>
+            <label class="checkbox">
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Remember me
+            </label>
+        </div>
+        <div>
+            <input type="submit" id="_submit" name="_submit" value="Login" class="btn" />
+        </div>
+    </form>
+    <ul class="unstyled">
+        <li><a href="{{ path('fos_user_registration_register') }}">Register account</a></li>
+        <li><a href="{{ path('fos_user_resetting_request') }}">Reset password</a></li>
+    </ul>
+{% endblock %}

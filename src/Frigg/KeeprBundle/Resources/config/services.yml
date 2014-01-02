@@ -1,0 +1,6 @@
+services:
+    codekeepr.registration_complet:
+        class: Frigg\KeeprBundle\EventListener\RegistrationConfirmListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }

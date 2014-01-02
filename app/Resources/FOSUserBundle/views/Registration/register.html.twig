@@ -1,0 +1,9 @@
+{% extends 'FriggKeeprBundle::layout.html.twig' %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock %}

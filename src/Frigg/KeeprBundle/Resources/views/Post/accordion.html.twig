@@ -8,19 +8,32 @@
 					</a>
 				{% endfor %}
 			</div>
-			<a class="inline-block accordion-language" href="">
+			<a class="inline-block accordion-language not" href="">
 				<span class="label label-inverse">{{ post.language.name }}</span>
 			</a>
 			<a class="inline-block accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
 				{{ post.topic }}
 			</a>
 		</div>
-		<div id="{{ post.identifier }}" class="accordion-body collapse">
+		<div id="{{ post.identifier }}" class="accordion-body collapse{% if full is defined and full %} in{% endif %} ">
 			<div class="accordion-inner">
 			<pre class="prettyprint"><code class="language-{{ post.language.identifier }}">{{ post.content|trim }}</code></pre>
 			</div>
-			<div class="accordion-credit pull-right">
-				<span class="muted"><small>{{ post.createdAt.format('Y-m-d') }} by <a href="">{{ post.user.username }}</a></small></span>
+			<div class="accordion-credit">
+				{% if full is not defined or full is empty %}
+					<a href="{{ path('post_show', {'id': post.id}) }}" title="Permalink"><i class="icon-fullscreen"></i></a>
+				{% endif %}
+				<a href="" title="Star" class="not"><i class="icon-star"></i></a>
+				<a href="" title="Share" class="not"><i class="icon-share"></i></a>
+				{% if is_granted('ROLE_USER') %}
+					{% if post.User.id == app.user.id or is_granted('ROLE_ADMIN') %}
+						<a href="{{ path('post_edit', {'id': post.id}) }}" title="Edit"><i class="icon-edit"></i></a>
+						<a href="{{ path('post_edit', {'id': post.id}) }}" title="Delete"><i class="icon-trash"></i></a>
+					{% endif %}
+				{% endif %}
+				<div class="pull-right">
+					<span class="muted"><small><a href="" class="not">{{ post.createdAt.format('Y-m-d') }}</a> by <a href="" class="not">{{ post.user.username }}</a></small></span>
+				</div>
 			</div>
 		</div>
 	</div>
