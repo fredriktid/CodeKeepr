@@ -174,6 +174,7 @@ class PostController extends Controller
         $form = $this->createCreateForm($entity);
 
         return array(
+            'edit_tag' => true,
             'title'  => $this->get('translator')->trans('Add code'),
             'entity' => $entity,
             'form'   => $form->createView()
@@ -229,6 +230,7 @@ class PostController extends Controller
         $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
+            'edit_tag' => false,
             'title'  => $this->get('translator')->trans('Edit'),
             'entity' => $entity,
             'form'   => $editForm->createView(),
@@ -263,7 +265,6 @@ class PostController extends Controller
      *
      * @Route("/{identifier}", name="post_update")
      * @Method("PUT")
-     * @Template("FriggKeeprBundle:Post:edit.html.twig")
      */
     public function updateAction(Request $request, $identifier)
     {

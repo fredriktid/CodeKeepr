@@ -11,7 +11,7 @@
                 {{ form_widget(form.content, {'attr': {'class': 'span12', 'style': 'height: 400px'}}) }}
                 <ul class="tags pull-left" data-prototype="{{ form_widget(form.Tags.vars.prototype.name)|e }}">
                     {% for tag in form.Tags %}
-                        <li>{{ form_row(tag.name) }}</li>
+                        <li>{{ form_row(tag.name, {'attr': {'readonly': edit_tag}}) }}</li>
                     {% endfor %}
                 </ul>
                 {{ form_widget(form.submit, {'attr': {'class': 'pull-right btn'}}) }}

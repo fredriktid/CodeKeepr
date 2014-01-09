@@ -1,3 +1,7 @@
+codekeeper_routing:
+    resource: "@FriggKeeprBundle/Resources/config/routing.yml"
+    prefix:   /
+
 codekeepr:
     resource: "@FriggKeeprBundle/Controller"
     type: annotation
