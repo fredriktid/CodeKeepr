@@ -11,3 +11,9 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }
             - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+
+    codekeepr.twig.user_extension:
+        class: Frigg\KeeprBundle\Twig\UserExtension
+        tags:
+            - { name: twig.extension }
+

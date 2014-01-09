@@ -32,7 +32,7 @@
 					{% endif %}
 				{% endif %}
 				<div class="pull-right">
-					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="" class="not">{{ post.user.username }}</a></small></span>
+					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="" class="not">{{ post.user.username|email_to_username }}</a></small></span>
 				</div>
 			</div>
 		</div>
