@@ -1,7 +1,7 @@
 var $collectionHolder;
 
 // setup an "add a tag" link
-var $addTagLink = $('<a href="#" class="add_tag_link btn"><i class="icon-tag"></i> Add a tag</a>');
+var $addTagLink = $('<a href="#" class="add_tag_link margin-bottom btn"><i class="icon-tag"></i> Add tag</a>');
 var $newLinkLi = $('<li></li>').append($addTagLink);
 
 jQuery(document).ready(function() {
@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
     });
 
     // add the "add a tag" anchor and li to the tags ul
-    $collectionHolder.append($newLinkLi);
+    $collectionHolder.prepend($newLinkLi);
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
@@ -46,13 +46,13 @@ function addTagForm($collectionHolder, $newLinkLi) {
 
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li></li>').append(newForm);
-    $newLinkLi.before($newFormLi);
+    $newLinkLi.after($newFormLi);
     addTagFormDeleteLink($newFormLi);
 }
 
 function addTagFormDeleteLink($tagFormLi) {
     var $removeFormA = $('<a href="#" class="btn btn-danger btn-tag-delete"><i class="icon-trash"></i></a>');
-    $tagFormLi.append($removeFormA);
+    $tagFormLi.prepend($removeFormA);
 
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL

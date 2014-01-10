@@ -3,8 +3,8 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body -%}
-    <div id="tagCloudContainer">
-        <canvas id="tagCloud">
+    <div id="tag-cloud-container">
+        <canvas id="tag-cloud">
             <p>Your browser is just too old...</p>
             {% if collection %}
                 <ul>
@@ -23,7 +23,7 @@
     <script src="{{ asset('js/jquery.tagcanvas.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#tagCloud').tagcanvas({
+            $('#tag-cloud').tagcanvas({
                 weight: true,
                 weightMode: 'size',
                 weightSize: 2,
