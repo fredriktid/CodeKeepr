@@ -47,6 +47,12 @@ a.muted:hover {
     margin: 10px 0;
 }
 
+/* Overrides */
+
+.chosen-container {
+    margin-top: -10px;
+}
+
 /* Scaffolding styles */
 
 #wrap {

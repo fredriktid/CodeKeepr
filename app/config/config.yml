@@ -39,14 +39,22 @@ assetic:
         #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
     assets:
         # images
-        bootstrap_glyphicons_halflings_white:
+        bootstrap_glyphicons_halflings_white_img:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/glyphicons-halflings-white.png
             output: img/glyphicons-halflings-white.png
-        bootstrap_glyphicons_halflings:
+        bootstrap_glyphicons_halflings_img:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/glyphicons-halflings.png
             output: img/glyphicons-halflings.png
+        chosen_sprite:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite.png
+            output: img/chosen-sprite.png
+        chosen_2x_sprite:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite@2x.png
+            output: img/chosen-sprite@2x.png
 
         # css
         bootstrap_css:
@@ -61,6 +69,12 @@ assetic:
             filters:
                 - cssrewrite
             output: css/bootstrap-responsive.min.css
+        chosen_css:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/css/chosen.min.css
+            filters:
+                - cssrewrite
+            output: css/chosen.min.css
         app_css:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/css/app.css
@@ -77,6 +91,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/jquery.tagcanvas.min.js
             output: js/jquery.tagcanvas.min.js
+        chosen_js:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/chosen.jquery.min.js
+            output: js/chosen.jquery.min.js
         app_js:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/app.js

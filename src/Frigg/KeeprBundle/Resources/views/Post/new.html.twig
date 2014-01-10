@@ -7,8 +7,8 @@
         <div class="span10">
             {{ form_start(form) }}
                 {{ form_widget(form.topic, {'attr': {'class': 'span9', 'placeholder': 'Type a descriptive title...'|trans}}) }}
-                {{ form_widget(form.Language, {'attr': {'class': 'span3'}}) }}
-                {{ form_widget(form.content, {'attr': {'class': 'span12 code', 'placeholder': 'And paste in your code...'}}) }}
+                {{ form_widget(form.Language, {'attr': {'class': 'span3 chosen margin-top-minus', 'data-placeholder': 'Choose syntax'|trans}}) }}
+                {{ form_widget(form.content, {'attr': {'class': 'span12 code', 'placeholder': 'And paste in your code...'|trans}}) }}
                 <ul class="tags pull-left" data-prototype="{{ form_widget(form.Tags.vars.prototype.name)|e }}">
                     {% for tag in form.Tags %}
                         <li>{{ form_row(tag.name, {'attr': {'readonly': edit_tag}}) }}</li>
