@@ -1,6 +1,53 @@
+/* Generic styles */
+
 html, body {
     height: 100%;
 }
+
+legend {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+h1 {
+    font-family: 'Lobster', Georgia, Times, serif;
+    font-size: 40px;
+}
+
+h1 a, h1 a:hover {
+    color: #444;
+    text-decoration: none;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.margin-bottom {
+    margin-bottom: 10px;
+}
+
+.align-center {
+    text-align: center;
+}
+
+a.muted:hover {
+    text-decoration: none;
+}
+
+.well {
+    padding: 5px !important;
+}
+
+.pagination {
+    margin: 10px 0;
+}
+
+/* Scaffolding styles */
 
 #wrap {
     min-height: 100%;
@@ -19,33 +66,6 @@ html, body {
     padding: 5px 0;
     background: inherit;
     border-top: 1px solid #e5e5e5;
-    text-align: center;
-}
-
-legend {
-	font-size: 14px;
-	font-weight: bold;
-}
-
-h1 {
-    font-family: 'Lobster', Georgia, Times, serif;
-    font-size: 40px;
-}
-
-h1 a, h1 a:hover {
-	color: #444;
-	text-decoration: none;
-}
-
-.inline-block {
-    display: inline-block;
-}
-
-.margin-top {
-    margin-top: 10px;
-}
-
-.align-center {
     text-align: center;
 }
 
@@ -77,10 +97,7 @@ h1 a, h1 a:hover {
     margin: 10px 20px 0 0;
 }
 
-.new-form textarea {
-	width: 600px;
-	height: 200px;
-}
+/* Sidebar */
 
 .sidebar-nav .nav-list > li > a {
     color: #999999;
@@ -90,6 +107,27 @@ h1 a, h1 a:hover {
 #sidebar input.input-medium {
     margin-bottom: 5px;
 }
+
+.sidebar-nav-fixed {
+    position: fixed;
+    top: 60px;
+    width: 21.97%;
+}
+
+@media (max-width: 767px) {
+    .sidebar-nav-fixed {
+        width:auto;
+    }
+}
+
+@media (max-width: 979px) {
+    .sidebar-nav-fixed {
+        position:static;
+        width: auto;
+    }
+}
+
+/* Post */
 
 .accordion-tags a:link,
 .accordion-tags a:hover,
@@ -114,6 +152,22 @@ h1 a, h1 a:hover {
     margin: -10px 15px 5px 15px;
 }
 
+pre.prettyprint {
+    margin-bottom: 5px;
+}
+
+textarea.code {
+    height: 400px;
+    font-family: 'Source Code Pro', sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 10px;
+    background: #000;
+    color: #F0F0F0;
+}
+
+/* Tags */
+
 ul.tags {
     list-style: none;
     margin: 0;
@@ -124,46 +178,11 @@ ul.tags div {
     display: inline-block;
 }
 
-a.muted:hover {
-    text-decoration: none;
-}
-
-pre.prettyprint {
-	margin-bottom: 5px;
-}
-
-.well {
-	padding: 5px !important;
-}
-
-.sidebar-nav-fixed {
-    position: fixed;
-    top: 60px;
-    width: 21.97%;
-}
-
-@media (max-width: 767px) {
-    .sidebar-nav-fixed {
-        width:auto;
-    }
-}
-
-@media (max-width: 979px) {
-    .sidebar-nav-fixed {
-        position:static;
-        width: auto;
-    }
+#tag-cloud {
+    width: 100%;
+    height: 100%;
 }
 
 .btn-tag-delete {
-    margin: -10px 0 0 5px;
-}
-
-.pagination {
-    margin: 10px 0;
-}
-
-#tagCloud {
-    width: 100%;
-    height: 100%;
+    margin: -10px 5px 0 0;
 }
