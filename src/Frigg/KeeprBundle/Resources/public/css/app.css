@@ -69,6 +69,37 @@ a.muted:hover {
     margin-right: 5px;
 }
 
+.accordion-tags a:link,
+.accordion-tags a:hover,
+.accordion-tags a:visited {
+    text-decoration: none;
+}
+
+.accordion-heading .accordion-toggle {
+    display: inline;
+    padding: 0;
+}
+
+.accordion-credit {
+    margin: -10px 15px 5px 15px;
+}
+
+.accordion-inner {
+    padding: 5px;
+}
+
+.accordion-content {
+    padding: 7px;
+}
+
+.accordion-content a:hover {
+    text-decoration: none;
+}
+
+pre.prettyprint {
+    margin-bottom: 5px;
+}
+
 /* Scaffolding styles */
 
 #wrap {
@@ -139,29 +170,6 @@ a.muted:hover {
 }
 
 /* Post */
-
-.accordion-tags a:link,
-.accordion-tags a:hover,
-.accordion-tags a:visited {
-    text-decoration: none;
-}
-
-.accordion-heading .accordion-toggle {
-    display: inline-block;
-    padding: 8px 4px;
-}
-
-.accordion-heading .accordion-language {
-    padding: 8px 0 8px 12px;
-}
-
-.accordion-credit {
-    margin: -10px 15px 5px 15px;
-}
-
-pre.prettyprint {
-    margin-bottom: 5px;
-}
 
 textarea.code {
     height: 400px;
