@@ -31,8 +31,10 @@
 							<ul class="nav nav-pills">
 								<li>
 									<div class="input-append">
-								  		<input style="width: 200px;" id="appendedInputButton" type="text">
-								  		<button class="btn" type="button"><i class="icon-search"></i></button>
+                                        <form method="GET" action="{{ path('search') }}">    
+								  		    <input name="query" style="width: 200px;" type="text">
+								  		    <button class="btn" type="button"><i class="icon-search"></i></button>
+                                        </form>
 									</div>
 								</li>
 							</ul>

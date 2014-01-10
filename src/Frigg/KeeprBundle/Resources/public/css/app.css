@@ -84,6 +84,10 @@ a.muted:hover {
     margin: 0;
 }
 
+.nav-pills form {
+    margin: 0 5px;
+}
+
 .nav-links {
     margin: 0 0 0 5px;
 }
@@ -168,7 +172,7 @@ textarea.code {
     font-size: 12px;
     line-height: 14px;
     padding: 10px;
-    background: #000;
+    background: #333;
     color: #F0F0F0;
 }
 

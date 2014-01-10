@@ -54,11 +54,11 @@ assetic:
         chosen_sprite:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite.png
-            output: img/chosen-sprite.png
+            output: chosen-sprite.png
         chosen_2x_sprite:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite@2x.png
-            output: img/chosen-sprite@2x.png
+            output: chosen-sprite@2x.png
 
         # css
         bootstrap_css:
@@ -149,4 +149,29 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+
+fos_elastica:
+    clients:
+        default: { host: localhost, port: 9200 }
+    indexes:
+        website:
+            client: default
+            types:
+                post:
+                    mappings:
+                        id:
+                        topic: { boost: 5 }
+                        content: { boost: 1 }
+                        Tags:
+                            type: "nested"
+                            properties:
+                                name: { boost: 3 }
+                        created_at:
+                        language:
+                    persistence:
+                        driver: orm
+                        model: Frigg\KeeprBundle\Entity\Post
+                        provider: ~
+                        listener: ~
+                        finder: ~
 
