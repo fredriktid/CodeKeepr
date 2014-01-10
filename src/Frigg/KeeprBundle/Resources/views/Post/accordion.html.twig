@@ -1,36 +1,29 @@
 {% if post %}
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="accordion-toggle pull-right accordion-tags">
-				{% for tag in post.tags %}
-					<a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">
-						<span class="label label-info">{{ tag.name }}</span>
-					</a>
-				{% endfor %}
+			<div class="accordion-content">
+				<div class="accordion-toggle pull-right">
+					{% for tag in post.tags %}
+						<a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">
+							<span class="label label-info">{{ tag.name }}</span>
+						</a>
+					{% endfor %}
+					{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
+				</div>
+				<a class="inline-block accordion-language not" href="">
+					<span class="label label-inverse">{{ post.language.name }}</span>
+				</a>
+				<a class="inline-block accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
+					{{ post.topic }}
+				</a>
 			</div>
-			<a class="inline-block accordion-language not" href="">
-				<span class="label label-inverse">{{ post.language.name }}</span>
-			</a>
-			<a class="inline-block accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
-				{{ post.topic }}
-			</a>
 		</div>
 		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %} ">
 			<div class="accordion-inner">
 			<pre class="prettyprint"><code class="language-{{ post.language.identifier }}">{{ post.content|trim }}</code></pre>
 			</div>
 			<div class="accordion-credit">
-				{% if view is not defined or view == 'line' %}
-					<a href="{{ path('post_show', {'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}"><i class="icon-fullscreen"></i></a>
-				{% endif %}
-				<a href="" title="{{ 'Star'|trans }}" class="not"><i class="icon-star"></i></a>
-				<a href="" title="{{ 'Share'|trans }}" class="not"><i class="icon-share"></i></a>
-				{% if is_granted('ROLE_USER') %}
-					{% if post.User.id == app.user.id or is_granted('ROLE_ADMIN') %}
-						<a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Edit'|trans }}"><i class="icon-edit"></i></a>
-						<a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Delete'|trans }}"><i class="icon-trash"></i></a>
-					{% endif %}
-				{% endif %}
+				{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 				<div class="pull-right">
 					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="" class="not">{{ post.user.username|email_to_username }}</a></small></span>
 				</div>

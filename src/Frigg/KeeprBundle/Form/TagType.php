@@ -17,7 +17,10 @@ class TagType extends AbstractType
         $builder
             ->add('name', 'text', array(
                 'label' => false,
-                'required' => true
+                'required' => true,
+                'attr' => array(
+                    'class' => 'tag-autocomplete ui-widget'
+                )
             ))
         ;
     }

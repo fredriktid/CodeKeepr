@@ -2,6 +2,10 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block tag_group %}
+    {{ render(controller('FriggKeeprBundle:Tag:group', {'currentIdentifier': entity.identifier})) }}
+{% endblock %}
+
 {% block body -%}
     {% if collection.getTotalItemCount %}
         <div class="accordion" id="accordion2">

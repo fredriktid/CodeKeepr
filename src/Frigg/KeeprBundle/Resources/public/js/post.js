@@ -47,6 +47,28 @@ function addTagForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.after($newFormLi);
+
+    $('.tag-autocomplete').autocomplete({
+        source: function( request, response ) {
+            jQuery.ajax({
+                url: '/tag/search/json',
+                dataType: 'json',
+                data: {
+                    query: request.term
+                },
+                success: function( data ) {
+                    response(data);
+                }
+            });
+        },
+        type:"json",
+        select: function(event, ui)
+        {
+            //console.log(ui);
+            //alert(ui.item.recipient);
+        }
+    });
+
     addTagFormDeleteLink($newFormLi);
 }
 

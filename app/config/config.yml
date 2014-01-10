@@ -174,4 +174,14 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
-
+                tag:
+                    mappings:
+                        id:
+                        name: { boost: 5 }
+                        identifier: { boost: 1 }
+                    persistence:
+                        driver: orm
+                        model: Frigg\KeeprBundle\Entity\Tag
+                        provider: ~
+                        listener: ~
+                        finder: ~

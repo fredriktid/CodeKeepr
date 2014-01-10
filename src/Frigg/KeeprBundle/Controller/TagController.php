@@ -3,6 +3,7 @@
 namespace Frigg\KeeprBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -58,11 +59,11 @@ class TagController extends Controller
     /**
      * Groups and ranks all tags
      *
-     * @Route("/group/{currentRoute}", name="tag_group", defaults={"currentRoute" = null})
+     * @Route("/group/{currentIdentifier}", name="tag_group", defaults={"currentIdentifier" = null})
      * @Method("GET")
      * @Template()
      */
-    public function groupAction(Request $request, $currentRoute)
+    public function groupAction(Request $request, $currentIdentifier = null)
     {
         $limit = 10;
         $em = $this->getDoctrine()->getManager();
@@ -79,7 +80,7 @@ class TagController extends Controller
         $group = (!$group ? array() : $group);
 
         return array(
-            'current_route' => $currentRoute,
+            'current_identifier' => $currentIdentifier,
             'group' => $group,
             'limit' => $limit
         );
@@ -124,5 +125,33 @@ class TagController extends Controller
             'limit' => $limit,
             'title' => $entity->getName()
         );
+    }
+
+    /**
+     * Search for tag, returns json
+     *
+     * @Route("/search/json", name="tag_search_json")
+     * @Method("GET")
+     * @Template()
+     */
+    public function jsonSearchAction()
+    {
+        $query = $this->get('request')->query->get('query');
+        $collection = array();
+        if (strlen($query) > 0) {
+            $limit = 20;
+            $finder = $this->get('fos_elastica.finder.website.tag');
+            $tags = $finder->find($query.'*', 10);
+            foreach($tags as $tag) {
+                $collection[] = array(
+                    'label' => $tag->getName(),
+                    'value' => $tag->getName()
+                );
+            }
+        }
+
+        $response = new Response(json_encode($collection));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 }

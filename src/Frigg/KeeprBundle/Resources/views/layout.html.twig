@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %} - CodeKeepr</title>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
 		<link href="{{ asset('css/bootstrap-responsive.min.css') }}" rel="stylesheet" media="screen">
 		<link href="{{ asset('css/chosen.min.css') }}" rel="stylesheet" media="screen">
@@ -17,33 +18,24 @@
 			<div id="main" class="container-fluid">
 				<div class="row-fluid">
 					<div class="span2">
-						<div class="nav-section">
-							<h1 class="nav-logo">
-								<a href="{{ path('home') }}">CodeKeepr</a>
-							</h1>
-						</div>
-						<div class="sidebar-nav">
-							{{ render(controller('FriggKeeprBundle:Tag:group', {'currentRoute': currentRoute})) }}
+						<h1 class="nav-logo">
+							<a href="{{ path('home') }}">CodeKeepr</a>
+						</h1>
+						<div class="sidebar-wrap">
+							{% block tag_group %}
+								{{ render(controller('FriggKeeprBundle:Tag:group')) }}
+							{% endblock %}
 						</div>
 					</div>
 					<div class="span10">
-						<div class="nav-section">
+						<div class="nav-wrap row-fluid">
 							<ul class="nav nav-pills">
-								<li>
-									<div class="input-append">
-                                        <form method="GET" action="{{ path('search') }}">    
-								  		    <input name="query" style="width: 200px;" type="text">
-								  		    <button class="btn" type="button"><i class="icon-search"></i></button>
-                                        </form>
-									</div>
-								</li>
+								{{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
 							</ul>
 						</div>
-						<div class="nav-section">
-							{{ render(controller('FriggKeeprBundle:Post:navigation', {'currentRoute': currentRoute})) }}
-						</div>
-						<div class="row-fluid">
-							{% block body %}{% endblock %}
+						<div class="content-wrap row-fluid">
+							{% block body %}
+							{% endblock %}
 						</div>
 					</div>
 				</div>
@@ -53,7 +45,8 @@
 			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
 			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
 		</footer>
-		<script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 		<script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
 		<script src="{{ asset('js/app.js') }}"></script>
@@ -61,7 +54,7 @@
 			<script type="text/javascript">
 				$(document).ready(function() {
 					$('.chosen').chosen({
-						disable_search_threshold: 10
+						disable_search_threshold: 5
 					});
 				});
 			</script>

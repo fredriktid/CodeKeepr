@@ -1,14 +1,9 @@
 {% if group %}
-    <ul class="nav nav-list">
+    <ul class="nav nav-tabs nav-stacked">
     {% for tag in group %}
-        <li class="nav-header btn">
-            <a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">{{ tag.name }} ({{ tag.post_count }})</a>
+        <li{% if current_identifier == tag.identifier %} class="active"{% endif %}>
+            <a href="{{ path('tag_show', {'identifier': tag.identifier}) }}"><span class="badge badge-info">{{ tag.post_count }}</span> <strong>{{ tag.name }}</strong></a>
         </li>
     {% endfor %}
-    </ul>
-    <ul class="unstyled margin-top">
-        <li class="align-center">
-            <a href="{{ path('tag') }}" class="muted"><small>{{ 'View all tags'|trans }}</small></a>
-        </li>
     </ul>
 {% endif %}

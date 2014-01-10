@@ -51,20 +51,6 @@ class PostController extends Controller
     }
 
     /**
-     * Main navigation menu for posts
-     *
-     * @Route("/navigation/{currentRoute}", name="post_navigation")
-     * @Method("GET")
-     * @Template()
-     */
-    public function navigationAction(Request $request, $currentRoute)
-    {
-        return array(
-            'current_route' => $currentRoute
-        );
-    }
-
-    /**
      * Posts by date
      *
      * @Route("/date/{date}", name="post_date")
