@@ -26,12 +26,32 @@ class TagController extends Controller
      */
     public function indexAction()
     {
+        $limit = 100;
         $em = $this->getDoctrine()->getManager();
-        $collection = $em->getRepository('FriggKeeprBundle:Tag')->findAll();
+        $qb = $em->createQueryBuilder();
+        $collection = $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
+           ->from('FriggKeeprBundle:Post', 'p')
+           ->leftJoin('p.Tags', 't')
+           ->where('t.id IS NOT NULL')
+           ->orderBy('t.name', 'ASC')
+           ->groupBy('t.identifier')
+           ->setMaxResults($limit)
+           ->getQuery()->getResult();
+
+        $share = array();
+        foreach ($collection as $item) {
+            $share[$item['identifier']] = $item['post_count'];
+        }
+
+        $total = array_sum($share);
+        $share = array_map(function($hits) use ($total) {
+           return round($hits / $total * 100, 1);
+        }, $share);
 
         return array(
             'title' => $this->get('translator')->trans('Tags'),
-            'collection' => $collection
+            'collection' => $collection,
+            'collection_share' => $share
         );
     }
 

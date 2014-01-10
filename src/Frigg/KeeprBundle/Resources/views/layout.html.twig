@@ -4,10 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %} - CodeKeepr</title>
-		<link href="{{ asset('bundles/friggkeepr/css/bootstrap.css') }}" rel="stylesheet" media="screen">
-		<link href="{{ asset('bundles/friggkeepr/css/bootstrap-responsive.css') }}" rel="stylesheet" media="screen">
+		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+		<link href="{{ asset('css/bootstrap-responsive.min.css') }}" rel="stylesheet" media="screen">
+		<link href="{{ asset('css/app.css') }}" rel="stylesheet" media="screen">
 		<link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
-		<link href="{{ asset('bundles/friggkeepr/css/app.css') }}" rel="stylesheet" media="screen">
 		{% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -51,9 +51,9 @@
 			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
 		</footer>
 		<script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-		<script src="{{ asset('bundles/friggkeepr/js/bootstrap.js') }}"></script>
-		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
-		<script src="{{ asset('bundles/friggkeepr/js/app.js') }}"></script>
+		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('js/app.js') }}"></script>
 		{% block javascripts %}{% endblock %}
+		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
 	</body>
 </html>

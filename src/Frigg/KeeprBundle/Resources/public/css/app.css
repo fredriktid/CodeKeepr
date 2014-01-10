@@ -162,3 +162,8 @@ pre.prettyprint {
 .pagination {
     margin: 10px 0;
 }
+
+#tagCloud {
+    width: 100%;
+    height: 100%;
+}
