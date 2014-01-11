@@ -54,7 +54,8 @@ function addTagForm($collectionHolder, $newLinkLi) {
                 url: '/tag/search/json',
                 dataType: 'json',
                 data: {
-                    query: request.term
+                    query: request.term,
+                    method: 'json'
                 },
                 success: function( data ) {
                     response(data);

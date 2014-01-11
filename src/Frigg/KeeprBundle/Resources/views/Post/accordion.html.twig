@@ -24,10 +24,10 @@
 		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %} ">
 			<div class="accordion-inner">
 				<pre class="prettyprint"><code class="language-{{ post.language.identifier }}">{{ post.content|trim }}</code></pre>
-				{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 				<div class="pull-right">
 					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('post_user', {'userId': post.user.id}) }}">{{ post.user.generateUsername }}</a></small></span>
 				</div>
+				{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 			</div>
 		</div>
 	</div>

@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -279,14 +280,11 @@ class PostController extends Controller
      */
     public function newAction()
     {
-        // todo: a real voter goes here...
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl(
-                'fos_user_security_login'
-            ));
+        $entity = new Post();
+        if (!$this->get('security.context')->isGranted('POST_NEW', $entity)) {
+            throw new AccessDeniedException;
         }
 
-        $entity = new Post();
         $form = $this->createCreateForm($entity);
 
         return array(
@@ -314,7 +312,9 @@ class PostController extends Controller
             );
         }
 
-        // todo: voter for private posts
+        if (!$this->get('security.context')->isGranted('POST_SHOW', $entity)) {
+            throw new AccessDeniedException;
+        }
 
         $deleteForm = $this->createDeleteForm($entity->getId());
 
@@ -342,11 +342,8 @@ class PostController extends Controller
             );
         }
 
-        // todo: a real voter goes here...
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl(
-                'fos_user_security_login'
-            ));
+        if (!$this->get('security.context')->isGranted('POST_EDIT', $entity)) {
+            throw new AccessDeniedException;
         }
 
         $editForm = $this->createEditForm($entity);

@@ -191,7 +191,7 @@ class TagController extends Controller
         if (strlen($query) > 0) {
             $pageLimit = 20;
             $finder = $this->get('fos_elastica.finder.website.tag');
-            $tags = $finder->find($query.'*', 10);
+            $tags = $finder->find($query.'*', 5);
             foreach($tags as $tag) {
                 $collection[] = array(
                     'label' => $tag->getName(),

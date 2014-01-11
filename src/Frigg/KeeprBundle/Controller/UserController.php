@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -34,11 +35,8 @@ class UserController extends Controller
             );
         }
 
-        // todo: a real voter goes here...
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl(
-                'fos_user_security_login'
-            ));
+        if (!$this->get('security.context')->isGranted('USER_POST', $userEntity)) {
+            throw new AccessDeniedException;
         }
 
         $pageLimit = 20;
@@ -81,11 +79,8 @@ class UserController extends Controller
             );
         }
 
-        // temporary, will be replaced by a real voter
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl(
-                'fos_user_security_login'
-            ));
+        if (!$this->get('security.context')->isGranted('USER_STAR', $userEntity)) {
+            throw new AccessDeniedException;
         }
 
         // soon...

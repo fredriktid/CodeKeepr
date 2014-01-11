@@ -17,3 +17,18 @@ services:
         tags:
             - { name: twig.extension }
 
+    codekeepr.post.voter:
+        class: Frigg\KeeprBundle\Security\Voter\PostVoter
+        public: false
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: security.voter }
+
+    codekeepr.user.voter:
+        class: Frigg\KeeprBundle\Security\Voter\UserVoter
+        public: false
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: security.voter }

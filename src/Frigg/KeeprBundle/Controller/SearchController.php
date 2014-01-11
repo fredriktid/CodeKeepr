@@ -25,9 +25,9 @@ class SearchController extends Controller
      */
     public function viewAction()
     {
-        $pageLimit = 20;
         $query = $this->get('request')->query->get('query');
         $collection = new ArrayCollection();
+        $pageLimit = 20;
 
         if ($query && strlen($query) > 0) {
             $finder = $this->get('fos_elastica.finder.website.post');
@@ -35,7 +35,7 @@ class SearchController extends Controller
             $collection = $paginator->paginate(
                 $finder->createPaginatorAdapter($query),
                 $this->get('request')->query->get('page', 1),
-                $limit
+                $pageLimit
             );
         }
 
