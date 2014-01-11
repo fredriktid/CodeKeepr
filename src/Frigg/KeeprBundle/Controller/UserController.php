@@ -21,28 +21,27 @@ class UserController extends Controller
     /**
      * User posts
      *
-     * @Route("/{id}", name="user_post")
+     * @Route("/{id}/post", name="user_post")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */
-    public function showAction($id)
+    public function postAction($id)
     {
-        // voter goes here...
+        $em = $this->getDoctrine()->getManager();
+        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find user')
+            );
+        }
+
+        // todo: a real voter goes here...
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl(
                 'fos_user_security_login'
             ));
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id);
-        if (!$userEntity) {
-            throw $this->createNotFoundException(
-                $this->get('translator')->trans('Unable to find User entity.')
-            );
-        }
-
-        $limit = 20;
+        $pageLimit = 20;
         $qb = $em->createQueryBuilder();
         $collection = $qb->select('p')
            ->from('FriggKeeprBundle:Post', 'p')
@@ -56,13 +55,13 @@ class UserController extends Controller
         $pagination = $paginator->paginate(
             $collection,
             $this->get('request')->query->get('page', 1),
-            $limit
+            $pageLimit
         );
 
         return array(
-            'entity' => $userEntity,
             'collection' => $pagination,
-            'title' => $this->get('translator')->trans('User posts')
+            'limit' => $pageLimit,
+            'title' => $this->get('translator')->trans('My posts')
         );
     }
 
@@ -75,19 +74,18 @@ class UserController extends Controller
      */
     public function starAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find user')
+            );
+        }
+
         // temporary, will be replaced by a real voter
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl(
                 'fos_user_security_login'
             ));
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id);
-        if (!$userEntity) {
-            throw $this->createNotFoundException(
-                $this->get('translator')->trans('Unable to find User entity.')
-            );
         }
 
         // soon...

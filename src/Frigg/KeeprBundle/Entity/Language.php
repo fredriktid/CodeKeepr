@@ -1,6 +1,9 @@
 <?php
+
 namespace Frigg\KeeprBundle\Entity;
+
 use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -34,7 +37,7 @@ class Language
      */
     public function __construct()
     {
-        $this->Posts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Posts = new ArrayCollection();
     }
 
     /**

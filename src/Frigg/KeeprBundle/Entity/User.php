@@ -5,7 +5,7 @@ namespace Frigg\KeeprBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -33,6 +33,8 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->Posts = new ArrayCollection();
+        $this->Stars = new ArrayCollection();
     }
 
     /**
@@ -54,6 +56,24 @@ class User extends BaseUser
     public function setUsername($username)
     {
         return $this;
+    }
+
+    /**
+     * Generate a username based on email address
+     *
+     * @return string
+     */
+    public function generateUsername()
+    {
+        $username = array();
+        foreach (str_split($this->getEmail()) as $char) {
+            if (in_array($char, array('.', '-', '_', '@', '+'))) {
+                break;
+            }
+            $username[] = $char;
+        }
+
+        return implode($username);
     }
 
     /**
@@ -126,7 +146,7 @@ class User extends BaseUser
     public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
     {
         $this->Stars[] = $stars;
-    
+
         return $this;
     }
 
@@ -143,7 +163,7 @@ class User extends BaseUser
     /**
      * Get Stars
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getStars()
     {

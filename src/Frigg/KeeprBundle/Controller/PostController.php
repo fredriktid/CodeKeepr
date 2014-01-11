@@ -19,33 +19,50 @@ use Frigg\KeeprBundle\Form\PostType;
  */
 class PostController extends Controller
 {
-
     /**
      * Lists all Post entities.
      *
      * @Route("/", name="post")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $collection = $em->getRepository('FriggKeeprBundle:Post')->findBy(
-            array(),
-            array('created_at' => 'DESC')
-        );
+        $qb = $em->createQueryBuilder();
 
-        $limit = 20;
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
+
+        $collection = $qb->select('p')
+            ->from('FriggKeeprBundle:Post', 'p')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('p.private', ':private'),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('p.private', ':private'),
+                        $qb->expr()->eq('p.User', ':current_user_id')
+                    )
+                )
+            )
+            ->orderBy('p.created_at', 'DESC')
+            ->setParameters(array(
+                'private' => 1,
+                'current_user_id' => $currentUserId
+            ))
+            ->getQuery()->getResult();
+
+        $pageLimit = 20;
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $collection,
             $this->get('request')->query->get('page', 1),
-            $limit
+            $pageLimit
         );
 
         return array(
             'collection' => $pagination,
-            'limit' => $limit,
+            'limit' => $pageLimit,
             'title' => $this->get('translator')->trans('Home')
         );
     }
@@ -55,16 +72,129 @@ class PostController extends Controller
      *
      * @Route("/date/{date}", name="post_date")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */
-    public function dateAction(Request $request, $date)
+    public function dateAction($date)
     {
-        // todo...
+        $pageLimit = 20;
+        $timestamp = strtotime($date);
+        $collection = new ArrayCollection();
+
+        if ($timestamp !== false) {
+            $currentUser = $this->get('security.context')->getToken()->getUser();
+            $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
+
+            $timestamps = array(
+                'start' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
+                'end'   => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+            );
+            $interval = array(
+                'start' => new \DateTime(date('Y-m-d H:i:s', $timestamps['start'])),
+                'end'   => new \DateTime(date('Y-m-d H:i:s', $timestamps['end']))
+            );
+
+            $em = $this->getDoctrine()->getManager();
+            $qb = $em->createQueryBuilder();
+            $collection = $qb->select('p')
+                ->from('FriggKeeprBundle:Post', 'p')
+                ->where($qb->expr()->between(
+                    'p.created_at',
+                    ':start_date',
+                    ':end_date'
+                ))
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->neq('p.private', ':private'),
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('p.private', ':private'),
+                            $qb->expr()->eq('p.User', ':current_user_id')
+                        )
+                    )
+                )
+                ->orderBy('p.created_at', 'DESC')
+                ->setParameters(array(
+                    'start_date' => $interval['start'],
+                    'end_date' => $interval['end'],
+                    'private' => 1,
+                    'current_user_id' => $currentUserId
+                ))
+                ->getQuery()->getResult();
+
+            $paginator = $this->get('knp_paginator');
+            $pagination = $paginator->paginate(
+                $collection,
+                $this->get('request')->query->get('page', 1),
+                $pageLimit
+            );
+        }
+
         return array(
-            'title' => $date,
-            'collection' => array()
+            'collection' => $pagination,
+            'limit' => $pageLimit,
+            'title' => $date
         );
     }
+
+    /**
+     * Posts by date
+     *
+     * @Route("/user/{userId}", requirements={"userId" = "\d+"}, name="post_user")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
+     */
+    public function userAction($userId)
+    {
+        $pageLimit = 20;
+        $collection = new ArrayCollection();
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$userObject = $em->getRepository('FriggKeeprBundle:User')->find($userId)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('User not found')
+            );
+        }
+
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+        $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
+
+        $qb = $em->createQueryBuilder();
+        $collection = $qb->select('p')
+            ->from('FriggKeeprBundle:Post', 'p')
+            ->where($qb->expr()->eq(
+                'p.User',
+                ':user_id'
+            ))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('p.private', ':private'),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('p.private', ':private'),
+                        $qb->expr()->eq('p.User', ':current_user_id')
+                    )
+                )
+            )
+            ->orderBy('p.created_at', 'DESC')
+            ->setParameters(array(
+                'user_id' => $userObject->getId(),
+                'current_user_id' => $currentUserId,
+                'private' => 1,
+            ))
+            ->getQuery()->getResult();
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $collection,
+            $this->get('request')->query->get('page', 1),
+            $pageLimit
+        );
+
+        return array(
+            'collection' => $pagination,
+            'limit' => $pageLimit,
+            'title' => $userObject->generateUsername()
+        );
+    }
+
 
     /**
      * Creates a new Post entity.
@@ -145,11 +275,11 @@ class PostController extends Controller
      *
      * @Route("/new", name="post_new")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:new.html.twig")
      */
     public function newAction()
     {
-        // voter goes here...
+        // todo: a real voter goes here...
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl(
                 'fos_user_security_login'
@@ -178,11 +308,13 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Post entity.');
+        if (!$entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find post')
+            );
         }
+
+        // todo: voter for private posts
 
         $deleteForm = $this->createDeleteForm($entity->getId());
 
@@ -204,12 +336,17 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
-
-        if (!$entity) {
+        if (!$entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException(
-                $this->get('translator')->trans('Unable to find Post entity')
+                $this->get('translator')->trans('Unable to find post')
             );
+        }
+
+        // todo: a real voter goes here...
+        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl(
+                'fos_user_security_login'
+            ));
         }
 
         $editForm = $this->createEditForm($entity);
@@ -300,17 +437,11 @@ class PostController extends Controller
 
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('post_show', array(
-                'identifier' => $entity->getIdentifier()
-            )));
         }
 
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView()
-        );
+        return $this->redirect($this->generateUrl('post_show', array(
+            'identifier' => $entity->getIdentifier()
+        )));
     }
     /**
      * Deletes a Post entity.

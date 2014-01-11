@@ -1,64 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %} - CodeKeepr</title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-		<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-		<link href="{{ asset('css/bootstrap-responsive.min.css') }}" rel="stylesheet" media="screen">
-		<link href="{{ asset('css/chosen.min.css') }}" rel="stylesheet" media="screen">
-		<link href="{{ asset('css/app.css') }}" rel="stylesheet" media="screen">
-		<link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
-		{% block stylesheets %}{% endblock %}
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/bootstrap-responsive.min.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/chosen.min.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet" media="screen">
+        <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
-    	{% set currentRoute = app.request.attributes.get('_route') %}
-    	<div id="wrap">
-			<div id="main" class="container-fluid">
-				<div class="row-fluid">
-					<div class="span2">
-						<h1 class="nav-logo">
-							<a href="{{ path('home') }}">CodeKeepr</a>
-						</h1>
-						<div class="sidebar-wrap">
-							{% block tag_group %}
-								{{ render(controller('FriggKeeprBundle:Tag:group')) }}
-							{% endblock %}
-						</div>
-					</div>
-					<div class="span10">
-						<div class="nav-wrap row-fluid">
-							<ul class="nav nav-pills">
-								{{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
-							</ul>
-						</div>
-						<div class="content-wrap row-fluid">
-							{% block body %}
-							{% endblock %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<footer class="footer">
-			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
-			<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
-		</footer>
-		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-		<script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
-		<script src="{{ asset('js/app.js') }}"></script>
-		{% block javascripts %}
-			<script type="text/javascript">
-				$(document).ready(function() {
-					$('.chosen').chosen({
-						disable_search_threshold: 5
-					});
-				});
-			</script>
-		{% endblock %}
-		<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
-	</body>
+        {% set currentRoute = app.request.attributes.get('_route') %}
+        <div id="wrap">
+            <div id="main" class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span2">
+                        <h1 class="nav-logo">
+                            <a href="{{ path('home') }}">CodeKeepr</a>
+                        </h1>
+                        <div class="sidebar-wrap">
+                            {% block tag_group %}
+                                {{ render(controller('FriggKeeprBundle:Tag:group')) }}
+                            {% endblock %}
+                        </div>
+                    </div>
+                    <div class="span10">
+                        <div class="nav-wrap row-fluid">
+                            <ul class="nav nav-pills">
+                                {{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
+                            </ul>
+                        </div>
+                        <div class="content-wrap row-fluid">
+                            {% block body %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
+        </footer>
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        {% block javascripts %}
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.chosen').chosen({
+                        disable_search_threshold: 5
+                    });
+                });
+            </script>
+        {% endblock %}
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
+    </body>
 </html>

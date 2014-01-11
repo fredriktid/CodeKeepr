@@ -1,6 +1,9 @@
 <?php
+
 namespace Frigg\KeeprBundle\Entity;
+
 use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -28,7 +31,7 @@ class TagType
      */
     public function __construct()
     {
-        $this->Tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Tags = new ArrayCollection();
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
 use Symfony\Component\Validator\Constraints;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -45,6 +46,11 @@ class Post
     private $content;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $private;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\User", inversedBy="Posts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -71,7 +77,8 @@ class Post
      */
     public function __construct()
     {
-        $this->Tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->Tags = new ArrayCollection();
+        $this->Stars = new ArrayCollection();
     }
 
     public function __toString()
@@ -317,7 +324,7 @@ class Post
     public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
     {
         $this->Stars[] = $stars;
-    
+
         return $this;
     }
 
@@ -334,10 +341,43 @@ class Post
     /**
      * Get Stars
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getStars()
     {
         return $this->Stars;
+    }
+
+    /**
+     * Set private
+     *
+     * @param boolean $private
+     * @return Post
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    /**
+     * Get private
+     *
+     * @return boolean
+     */
+    public function getPrivate()
+    {
+        return $this->private;
+    }
+
+    /**
+     * Is this a public post?
+     *
+     * @return boolean
+     */
+    public function isPublic()
+    {
+        return !$this->private;
     }
 }

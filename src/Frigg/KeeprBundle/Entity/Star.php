@@ -1,5 +1,7 @@
 <?php
+
 namespace Frigg\KeeprBundle\Entity;
+
 use Doctrine\ORM\Mapping AS ORM;
 
 /**

@@ -2,6 +2,9 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
+parameters:
+    fos_elastica.client.class: Frigg\KeeprBundle\Elastica\ElasticaClient
+
 framework:
     #esi:             ~
     #translator:      { fallback: %locale% }
@@ -172,7 +175,11 @@ fos_elastica:
                         driver: orm
                         model: Frigg\KeeprBundle\Entity\Post
                         provider: ~
-                        listener: ~
+                        listener:
+                            insert: true
+                            update: true
+                            delete: true
+                            is_indexable_callback: "isPublic"
                         finder: ~
                 tag:
                     mappings:

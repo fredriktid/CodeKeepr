@@ -17,6 +17,7 @@ class PostType extends AbstractType
         $builder
             ->add('topic')
             ->add('content')
+            ->add('private')
             ->add('Tags', 'collection', array(
                 'type' => new TagType(),
                 'allow_add' => true,
