@@ -47,7 +47,7 @@ class BaseVoter
 
     public function supportsClass($object)
     {
-        return false !== strpos($this->className(get_called_class()), $this->className(get_class($object)));
+        return 0 === strpos($this->className(get_called_class()), $this->className(get_class($object)));
     }
 
     public function supportsAttribute($attribute)
