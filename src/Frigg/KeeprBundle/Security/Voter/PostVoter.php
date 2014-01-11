@@ -32,6 +32,7 @@ class PostVoter extends BaseVoter implements VoterInterface
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
+                case 'DELETE':
                 case 'EDIT':
                     if (is_object($this->user)) {
                         if ($this->user->getId() == $object->getUser()->getId()) {

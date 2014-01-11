@@ -347,14 +347,12 @@ class PostController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($entity->getId());
 
         return array(
             'edit_tag' => false,
             'title'  => $this->get('translator')->trans('Edit'),
             'entity' => $entity,
-            'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView()
+            'form'   => $editForm->createView()
         );
     }
 
@@ -440,6 +438,40 @@ class PostController extends Controller
             'identifier' => $entity->getIdentifier()
         )));
     }
+
+    /**
+     * Confirms deletion of an entity
+     *
+     * @Route("/{identifier}/delete", name="post_delete_confirm")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:delete.html.twig")
+     */
+    public function deleteConfirmAction($identifier)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$entity = $em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find post')
+            );
+        }
+
+        if (!$this->get('security.context')->isGranted('POST_DELETE', $entity)) {
+            throw new AccessDeniedException;
+        }
+
+        $deleteForm = $this->createDeleteForm($entity->getId());
+
+        return array(
+            'title' => $this->get('translator')->trans(
+                'Confirm delete of "topic"',
+                array('topic' => $entity->getTopic())
+            ),
+            'delete_form' => $deleteForm->createView()
+        );
+    }
+
+
     /**
      * Deletes a Post entity.
      *

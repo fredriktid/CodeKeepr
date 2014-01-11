@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Star
 {
@@ -28,6 +29,11 @@ class Star
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id", nullable=false)
      */
     private $Post;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
 
     /**
      * Get id
@@ -83,5 +89,38 @@ class Star
     public function getPost()
     {
         return $this->Post;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Flight
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function updateTimestamps()
+    {
+        if ($this->getCreatedAt() == null) {
+            $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
+        }
     }
 }

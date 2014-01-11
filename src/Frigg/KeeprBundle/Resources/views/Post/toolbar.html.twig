@@ -1,11 +1,11 @@
 {% if view is not defined or view == 'line' %}
     <a href="{{ path('post_show', {'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}"><i class="icon-fullscreen"></i></a>
 {% endif %}
-<a href="" title="{{ 'Star'|trans }}" class="not"><i class="icon-star"></i></a>
+<a href="{{ path('user_star_new', {'id': app.user ? app.user.id : 0, 'postId': post.id}) }}" title="{{ 'Star'|trans }}"><i class="icon-star"></i></a>
 <a href="" title="{{ 'Share'|trans }}" class="not"><i class="icon-share"></i></a>
 {% if is_granted('ROLE_USER') %}
     {% if post.User.id == app.user.id or is_granted('ROLE_ADMIN') %}
         <a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Edit'|trans }}"><i class="icon-edit"></i></a>
-        <a href="{{ path('post_edit', {'identifier': post.identifier}) }}" title="{{ 'Delete'|trans }}"><i class="icon-trash"></i></a>
+        <a href="{{ path('post_delete_confirm', {'identifier': post.identifier}) }}" title="{{ 'Delete'|trans }}"><i class="icon-trash"></i></a>
     {% endif %}
 {% endif %}

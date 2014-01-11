@@ -55,6 +55,10 @@ a.muted:hover {
 
 /* Overrides */
 
+.alert {
+    margin-bottom: 10px;
+}
+
 .chosen-container {
     margin-top: -10px;
 }
@@ -172,7 +176,7 @@ pre.prettyprint {
 /* Post */
 
 textarea.code {
-    height: 400px;
+    height: 480px;
     font-family: 'Source Code Pro', sans-serif;
     font-size: 12px;
     line-height: 14px;

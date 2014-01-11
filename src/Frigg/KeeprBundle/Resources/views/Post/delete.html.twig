@@ -1,0 +1,14 @@
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body -%}
+    <div class="row-fluid">
+        <div class="span12">
+            <p><strong>{{ title }}</strong></p>
+            {{ form_start(delete_form) }}
+                {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger'}, 'label': 'Delete this post'|trans}) }}
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
+{% endblock %}
