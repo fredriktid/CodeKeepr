@@ -25,6 +25,11 @@ class User extends BaseUser
      */
     private $Posts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Frigg\KeeprBundle\Entity\Star", mappedBy="User")
+     */
+    private $Stars;
+
     public function __construct()
     {
         parent::__construct();
@@ -110,5 +115,38 @@ class User extends BaseUser
     public function getPosts()
     {
         return $this->Posts;
+    }
+
+    /**
+     * Add Stars
+     *
+     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @return User
+     */
+    public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    {
+        $this->Stars[] = $stars;
+    
+        return $this;
+    }
+
+    /**
+     * Remove Stars
+     *
+     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     */
+    public function removeStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    {
+        $this->Stars->removeElement($stars);
+    }
+
+    /**
+     * Get Stars
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStars()
+    {
+        return $this->Stars;
     }
 }

@@ -62,6 +62,11 @@ class Post
     private $Language;
 
     /**
+     * @ORM\OneToMany(targetEntity="Frigg\KeeprBundle\Entity\Star", mappedBy="Post")
+     */
+    private $Stars;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -301,5 +306,38 @@ class Post
     public function getLanguage()
     {
         return $this->Language;
+    }
+
+    /**
+     * Add Stars
+     *
+     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @return Post
+     */
+    public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    {
+        $this->Stars[] = $stars;
+    
+        return $this;
+    }
+
+    /**
+     * Remove Stars
+     *
+     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     */
+    public function removeStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    {
+        $this->Stars->removeElement($stars);
+    }
+
+    /**
+     * Get Stars
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getStars()
+    {
+        return $this->Stars;
     }
 }
