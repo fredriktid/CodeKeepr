@@ -5,7 +5,7 @@ namespace Frigg\KeeprBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Yaml\Yaml;
 
-abstract class ParentService
+abstract class ParentServiceAbstract
 {
     protected $em;
     protected $config;
@@ -16,6 +16,11 @@ abstract class ParentService
     {
         $this->em = $em;
         $this->config = Yaml::parse(file_get_contents($configFile));
+    }
+
+    public function getConfig($key)
+    {
+        return (array_key_exists($key, $this->config)) ? $this->config[$key] : null;
     }
 
     final public function setEntity($entity)
@@ -29,32 +34,27 @@ abstract class ParentService
         return $this->entity;
     }
 
+    abstract public function loadEntityById($id);
+
     public function getEntityManager()
     {
         return $this->em;
     }
 
-    abstract public function loadEntityById($id);
 
-    public function getConfig($key)
-    {
-        return (array_key_exists($key, $this->config)) ? $this->config[$key] : null;
-    }
-
-    public function getCollection()
+    public function getLoadedCollection()
     {
         return $this->collection;
     }
 
-    public function getCollectionIds()
+    public function getLoadedCollectionIds()
     {
-        $collection = $this->getCollection();
-        if (!is_array($collection) || !count($collection)) {
-            return $collection;
+        if (!is_array($this->collection) || !count($this->collection)) {
+            return $this->collection;
         }
 
         $collectionIds = array();
-        foreach ($collection as $item) {
+        foreach ($this->collection as $item) {
             $collectionIds[] = $item->getId();
         }
 

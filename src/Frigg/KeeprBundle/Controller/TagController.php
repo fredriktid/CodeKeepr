@@ -34,7 +34,7 @@ class TagController extends Controller
 
         return array(
             'title' => $this->get('translator')->trans('Tags'),
-            'collection' => $tagService->getCollection(),
+            'collection' => $tagService->getLoadedCollection(),
             'collection_share' => $tagService->getCloudPecentages()
         );
     }
@@ -55,7 +55,7 @@ class TagController extends Controller
 
         return array(
             'current_identifier' => $currentIdentifier,
-            'collection' => $tagService->getCollection()
+            'collection' => $tagService->getLoadedCollection()
         );
     }
 
@@ -79,11 +79,11 @@ class TagController extends Controller
 
         $userService = $this->get('codekeepr.service.user');
         $tagService->setUserService($userService);
-        $tagService->loadPostsByTag();
+        $tagService->loadTagPosts();
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $tagService->getCollection(),
+            $tagService->getLoadedCollection(),
             $this->get('request')->query->get('page', 1),
             $tagService->getConfig('page_limit')
         );

@@ -36,14 +36,13 @@ class PostController extends Controller
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $postService->getCollection(),
+            $postService->getLoadedCollection(),
             $this->get('request')->query->get('page', 1),
             $postService->getConfig('page_limit')
         );
 
         return array(
             'collection' => $pagination,
-            'limit' => $postService->getConfig('page_limit'),
             'title' => $this->get('translator')->trans('Home')
         );
     }
@@ -66,7 +65,7 @@ class PostController extends Controller
 
             $paginator = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
-                $postService->getCollection(),
+                $postService->getLoadedCollection(),
                 $this->get('request')->query->get('page', 1),
                 $postService->getConfig('page_limit')
             );
@@ -74,7 +73,6 @@ class PostController extends Controller
 
         return array(
             'collection' => $pagination,
-            'limit' => $postService->getConfig('page_limit'),
             'title' => $this->get('translator')->trans('By date')
         );
     }
@@ -98,18 +96,17 @@ class PostController extends Controller
 
         $postService = $this->get('codekeepr.service.post');
         $postService->setUserService($userService);
-        $postService->loadByUser();
+        $postService->loadUserPosts();
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $postService->getCollection(),
+            $postService->getLoadedCollection(),
             $this->get('request')->query->get('page', 1),
             $postService->getConfig('page_limit')
         );
 
         return array(
             'collection' => $pagination,
-            'limit' => $postService->getConfig('page_limit'),
             'title' => $postService->getUserService()->generateUsername()
         );
     }

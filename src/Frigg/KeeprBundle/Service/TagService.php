@@ -8,7 +8,7 @@ use Frigg\KeeprBundle\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 
-class TagService extends ParentService
+class TagService extends ParentServiceAbstract implements UserContainerInterface
 {
     protected $finder;
     protected $userService = null;
@@ -17,6 +17,28 @@ class TagService extends ParentService
     {
         parent::__construct($em, $configFile);
         $this->finder = $finder;
+    }
+
+    public function getFinder()
+    {
+        return $this->finder;
+    }
+
+    public function getUserService()
+    {
+        return $this->userService;
+    }
+
+    public function setUserService(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+        return $this;
+    }
+
+    public function loadEntityBy($attributes)
+    {
+        $this->entity = $em->getRepository('FriggKeeprBundle:Tag')->findOneBy($attributes);
+        return $this;
     }
 
     public function loadEntityById($id)
@@ -31,23 +53,23 @@ class TagService extends ParentService
         return $this;
     }
 
-    public function getFinder()
+    public function loadAll()
     {
-        return $this->finder;
-    }
+        if (!is_object($this->getUserService())) {
+            $this->collection = array();
+            return $this->collection();
+        }
 
-    public function getUserService()
-    {
-        return $this->userService;
-    }
+        $qb = $this->em->createQueryBuilder();
+        $this->collection = $qb->select('t')
+            ->from('FriggKeeprBundle:Tag', 't')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()->getResult();
 
-    public function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
         return $this;
     }
 
-    public function loadPostsByTag()
+    public function loadTagPosts()
     {
         if (!is_object($this->getUserService())) {
             $this->collection = array();

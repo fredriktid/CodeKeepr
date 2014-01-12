@@ -2,7 +2,8 @@
 
 namespace Frigg\KeeprBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Frigg\KeeprBundle\Service\UserServiceInterface;
+use Frigg\KeeprBundle\Service\UserContainerInterface;
 
 class UserExtension extends \Twig_Extension
 {
@@ -10,11 +11,10 @@ class UserExtension extends \Twig_Extension
     protected $userService;
     protected $postService;
 
-    public function __construct(ContainerInterface $container = null)
+    public function __construct(UserServiceInterface $userService, UserContainerInterface $postService)
     {
-        $this->container = $container;
-        $this->userService = $container->get('codekeepr.service.user');
-        $this->postService = $container->get('codekeepr.service.post');
+        $this->userService = $userService;
+        $this->postService = $postService;
     }
 
     public function getFilters()
@@ -26,23 +26,18 @@ class UserExtension extends \Twig_Extension
         );
     }
 
-    public function factory($user, $method, $params = array())
-    {
-        call_user_method_array(array($this->userService, $method), $params);
-    }
-
-    public function isStarred($postEntity, $starGroup)
+    public function isStarred($postEntity, $currentStars)
     {
         $this->postService->setEntity($postEntity);
-        return !$this->postService->canStarEntity($starGroup);
+        return !$this->postService->canStarEntity($currentStars);
     }
 
     public function getStars($userId)
     {
         $this->userService->loadEntityById($userId);
         $this->postService->setUserService($this->userService);
-        $this->postService->loadStarredByUser();
-        return $this->postService->getCollectionIds();
+        $this->postService->loadUserStarPosts();
+        return $this->postService->getLoadedCollectionIds();
     }
 
     public function generateUsername($user)
