@@ -59,24 +59,6 @@ class User extends BaseUser
     }
 
     /**
-     * Generate a username based on email address
-     *
-     * @return string
-     */
-    public function generateUsername()
-    {
-        $username = array();
-        foreach (str_split($this->getEmail()) as $char) {
-            if (in_array($char, array('.', '-', '_', '@', '+'))) {
-                break;
-            }
-            $username[] = $char;
-        }
-
-        return implode($username);
-    }
-
-    /**
      * Override to set email and username
      *
      * @param string $email

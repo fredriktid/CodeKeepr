@@ -14,13 +14,13 @@ class UserVoter extends BaseVoter implements VoterInterface
         parent::__construct($em, 'USER_');
     }
 
-    public function vote(TokenInterface $token, $object, array $attributes)
+    public function vote(TokenInterface $token, $userEntity, array $attributes)
     {
-        if (!$this->supportsClass($object)) {
+        if (!$this->supportsClass($userEntity)) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
-        $this->setUserByToken($token);
+        $this->setCurrentUser($token);
 
         foreach ($attributes as $attribute) {
             if (!$this->supportsAttribute($attribute)) {
@@ -28,12 +28,18 @@ class UserVoter extends BaseVoter implements VoterInterface
             }
 
             switch ($this->securedArea($attribute)) {
-                case 'STAR':
-                case 'POST':
-                    if (is_object($this->user)) {
-                        if ($object->getId() == $this->user->getId()) {
+                case 'STAR_DELETE':
+                case 'STAR_SHOW':
+                case 'POSTS':
+                    if (is_object($this->currentUser)) {
+                        if ($userEntity->getId() == $this->currentUser->getId()) {
                             return VoterInterface::ACCESS_GRANTED;
                         }
+                    }
+                    break;
+                case 'STAR_NEW':
+                    if (is_object($this->currentUser)) {
+                        return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
             }

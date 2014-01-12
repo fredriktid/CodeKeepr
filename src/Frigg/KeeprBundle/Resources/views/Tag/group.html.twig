@@ -1,8 +1,8 @@
-{% if group %}
+{% if collection %}
     <ul class="nav nav-tabs nav-stacked">
-    {% for tag in group %}
-        <li{% if current_identifier == tag.identifier %} class="active"{% endif %}>
-            <a href="{{ path('tag_show', {'identifier': tag.identifier}) }}"><span class="badge badge-info">{{ tag.post_count }}</span> <strong>{{ tag.name }}</strong></a>
+    {% for item in collection %}
+        <li{% if current_identifier is defined and current_identifier == item.identifier %} class="active"{% endif %}>
+            <a href="{{ path('tag_show', {'identifier': item.identifier}) }}"><span class="badge badge-info">{{ item.post_count }}</span> <strong>{{ item.name }}</strong></a>
         </li>
     {% endfor %}
     </ul>

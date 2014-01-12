@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManager;
 class BaseVoter
 {
     protected $em = null;
-    protected $user = null;
     protected $roles = array();
     protected $attribute = null;
+    protected $currentUser = null;
 
     public function __construct(EntityManager $em, $attribute)
     {
@@ -22,9 +22,9 @@ class BaseVoter
         $this->roles[] = $role;
     }
 
-    protected function setUserByToken($token)
+    protected function setCurrentUser($token)
     {
-        $this->user = $token->getUser();
+        $this->currentUser = $token->getUser();
 
         $roles = array();
         if(count($token->getRoles())) {
@@ -34,10 +34,10 @@ class BaseVoter
         }
     }
 
-    protected function className($class)
+    protected function className($entity)
     {
-        $nameSplit = explode('\\', $class);
-        return array_pop($nameSplit);
+        $classChunks = explode('\\', $entity);
+        return array_pop($classChunks);
     }
 
     protected function securedArea($attribute)
@@ -45,9 +45,9 @@ class BaseVoter
         return substr($attribute, strlen($this->attribute));
     }
 
-    public function supportsClass($object)
+    public function supportsClass($entity)
     {
-        return 0 === strpos($this->className(get_called_class()), $this->className(get_class($object)));
+        return 0 === strpos($this->className(get_called_class()), $this->className(get_class($entity)));
     }
 
     public function supportsAttribute($attribute)

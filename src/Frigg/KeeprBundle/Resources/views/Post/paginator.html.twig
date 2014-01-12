@@ -9,6 +9,7 @@
 
 {% block body -%}
     {% if collection.getTotalItemCount %}
+        {% set user_stars = app.user ? app.user.id|stars : [] %}
         <div class="accordion" id="accordion2">
             {% for item in collection %}
                 {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'view': 'line'}) }}

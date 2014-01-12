@@ -27,48 +27,15 @@ class TagController extends Controller
      */
     public function indexAction()
     {
-        $currentUser = $this->get('security.context')->getToken()->getUser();
-        $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
-
-        $pageLimit = 100;
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-        $collection = $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
-            ->from('FriggKeeprBundle:Post', 'p')
-            ->leftJoin('p.Tags', 't')
-            ->where('t.id IS NOT NULL')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->neq('p.private', ':private'),
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('p.private', ':private'),
-                        $qb->expr()->eq('p.User', ':current_user_id')
-                    )
-                )
-            )
-            ->orderBy('t.name', 'ASC')
-            ->groupBy('t.identifier')
-            ->setParameters(array(
-                'private' => 1,
-                'current_user_id' => $currentUserId
-            ))
-            ->setMaxResults($pageLimit)
-            ->getQuery()->getResult();
-
-        $share = array();
-        foreach ($collection as $item) {
-            $share[$item['identifier']] = $item['post_count'];
-        }
-
-        $total = array_sum($share);
-        $share = array_map(function($hits) use ($total) {
-           return round($hits / $total * 100, 1);
-        }, $share);
+        $userService = $this->get('codekeepr.service.user');
+        $tagService = $this->get('codekeepr.service.tag');
+        $tagService->setUserService($userService);
+        $tagService->loadPopularTags($tagService->getConfig('tag_cloud_limit'));
 
         return array(
             'title' => $this->get('translator')->trans('Tags'),
-            'collection' => $collection,
-            'collection_share' => $share
+            'collection' => $tagService->getCollection(),
+            'collection_share' => $tagService->getCloudPecentages()
         );
     }
 
@@ -81,40 +48,14 @@ class TagController extends Controller
      */
     public function groupAction(Request $request, $currentIdentifier = null)
     {
-        $currentUser = $this->get('security.context')->getToken()->getUser();
-        $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
-
-        $pageLimit = 15;
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-        $group = $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
-            ->from('FriggKeeprBundle:Post', 'p')
-            ->leftJoin('p.Tags', 't')
-            ->where('t.id IS NOT NULL')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->neq('p.private', ':private'),
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('p.private', ':private'),
-                        $qb->expr()->eq('p.User', ':current_user_id')
-                    )
-                )
-            )
-            ->orderBy('post_count', 'DESC')
-            ->groupBy('t.identifier')
-            ->setMaxResults($pageLimit)
-            ->setParameters(array(
-                'private' => 1,
-                'current_user_id' => $currentUserId
-            ))
-            ->getQuery()->getResult();
-
-        $group = (!$group ? new ArrayCollection() : $group);
+        $userService = $this->get('codekeepr.service.user');
+        $tagService = $this->get('codekeepr.service.tag');
+        $tagService->setUserService($userService);
+        $tagService->loadPopularTags();
 
         return array(
             'current_identifier' => $currentIdentifier,
-            'group' => $group,
-            'limit' => $pageLimit
+            'collection' => $tagService->getCollection()
         );
     }
 
@@ -127,51 +68,30 @@ class TagController extends Controller
      */
     public function showAction($identifier)
     {
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
+        $tagService = $this->get('codekeepr.service.tag');
+        $tagService->loadEntityByIdentifier($identifier);
+
+        if (!$tagService->getEntity()) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find tag')
             );
         }
 
-        $currentUser = $this->get('security.context')->getToken()->getUser();
-        $currentUserId = (is_object($currentUser)) ? $currentUser->getId() : 0;
-
-        $pageLimit = 20;
-        $qb = $em->createQueryBuilder();
-        $collection = $qb->select('p')
-            ->from('FriggKeeprBundle:Post', 'p')
-            ->leftJoin('p.Tags', 't')
-            ->where('t.identifier = :identifier')
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->neq('p.private', ':private'),
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('p.private', ':private'),
-                        $qb->expr()->eq('p.User', ':current_user_id')
-                    )
-                )
-            )
-            ->orderBy('p.created_at', 'DESC')
-            ->setParameters(array(
-                'identifier' => $identifier,
-                'private' => 1,
-                'current_user_id' => $currentUserId
-            ))
-            ->getQuery()->getResult();
+        $userService = $this->get('codekeepr.service.user');
+        $tagService->setUserService($userService);
+        $tagService->loadPostsByTag();
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $collection,
+            $tagService->getCollection(),
             $this->get('request')->query->get('page', 1),
-            $pageLimit
+            $tagService->getConfig('page_limit')
         );
 
         return array(
-            'tag_identifier' => $entity->getIdentifier(),
+            'tag_identifier' => $identifier,
             'collection' => $pagination,
-            'limit' => $pageLimit,
-            'title' => $entity->getName()
+            'title' => $tagService->getEntity()->getName()
         );
     }
 
@@ -184,15 +104,14 @@ class TagController extends Controller
      */
     public function searchAction()
     {
+        $tagService = $this->get('codekeepr.service.tag');
         $query = $this->get('request')->query->get('query');
         $method = $this->get('request')->query->get('method');
 
         $collection = array();
-        if (strlen($query) > 0) {
-            $pageLimit = 20;
-            $finder = $this->get('fos_elastica.finder.website.tag');
-            $tags = $finder->find($query.'*', 5);
-            foreach($tags as $tag) {
+        if ($query && strlen($query) >= $tagService->getConfig('search_minimum_chars')) {
+            $tagSearch = $tagService->getFinder()->find($query.'*', $tagService->getConfig('tag_autocomplete_limit'));
+            foreach($tagSearch as $tag) {
                 $collection[] = array(
                     'label' => $tag->getName(),
                     'value' => $tag->getName()

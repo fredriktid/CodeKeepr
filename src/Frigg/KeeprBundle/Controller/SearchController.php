@@ -25,24 +25,26 @@ class SearchController extends Controller
      */
     public function viewAction()
     {
+        $postService  = $this->get('codekeepr.service.post');
         $query = $this->get('request')->query->get('query');
-        $collection = new ArrayCollection();
-        $pageLimit = 20;
 
-        if ($query && strlen($query) > 0) {
-            $finder = $this->get('fos_elastica.finder.website.post');
+        $collection = array();
+        if ($query && strlen($query) > $postService->getConfig('search_minimum_chars')) {
             $paginator = $this->get('knp_paginator');
             $collection = $paginator->paginate(
-                $finder->createPaginatorAdapter($query),
+                $postService->getFinder()->createPaginatorAdapter($query),
                 $this->get('request')->query->get('page', 1),
-                $pageLimit
+                $postService->getConfig('page_limit')
             );
         }
 
         return array(
             'collection' => $collection,
-            'limit' => $pageLimit,
-            'title' => $this->get('translator')->trans('Search')
+            'limit' => $postService->getConfig('page_limit'),
+            'title' => $this->get('translator')->trans(
+                'Search: "query"',
+                array('query' => $query)
+            )
         );
     }
 }

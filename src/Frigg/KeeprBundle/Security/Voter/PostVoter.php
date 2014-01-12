@@ -14,39 +14,40 @@ class PostVoter extends BaseVoter implements VoterInterface
         parent::__construct($em, 'POST_');
     }
 
-    public function vote(TokenInterface $token, $object, array $attributes)
+    public function vote(TokenInterface $token, $postEntity, array $attributes)
     {
-        if (!$this->supportsClass($object)) {
+        if (!$this->supportsClass($postEntity)) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
-        $this->setUserByToken($token);
+        $this->setCurrentUser($token);
 
         foreach ($attributes as $attribute) {
             if (!$this->supportsAttribute($attribute)) {
                 continue;
             }
             switch ($this->securedArea($attribute)) {
+                case 'STAR':
                 case 'NEW':
-                    if (is_object($this->user)) {
+                    if (is_object($this->currentUser)) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
                 case 'DELETE':
                 case 'EDIT':
-                    if (is_object($this->user)) {
-                        if ($this->user->getId() == $object->getUser()->getId()) {
+                    if (is_object($this->currentUser)) {
+                        if ($this->currentUser->getId() == $postEntity->getUser()->getId()) {
                             return VoterInterface::ACCESS_GRANTED;
                         }
                     }
                     break;
                 case 'SHOW':
-                    if ($object->isPublic()) {
+                    if ($postEntity->isPublic()) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
 
-                    if (is_object($this->user)) {
-                        if ($this->user->getId() == $object->getUser()->getId()) {
+                    if (is_object($this->currentUser)) {
+                        if ($this->currentUser->getId() == $postEntity->getUser()->getId()) {
                             return VoterInterface::ACCESS_GRANTED;
                         }
                     }

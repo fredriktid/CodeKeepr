@@ -185,6 +185,13 @@ textarea.code {
     color: #F0F0F0;
 }
 
+textarea.code, pre code {
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: scroll;
+    display: block;
+}
+
 /* Tags */
 
 ul.tags {
