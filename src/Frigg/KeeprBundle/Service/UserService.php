@@ -18,6 +18,11 @@ class UserService extends ParentService
         $this->currentUser = $this->getCurrentUser();
     }
 
+    public function getEntityId()
+    {
+        return (is_object($this->entity)) ? $this->entity->getId() : 0;
+    }
+
     public function loadEntityById($id)
     {
         $this->entity = $this->em->getRepository('FriggKeeprBundle:User')->findOneById($id);

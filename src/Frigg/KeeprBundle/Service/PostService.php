@@ -101,7 +101,7 @@ class PostService extends ParentService
             )
             ->orderBy('p.created_at', 'DESC')
             ->setParameters(array(
-                'user_id' => $this->getUserService()->getEntity()->getId(),
+                'user_id' => $this->getUserService()->getEntityId(),
                 'current_user_id' => $this->getUserService()->getCurrentUserId(),
                 'private' => 1,
             ))
@@ -143,7 +143,7 @@ class PostService extends ParentService
             )
             ->orderBy('s.created_at', 'DESC')
             ->setParameters(array(
-                'user_id' => $this->getUserService()->getEntity()->getId()
+                'user_id' => $this->getUserService()->getEntityId()
             ))
             ->getQuery()->getResult();
 
