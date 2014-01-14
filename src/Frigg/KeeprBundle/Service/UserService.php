@@ -47,7 +47,7 @@ class UserService extends ParentServiceAbstract implements UserServiceInterface
 
     public function getStars($userEntity = null)
     {
-        if ($userEntity == null) {
+        if ($userEntity === null) {
             $userEntity = $this->getCurrentUser();
         }
 
@@ -56,17 +56,17 @@ class UserService extends ParentServiceAbstract implements UserServiceInterface
         }
 
         $qb = $this->em->createQueryBuilder();
-        $this->collection = $qb->select('s')
-            ->from('FriggKeeprBundle:Star', 's')
+        return $qb->select('p.id')
+            ->from('FriggKeeprBundle:Post', 'p')
+            ->leftJoin('p.Stars', 's')
             ->where(
                 $qb->expr()->eq('s.User', ':user_id')
             )
+            ->orderBy('s.created_at', 'DESC')
             ->setParameters(array(
                 'user_id' => $userEntity->getId()
             ))
             ->getQuery()->getResult();
-
-        return $this->getLoadedCollectionIds();
     }
 
     public function generateUsername()
