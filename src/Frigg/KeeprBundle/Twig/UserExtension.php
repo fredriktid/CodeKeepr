@@ -20,7 +20,7 @@ class UserExtension extends \Twig_Extension
     public function getGlobals()
     {
         return array(
-            'user_stars' => $this->getStars($this->userService->getCurrentUserId())
+            'user_stars' => $this->userService->getStars()
         );
     }
 

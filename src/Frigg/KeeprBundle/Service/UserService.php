@@ -45,6 +45,30 @@ class UserService extends ParentServiceAbstract implements UserServiceInterface
         return (is_object($this->currentUser)) ? $this->currentUser->getId() : 0;
     }
 
+    public function getStars($userEntity = null)
+    {
+        if ($userEntity == null) {
+            $userEntity = $this->getCurrentUser();
+        }
+
+        if (!is_object($userEntity)) {
+            return array();
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $this->collection = $qb->select('s')
+            ->from('FriggKeeprBundle:Star', 's')
+            ->where(
+                $qb->expr()->eq('s.User', ':user_id')
+            )
+            ->setParameters(array(
+                'user_id' => $userEntity->getId()
+            ))
+            ->getQuery()->getResult();
+
+        return $this->getLoadedCollectionIds();
+    }
+
     public function generateUsername()
     {
         if (!is_object($this->entity)) {
