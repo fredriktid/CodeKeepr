@@ -155,6 +155,7 @@ class PostController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('post_show', array(
+                'id' => $entity->getId(),
                 'identifier' => $entity->getIdentifier()
             )));
         }
@@ -213,14 +214,14 @@ class PostController extends Controller
     /**
      * Finds and displays a Post entity.
      *
-     * @Route("/{identifier}", name="post_show")
+     * @Route("/{id}/{identifier}", name="post_show", requirements={"id" = "\d+"}, defaults={"identifier" = null})
      * @Method("GET")
      * @Template()
      */
-    public function showAction($identifier)
+    public function showAction($id, $identifier = null)
     {
         $postService = $this->get('codekeepr.service.post');
-        $postService->loadEntityByIdentifier($identifier);
+        $postService->loadEntityById($id);
 
         if (!$postEntity = $postService->getEntity()) {
             throw $this->createNotFoundException(
@@ -244,14 +245,14 @@ class PostController extends Controller
     /**
      * Displays a form to edit an existing Post entity.
      *
-     * @Route("/{identifier}/edit", name="post_edit")
+     * @Route("/{id}/{identifier}/edit", name="post_edit", requirements={"id" = "\d+"}, defaults={"identifier" = null})
      * @Method("GET")
      * @Template("FriggKeeprBundle:Post:new.html.twig")
      */
-    public function editAction($identifier)
+    public function editAction($id, $identifier = null)
     {
         $postService = $this->get('codekeepr.service.post');
-        $postService->loadEntityByIdentifier($identifier);
+        $postService->loadEntityById($id);
 
         if (!$postEntity = $postService->getEntity()) {
             throw $this->createNotFoundException(
@@ -356,6 +357,7 @@ class PostController extends Controller
         }
 
         return $this->redirect($this->generateUrl('post_show', array(
+            'id' => $entity->getId(),
             'identifier' => $entity->getIdentifier()
         )));
     }
