@@ -53,12 +53,11 @@ abstract class ParentServiceAbstract
             return $this->collection;
         }
 
-        $collectionIds = array();
-        foreach ($this->collection as $item) {
-            $collectionIds[] = $item->getId();
+        foreach ($this->collection as &$item) {
+            $item = $item->getId();
         }
 
-        return $collectionIds;
+        return $this->collection;
     }
 
     final public static function arraySearchRecursive($needle, $haystack, $strict = false, $path = array())

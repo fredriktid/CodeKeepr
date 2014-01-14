@@ -17,6 +17,13 @@ class UserExtension extends \Twig_Extension
         $this->postService = $postService;
     }
 
+    public function getGlobals()
+    {
+        return array(
+            'user_stars' => $this->getStars($this->userService->getCurrentUserId())
+        );
+    }
+
     public function getFilters()
     {
         return array(
