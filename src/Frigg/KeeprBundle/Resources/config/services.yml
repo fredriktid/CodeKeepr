@@ -27,7 +27,7 @@ services:
     # twig extensions
     codekeepr.twig.user.extension:
         class: %codekeepr.twig.user.class%
-        arguments: [@service_container]
+        arguments: [@codekeepr.service.user, @codekeepr.service.post]
         tags:
             - { name: twig.extension }
 

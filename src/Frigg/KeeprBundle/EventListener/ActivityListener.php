@@ -37,12 +37,12 @@ class ActivityListener
     public function postPersist(LifecycleEventArgs $arguments)
     {
         $this->setEntity($arguments->getEntity());
+
         if (!$this->isValidEntity()) {
             return;
         }
 
-        $identifier = sprintf('%s-%d', $this->entity->sanitize($this->entity->getTopic()), $this->entity->getId());
-        $this->persistIdentifier('setIdentifier', $identifier);
+        $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
     }
 
     public function postUpdate(LifecycleEventArgs $arguments)
@@ -52,11 +52,10 @@ class ActivityListener
             return;
         }
 
-        $identifier = sprintf('%s-%d', $this->entity->sanitize($this->entity->getTopic()), $this->entity->getId());
-        $this->persistIdentifier('setIdentifier', $identifier);
+        $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
     }
 
-    protected function persistIdentifier($method, $identifier)
+    protected function persist($method, $identifier)
     {
         if (!method_exists($this->entity, $method)) {
             return;

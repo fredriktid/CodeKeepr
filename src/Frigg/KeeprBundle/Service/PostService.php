@@ -8,7 +8,7 @@ use Frigg\KeeprBundle\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 
-class PostService extends ParentService
+class PostService extends ParentServiceAbstract implements UserContainerInterface
 {
     protected $finder;
     protected $userService = null;
@@ -17,18 +17,6 @@ class PostService extends ParentService
     {
         parent::__construct($em, $configFile);
         $this->finder = $finder;
-    }
-
-    public function loadEntityById($id)
-    {
-        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneById($id);
-        return $this;
-    }
-
-    public function loadEntityByIdentifier($identifier)
-    {
-        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
-        return $this;
     }
 
     public function getFinder()
@@ -41,9 +29,21 @@ class PostService extends ParentService
         return $this->userService;
     }
 
-    public function setUserService(UserService $userService)
+    public function setUserService(UserServiceInterface $userService)
     {
         $this->userService = $userService;
+        return $this;
+    }
+
+    public function loadEntityById($id)
+    {
+        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneById($id);
+        return $this;
+    }
+
+    public function loadEntityByIdentifier($identifier)
+    {
+        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
         return $this;
     }
 
@@ -76,7 +76,7 @@ class PostService extends ParentService
         return $this;
     }
 
-    public function loadByUser()
+    public function loadUserPosts()
     {
         if (!is_object($this->getUserService())) {
             $this->collection = array();
@@ -117,8 +117,8 @@ class PostService extends ParentService
         }
 
         if ($currentStars === null) {
-            $this->loadStarredByUser();
-            $currentStars = $this->getCollectionIds();
+            $this->loadUserStarPosts();
+            $currentStars = $this->getLoadedCollectionIds();
         }
 
         return (bool)!(static::arraySearchRecursive(
@@ -127,7 +127,7 @@ class PostService extends ParentService
         ));
     }
 
-    public function loadStarredByUser()
+    public function loadUserStarPosts()
     {
         if (!is_object($this->getUserService())) {
             $this->collection = array();

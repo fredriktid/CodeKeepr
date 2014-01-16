@@ -44,11 +44,11 @@ class UserController extends Controller
 
         $postService = $this->get('codekeepr.service.post');
         $postService->setUserService($userService);
-        $postService->loadByUser();
+        $postService->loadUserPosts();
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $postService->getCollection(),
+            $postService->getLoadedCollection(),
             $this->get('request')->query->get('page', 1),
             $postService->getConfig('page_limit')
         );
@@ -83,11 +83,11 @@ class UserController extends Controller
 
         $postService = $this->get('codekeepr.service.post');
         $postService->setUserService($userService);
-        $postService->loadStarredByUser();
+        $postService->loadUserStarPosts();
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $postService->getCollection(),
+            $postService->getLoadedCollection(),
             $this->get('request')->query->get('page', 1),
             $postService->getConfig('page_limit')
         );
