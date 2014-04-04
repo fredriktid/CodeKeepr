@@ -190,6 +190,7 @@ textarea.code, pre code {
     word-wrap: normal;
     overflow-x: scroll;
     display: block;
+    overflow: auto;
 }
 
 /* Tags */
