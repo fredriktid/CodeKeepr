@@ -1,0 +1,11 @@
+Follow these steps in order to test changes in the post-receive hook without a lot of bogus commits.
+
+    cd <remote/bare repository>
+    git log -2 --format=oneline --reverse
+
+The command above will produce the latest two commits from the repository. Use them to replace *$FROM_ID* and *$TO_ID* below:
+
+    echo "$FROM_ID $TO_ID master" | ./hooks/post-receiv
+
+This makes post-receive hooks really enjoyable, and you may execute this command repeatedly.
+

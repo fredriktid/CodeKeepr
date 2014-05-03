@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 # post-receive
 
-# 1. Read STDIN (Format: "from_commit to_commit branch_name")
+puts "**************************************"
+puts "Post-receive: Deploying to production"
+puts "**************************************"
+
+# 1. Read from stdin in format: "from_commit to_commit branch_name"
 from, to, branch = ARGF.read.split " "
 
 # 2. Only deploy if master branch was pushed
@@ -14,4 +18,13 @@ end
 deploy_to_dir = File.expand_path('../www')
 `GIT_WORK_TREE="#{deploy_to_dir}" git checkout -f master`
 puts "DEPLOY: master(#{to}) copied to '#{deploy_to_dir}'"
+
+# 4. Post-deploy settings and cleanup
+Dir.chdir("#{deploy_to_dir}")
+
+output = `#{"cp web/.htaccess_prod web/.htaccess" +
+" && php app/console assetic:dump --env=prod --no-debug --no-interaction" +
+" && php app/console cache:clear --env=prod --no-debug  --no-interaction"}`
+
+puts "Done."
 
