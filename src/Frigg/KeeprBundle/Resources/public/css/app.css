@@ -4,6 +4,10 @@ html, body {
     height: 100%;
 }
 
+body {
+    font-size: 15px;
+}
+
 legend {
     font-size: 14px;
     font-weight: bold;
@@ -18,6 +22,11 @@ h1 {
 h1 a, h1 a:hover {
     color: #444;
     text-decoration: none;
+}
+
+.label, .badge {
+    font-size: 13px;
+    padding: 3px 5px;
 }
 
 .inline-block {
