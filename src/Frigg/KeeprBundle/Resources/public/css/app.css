@@ -82,6 +82,7 @@ a.muted:hover {
 .accordion-heading .accordion-toggle {
     display: inline;
     padding: 0;
+    margin-left: 5px;
 }
 
 .accordion-credit {
@@ -109,12 +110,24 @@ pre.prettyprint {
 #wrap {
     min-height: 100%;
     margin: 0 auto;
-    width: 1200px;
+    width: 960px;
 }
 
 #main {
     margin-top: 90px;
     width: 100%;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.logo-right {
+    position: absolute;
+    left: 50%;
+}
+
+.logo-left {
+    position: relative;
+    left: -50%;
 }
 
 .footer {
@@ -224,11 +237,13 @@ ul.tags div {
 }
 
 form#main-search {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     border-bottom: 1px solid #eee;
+    padding: 0 0 12px;
 }
 
 form#main-search input {
-    font-size: 16px;
+    font-size: 18px;
     padding: 16px 10px;
+    margin-bottom: 0;
 }

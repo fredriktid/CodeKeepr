@@ -109,12 +109,16 @@ class UserController extends Controller
         $session = $this->get('session');
         $translator = $this->get('translator');
 
+        $referer = $this->get('request')->headers->get('referer');
+        $referer = (!$referer ? $this->generateUrl('home') : $referer);
+
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             $session->getFlashBag()->add(
                 'error',
                 $translator->trans('You must be logged in to star something')
             );
-            throw new AccessDeniedException;
+
+            return $this->redirect($referer);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -158,13 +162,7 @@ class UserController extends Controller
             }
         }
 
-        if ($referer = $request = $this->get('request')->headers->get('referer')) {
-            return $this->redirect($referer);
-        }
-
-        return $this->redirect($this->generateUrl(
-            'home'
-        ));
+        return $this->redirect($referer);
     }
 
     /**
