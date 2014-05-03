@@ -114,7 +114,7 @@ class UserController extends Controller
 
         if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             $session->getFlashBag()->add(
-                'error',
+                'info',
                 $translator->trans('You must be logged in to star something')
             );
 
