@@ -88,6 +88,12 @@ assetic:
             filters:
                 - cssrewrite
             output: css/app.css
+        doc_css:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/css/doc.css
+            filters:
+                - cssrewrite
+            output: css/doc.css
 
         # javascript
         bootstrap_js:
@@ -192,4 +198,3 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
-

@@ -10,27 +10,28 @@
             {{ error|trans }}
         </div>
     {% endif %}
-    <form action="{{ path("fos_user_security_check") }}" method="post">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-        <div>
-            <label for="username">{{ 'Username'|trans }}</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-        </div>
-        <div>
-            <label for="username">{{ 'Password'|trans }}</label>
-            <input type="password" id="password" name="_password" required="required" />
-        </div>
-        <div>
-            <label class="checkbox">
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> {{ 'Remember me'|trans }}
-            </label>
-        </div>
-        <div>
-            <input type="submit" id="_submit" name="_submit" value="{{ 'Login'|trans }}" class="btn" />
+    <form action="{{ path("fos_user_security_check") }}" method="post" class="well">
+        <div style="padding: 10px">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <div>
+                <label for="username">{{ 'Username'|trans }}</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+            </div>
+            <div>
+                <label for="username">{{ 'Password'|trans }}</label>
+                <input type="password" id="password" name="_password" required="required" />
+            </div>
+            <div>
+                <label class="checkbox">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> {{ 'Remember me'|trans }}
+                </label>
+            </div>
+            <div>
+                <input type="submit" id="_submit" name="_submit" value="{{ 'Login'|trans }}" class="btn" />
+            </div>
+            <p class="margin-top">
+                <a href="{{ path('fos_user_resetting_request') }}">{{ 'Missing password? Reset here'|trans }}</a>
+            </p>
         </div>
     </form>
-    <ul class="unstyled">
-        <li><a href="{{ path('fos_user_registration_register') }}"><i class="icon-ok-sign"></i> {{ 'Register account'|trans }}</a></li>
-        <li><a href="{{ path('fos_user_resetting_request') }}"><i class="icon-question-sign"></i> {{ 'Reset password'|trans }}</a></li>
-    </ul>
 {% endblock %}

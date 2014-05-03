@@ -11,8 +11,8 @@ legend {
 
 h1 {
     font-family: 'Lobster', Georgia, Times, serif;
-    font-size: 40px;
-    margin-bottom: 15px;
+    font-size: 70px;
+    margin: 20px 0 10px 0;
 }
 
 h1 a, h1 a:hover {
@@ -108,11 +108,13 @@ pre.prettyprint {
 
 #wrap {
     min-height: 100%;
+    margin: 0 auto;
+    width: 1200px;
 }
 
 #main {
-    overflow: auto;
-    padding-bottom: 35px;
+    margin-top: 90px;
+    width: 100%;
 }
 
 .footer {
@@ -122,7 +124,6 @@ pre.prettyprint {
     clear: both;
     padding: 5px 0;
     background: inherit;
-    border-top: 1px solid #ddd;
     text-align: center;
 }
 
@@ -148,6 +149,14 @@ pre.prettyprint {
 .sidebar-wrap .nav-list > li > a {
     color: #999999;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.nav-list {
+    padding: 5px 15px;
+}
+
+.nav-list li {
+    line-height: 22px;
 }
 
 #sidebar input.input-medium {
@@ -212,4 +221,14 @@ ul.tags div {
 
 .btn-tag-delete {
     margin: -10px 5px 0 0;
+}
+
+form#main-search {
+    margin: 0 0 10px;
+    border-bottom: 1px solid #eee;
+}
+
+form#main-search input {
+    font-size: 16px;
+    padding: 16px 10px;
 }

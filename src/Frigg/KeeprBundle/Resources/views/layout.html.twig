@@ -9,29 +9,37 @@
         <link href="{{ asset('css/bootstrap-responsive.min.css') }}" rel="stylesheet" media="screen">
         <link href="{{ asset('css/chosen.min.css') }}" rel="stylesheet" media="screen">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/doc.css') }}" rel="stylesheet" media="screen">
         <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
         {% set currentRoute = app.request.attributes.get('_route') %}
         <div id="wrap">
-            <div id="main" class="container-fluid">
+            <div style="position: absolute; left: 50%;">
+                <div style="position: relative; left: -50%;">
+                    <h1><a href="{{ path('home') }}">CodeKeepr</a></h1>
+                </div>
+            </div>
+            <div id="main" class="span12">
                 <div class="row-fluid">
-                    <div class="span2">
-                        <h1 class="nav-logo">
-                            <a href="{{ path('home') }}">CodeKeepr</a>
-                        </h1>
-                        <div class="sidebar-wrap">
+                    <div class="span3">
+                        <div class="row-fluid">
+                            <div class="well">
+                                <ul class="nav nav-list">
+                                    {{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row-fluid bs-docs-sidebar">
                             {% block tag_group %}
                                 {{ render(controller('FriggKeeprBundle:Tag:group')) }}
                             {% endblock %}
                         </div>
                     </div>
-                    <div class="span10">
-                        <div class="nav-wrap row-fluid">
-                            <ul class="nav nav-pills">
-                                {{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
-                            </ul>
+                    <div class="span9">
+                        <div class="row-fluid">
+                            {{ include('FriggKeeprBundle::Search/form.html.twig') }}
                         </div>
                         <div class="content-wrap row-fluid">
                             {% for type, messages in app.session.flashbag.all() %}
@@ -41,8 +49,10 @@
                                     </div>
                                 {% endfor %}
                             {% endfor %}
+                            <!-- Main content -->
                             {% block body %}
                             {% endblock %}
+                            <!-- /Main content -->
                         </div>
                     </div>
                 </div>

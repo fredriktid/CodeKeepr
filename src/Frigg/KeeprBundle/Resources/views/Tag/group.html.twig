@@ -1,8 +1,11 @@
 {% if collection %}
-    <ul class="nav nav-tabs nav-stacked">
+    <ul class="nav nav-list bs-docs-sidenav span12">
     {% for item in collection %}
         <li{% if current_identifier is defined and current_identifier == item.identifier %} class="active"{% endif %}>
-            <a href="{{ path('tag_show', {'identifier': item.identifier}) }}"><span class="badge badge-info">{{ item.post_count }}</span> <strong>{{ item.name }}</strong></a>
+        	<i class="icon-chevron-right"></i>
+            <a href="{{ path('tag_show', {'identifier': item.identifier}) }}">
+            	<span class="badge">{{ item.post_count }}</span> <strong>{{ item.name }}</strong>
+           	</a>
         </li>
     {% endfor %}
     </ul>

@@ -7,6 +7,6 @@
 {% endblock %}
 
 {% block body -%}
-    {% set user_stars = app.user.id|stars %}
+    {% set user_stars = (app.user and app.user is defined) ? app.user.id|stars : [] %}
     {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': entity, 'view': 'full'}) }}
 {% endblock %}

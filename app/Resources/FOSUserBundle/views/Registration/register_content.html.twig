@@ -1,21 +1,23 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{{ form_start(form) }}
-    <div>
-        <label for="email">{{ 'Your e-mail'|trans }}</label>
-        {{ form_widget(form.email, {'attr': {'id': 'email'}}) }}
-        {{ form_widget(form.username, {'attr': {'style': 'display: none', 'value': 'placeholder'}}) }}
-    </div>
-    <div>
-        <label for="password">{{ 'Password'|trans }}</label>
-        {{ form_widget(form.plainPassword.first) }}
-    </div>
-    <div>
-        <label for="password">{{ 'Repeat password'|trans }}</label>
-        {{ form_widget(form.plainPassword.second) }}
-    </div>
-    <div>
-        {{ form_widget(form._token) }}
-        <input class="btn" type="submit" value="{{ 'Register'|trans }}" />
+{{ form_start(form, {'attr': {'class': 'well'}}) }}
+    <div style="padding: 10px">
+        <div>
+            <label for="email">{{ 'Your e-mail'|trans }}</label>
+            {{ form_widget(form.email, {'attr': {'id': 'email'}}) }}
+            {{ form_widget(form.username, {'attr': {'style': 'display: none', 'value': 'placeholder'}}) }}
+        </div>
+        <div>
+            <label for="password">{{ 'Password'|trans }}</label>
+            {{ form_widget(form.plainPassword.first) }}
+        </div>
+        <div>
+            <label for="password">{{ 'Repeat password'|trans }}</label>
+            {{ form_widget(form.plainPassword.second) }}
+        </div>
+        <div>
+            {{ form_widget(form._token) }}
+            <input class="btn" type="submit" value="{{ 'Register'|trans }}" />
+        </div>
     </div>
 {{ form_end(form) }}
