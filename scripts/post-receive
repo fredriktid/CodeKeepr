@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 # post-receive
 
+echo "**************************************"
+echo "Post-receive: Deploying to production"
+echo "**************************************"
+
 # 1. Read STDIN (Format: "from_commit to_commit branch_name")
 from, to, branch = ARGF.read.split " "
 
