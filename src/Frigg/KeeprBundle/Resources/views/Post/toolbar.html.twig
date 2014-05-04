@@ -1,5 +1,10 @@
 {% if view is not defined or view == 'line' %}
-    <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}"><i class="icon-fullscreen"></i></a>
+    <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}">
+    	<i class="icon-fullscreen"></i>
+    </a>
+{% endif %}
+{% if post.private %}
+	<i class="icon-lock"></i>
 {% endif %}
 {#<a href="" title="{{ 'Share'|trans }}" class="not"><i class="icon-share"></i></a>#}
 {% if is_granted('ROLE_USER') %}

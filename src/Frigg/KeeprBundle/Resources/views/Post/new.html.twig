@@ -37,10 +37,12 @@
     </div>
     {{ form_end(form) }}
 {% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/post.js') }}"></script>

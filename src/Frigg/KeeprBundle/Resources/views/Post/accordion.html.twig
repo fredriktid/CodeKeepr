@@ -3,31 +3,25 @@
 		<div class="accordion-heading">
 			<div class="accordion-content">
 				<div class="pull-right">
-					{% for tag in post.tags %}
+					{% set post_tags = (view is defined and view == 'full') ? post.tags : post.tags|slice(0, 5)  %} 
+					{% for tag in post_tags %}
 						<a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">
 							<span class="label label-info">{{ tag.name }}</span>
 						</a>
 					{% endfor %}
 					{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 				</div>
-				{% if post.private %}
-					<i class="icon-lock"></i>
-				{% endif %}
-
-				{% if user_stars is not defined or not post|is_starred(user_stars) %}
-				    <a href="{{ path('user_star_new', {'id': app.user ? app.user.id : 0, 'postId': post.id}) }}" title="{{ 'Star'|trans }}"><i class="icon-star-empty"></i></a>
-				{% elseif app.user %}
-				    <a href="{{ path('user_star_delete', {'id': app.user.id, 'postId': post.id}) }}" title="{{ 'Unstar'|trans }}"><i class="icon-star"></i></a>
-				{% endif %}
-			
+				{{ include('FriggKeeprBundle:Star:add.html.twig') }}
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
 					{{ post.topic }}
 				</a>
 			</div>
 		</div>
-		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %} ">
+
+		{% set highlighter = (post.language.identifier and post.language.identifier not in ['plain', 'blank', 'none']) %}
+		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %}">
 			<div class="accordion-inner">
-				<pre class="prettyprint"><code class="language-{{ post.language.identifier }}">{{ post.content|trim }}</code></pre>
+				<pre class="prettyprint{% if not highlighter %}-plain{% endif %}"><code{% if highlighter %} class="language-{{ post.language.identifier }}"{% endif %}>{{ post.content|trim }}</code></pre>
 				<div class="pull-right">
 					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('post_user', {'userId': post.user.id}) }}">{{ post.user|username }}</a></small></span>
 				</div>

@@ -10,7 +10,11 @@
                 <ul>
                     {% for item in collection %}
                         {% set item_key = item.identifier %}
-                        <li><a href="{{ path('tag_show', {'identifier': item.identifier}) }}"{% if collection_share[item_key] is defined %} style="font-size: {{ collection_share[item_key] }}pt"{% endif %}>{{ item.name }}</a></li>
+                        <li>
+                            <a href="{{ path('tag_show', {'identifier': item.identifier}) }}"{% if collection_share[item_key] is defined %} style="font-size: {{ collection_share[item_key] }}pt"{% endif %}>
+                                {{ item.name }}
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -28,6 +32,7 @@
             });
 
             $('#tag-cloud').tagcanvas({
+                initial: 2,
                 weight: true,
                 weightMode: 'size',
                 weightSize: 2,
@@ -36,10 +41,12 @@
                 outlineColour: '#0088cc',
                 outlineThickness : 1,
                 maxSpeed : 0.05,
-                depth : 0.8,
+                depth : 0.9,
                 fadeIn: 1,
                 decel: 0.98,
-                zoom: 1.0
+                zoom: 1.2,
+                freezeActive: true,
+
             });
         });
     </script>

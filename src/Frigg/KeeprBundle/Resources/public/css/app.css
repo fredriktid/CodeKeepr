@@ -256,3 +256,8 @@ form#main-search input {
     padding: 16px 10px;
     margin-bottom: 0;
 }
+
+pre.prettyprint-plain {
+    display: block;
+    background-color: #333;
+}
