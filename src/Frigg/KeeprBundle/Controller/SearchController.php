@@ -39,6 +39,7 @@ class SearchController extends Controller
         }
 
         return array(
+            'query' => $query,
             'collection' => $collection,
             'limit' => $postService->getConfig('page_limit'),
             'title' => $this->get('translator')->trans(

@@ -2,6 +2,8 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block search_placeholder %}{{ query }}{% endblock %}
+
 {% block tag_group %}
     {% set identifier = (tag_identifier is defined and tag_identifier is not empty) ? tag_identifier : false %}
     {{ render(controller('FriggKeeprBundle:Tag:group', {'currentIdentifier': identifier})) }}
