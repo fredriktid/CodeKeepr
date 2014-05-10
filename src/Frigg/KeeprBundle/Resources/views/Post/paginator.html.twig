@@ -3,8 +3,10 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block search_form %}
-    {% set query = (query is defined) ? query : '' %}
-    {{ include('FriggKeeprBundle::Search/form.html.twig', {'query': query}) }}
+    <div class="row-fluid">
+        {% set query = (query is defined) ? query : '' %}
+        {{ include('FriggKeeprBundle::Search/form.html.twig', {'query': query}) }}
+    </div>
 {% endblock %}
 
 {% block tag_group %}
