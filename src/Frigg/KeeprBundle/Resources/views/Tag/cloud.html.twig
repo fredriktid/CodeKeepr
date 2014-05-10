@@ -1,0 +1,53 @@
+{% extends "FriggKeeprBundle::layout.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body -%}
+    <div id="tag-cloud-container">
+        <canvas id="tag-cloud">
+            <p>Your browser is just too old...</p>
+            {% if collection %}
+                <ul>
+                    {% for item in collection %}
+                        {% set item_key = item.identifier %}
+                        <li>
+                            <a href="{{ path('tag_show', {'identifier': item.identifier}) }}"{% if collection_share[item_key] is defined %} style="font-size: {{ collection_share[item_key] }}pt"{% endif %}>
+                                {{ item.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </canvas>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.tagcanvas.min.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tag-cloud').height(function(index, height) {
+                return window.innerHeight - $(this).offset().top;
+            });
+
+            $('#tag-cloud').tagcanvas({
+                initial: 2,
+                weight: true,
+                weightMode: 'size',
+                weightSize: 2,
+                textColour : '#999999',
+                outlineMethod: 'colour',
+                outlineColour: '#0088cc',
+                outlineThickness : 1,
+                maxSpeed : 0.05,
+                depth : 0.9,
+                fadeIn: 1,
+                decel: 0.98,
+                zoom: 1.2,
+                freezeActive: true,
+
+            });
+        });
+    </script>
+{% endblock %}

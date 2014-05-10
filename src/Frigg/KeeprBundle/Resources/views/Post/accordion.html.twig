@@ -6,7 +6,7 @@
 					{% set post_tags = (view is defined and view == 'full') ? post.tags : post.tags|slice(0, 5)  %} 
 					{% for tag in post_tags %}
 						<a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">
-							<span class="label label-info">{{ tag.name }}</span>
+							<span class="label label-inverse tag-badge">{{ tag.name }}</span>
 						</a>
 					{% endfor %}
 					{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}

@@ -39,6 +39,28 @@ class TagController extends Controller
         );
     }
 
+
+    /**
+     * Lists all Tag entities.
+     *
+     * @Route("/cloud", name="tag_cloud")
+     * @Method("GET")
+     * @Template()
+     */
+    public function cloudAction()
+    {
+        $userService = $this->get('codekeepr.service.user');
+        $tagService = $this->get('codekeepr.service.tag');
+        $tagService->setUserService($userService);
+        $tagService->loadPopularTags($tagService->getConfig('tag_cloud_limit'));
+
+        return array(
+            'title' => $this->get('translator')->trans('Tags'),
+            'collection' => $tagService->getLoadedCollection(),
+            'collection_share' => $tagService->getCloudPecentages()
+        );
+    }
+
     /**
      * Groups and ranks all tags
      *

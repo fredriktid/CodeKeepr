@@ -261,3 +261,7 @@ pre.prettyprint-plain {
     display: block;
     background-color: #333;
 }
+
+.tag-badge:hover  {
+    background-color: #3a87ad;
+}
