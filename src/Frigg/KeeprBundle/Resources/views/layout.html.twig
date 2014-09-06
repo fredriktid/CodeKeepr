@@ -40,7 +40,7 @@
                         </div>
                         <div class="row-fluid bs-docs-sidebar">
                             {% block tag_group %}
-                                {{ render(controller('FriggKeeprBundle:Tag:group')) }}
+                                {{ render_esi(controller('FriggKeeprBundle:Tag:group')) }}
                             {% endblock %}
                         </div>
                     </div>
@@ -72,11 +72,11 @@
             <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
             <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
         </footer>
-        
+
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-        {% javascripts 
+        {% javascripts
             '@FriggKeeprBundle/Resources/public/js/bootstrap.min.js'
             '@FriggKeeprBundle/Resources/public/js/chosen.jquery.min.js'
             '@FriggKeeprBundle/Resources/public/js/app.js'

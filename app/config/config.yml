@@ -6,7 +6,7 @@ parameters:
     fos_elastica.client.class: Frigg\KeeprBundle\Elastica\ElasticaClient
 
 framework:
-    #esi:             ~
+    esi:             ~
     translator:      { fallback: %locale% }
     secret:          %secret%
     router:
@@ -19,7 +19,7 @@ framework:
         engines: ['twig']
         assets_version: '0.2'
     default_locale:  "%locale%"
-    trusted_proxies: ~
+    trusted_proxies: [192.0.0.1, 10.0.0.0/8, 127.0.0.1]
     session:         ~
     fragments:       ~
 

@@ -11,7 +11,7 @@
 
 {% block tag_group %}
     {% set identifier = (tag_identifier is defined and tag_identifier is not empty) ? tag_identifier : false %}
-    {{ render(controller('FriggKeeprBundle:Tag:group', {'currentIdentifier': identifier})) }}
+    {{ render_esi(controller('FriggKeeprBundle:Tag:group', {'currentIdentifier': identifier})) }}
 {% endblock %}
 
 {% block body -%}
