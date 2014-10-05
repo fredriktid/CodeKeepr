@@ -1,62 +1,55 @@
 parameters:
     codekeepr.config: "%kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/config/codekeepr.yml"
-    codekeepr.event.registration.class: Frigg\KeeprBundle\EventListener\RegistrationListener
-    codekeepr.event.activity.class: Frigg\KeeprBundle\EventListener\ActivityListener
-    codekeepr.twig.user.class: Frigg\KeeprBundle\Twig\UserExtension
-    codekeepr.voter.post.class: Frigg\KeeprBundle\Security\Voter\PostVoter
-    codekeepr.voter.user.class: Frigg\KeeprBundle\Security\Voter\UserVoter
-    codekeepr.service.user.class: Frigg\KeeprBundle\Service\UserService
-    codekeepr.service.post.class: Frigg\KeeprBundle\Service\PostService
-    codekeepr.service.tag.class: Frigg\KeeprBundle\Service\TagService
+    codekeepr.registration.class: Frigg\KeeprBundle\EventListener\RegistrationListener
+    codekeepr.activity.class: Frigg\KeeprBundle\EventListener\ActivityListener
+    codekeepr.post.service.class: Frigg\KeeprBundle\Service\PostService
+    codekeepr.post.twig.class: Frigg\KeeprBundle\Twig\PostExtension
+    codekeepr.post.voter.class: Frigg\KeeprBundle\Security\Voter\PostVoter
+    codekeepr.user.voter.class: Frigg\KeeprBundle\Security\Voter\UserVoter
+
 
 services:
+
+    # buisness services
+    codekeepr.post.service:
+        class: %codekeepr.post.service.class%
+        arguments: [ @doctrine.orm.entity_manager, @security.context, %codekeepr.config% ]
+
+
     # event listeners
     codekeepr.registration:
-        class: %codekeepr.event.registration.class%
+        class: %codekeepr.registration.class%
         arguments: [@router]
         tags:
             - { name: kernel.event_subscriber }
 
     codekeepr.activity:
-        class: %codekeepr.event.activity.class%
+        class: %codekeepr.activity.class%
         arguments: [@service_container]
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }
             - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
 
     # twig extensions
-    codekeepr.twig.user.extension:
-        class: %codekeepr.twig.user.class%
-        arguments: [@codekeepr.service.user, @codekeepr.service.post]
+    codekeepr.post.twig:
+        class: %codekeepr.post.twig.class%
+        arguments: [@codekeepr.post.service]
         tags:
             - { name: twig.extension }
 
     # voters
-    codekeepr.voter.post:
-        class: %codekeepr.voter.post.class%
+    codekeepr.post.voter:
+        class: %codekeepr.post.voter.class%
         public: false
         arguments:
             - @doctrine.orm.entity_manager
         tags:
             - { name: security.voter }
 
-    codekeepr.voter.user:
-        class: %codekeepr.voter.user.class%
+    codekeepr.user.voter:
+        class: %codekeepr.user.voter.class%
         public: false
         arguments:
             - @doctrine.orm.entity_manager
         tags:
             - { name: security.voter }
-
-    # services
-    codekeepr.service.user:
-        class: %codekeepr.service.user.class%
-        arguments: [ @doctrine.orm.entity_manager, @security.context, %codekeepr.config% ]
-
-    codekeepr.service.post:
-        class: %codekeepr.service.post.class%
-        arguments: [ @doctrine.orm.entity_manager, @fos_elastica.finder.website.post, %codekeepr.config% ]
-
-    codekeepr.service.tag:
-        class: %codekeepr.service.tag.class%
-        arguments: [ @doctrine.orm.entity_manager, @fos_elastica.finder.website.tag, %codekeepr.config% ]

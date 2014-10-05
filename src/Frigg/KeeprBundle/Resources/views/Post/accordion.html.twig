@@ -1,11 +1,12 @@
 {% if post %}
+    {%  set full_view = (view is defined and view == 'full') %}
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<div class="accordion-content">
 				<div class="pull-right">
-					{% set post_tags = (view is defined and view == 'full') ? post.tags : post.tags|slice(0, 5)  %} 
+					{% set post_tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
 					{% for tag in post_tags %}
-						<a href="{{ path('tag_show', {'identifier': tag.identifier}) }}">
+						<a href="{{ path('post_tag', {'identifier': tag.identifier}) }}">
 							<span class="label label-inverse tag-badge">{{ tag.name }}</span>
 						</a>
 					{% endfor %}
@@ -18,12 +19,12 @@
 			</div>
 		</div>
 
-		{% set highlighter = (post.language.identifier and post.language.identifier not in ['plain', 'blank', 'none']) %}
-		<div id="{{ post.identifier }}" class="accordion-body collapse{% if view is defined and view == 'full' %} in{% endif %}">
+		{% set highlighter = 'php' %}
+		<div id="{{ post.identifier }}" class="accordion-body collapse{% if full_view %} in{% endif %}">
 			<div class="accordion-inner">
-				<pre class="prettyprint{% if not highlighter %}-plain{% endif %}"><code{% if highlighter %} class="language-{{ post.language.identifier }}"{% endif %}>{{ post.content|trim }}</code></pre>
+				<pre class="prettyprint"><code{% if highlighter %} class="language-{{ post.language.identifier }}"{% endif %}>{{ post.content|trim }}</code></pre>
 				<div class="pull-right">
-					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('post_user', {'userId': post.user.id}) }}">{{ post.user|username }}</a></small></span>
+					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('post_user', {'id': post.user.id}) }}">{{ post.user.username }}</a></small></span>
 				</div>
 				{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 			</div>
