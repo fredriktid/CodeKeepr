@@ -57,19 +57,21 @@ class PostController extends Controller
     public function dateAction($date)
     {
         $timestamp = strtotime($date);
-        if ($timestamp !== false) {
-            $postService = $this->get('codekeepr.post.service');
-            $posts = $postService->loadDay($timestamp);
-            $page = $postService->getConfig('page_limit');
-            $limit = $postService->getConfig('page_limit');
+        $postService = $this->get('codekeepr.post.service');
+        $posts = $postService->loadPeriod(
+            mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
+            mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+        );
 
-            $paginator = $this->get('knp_paginator');
-            $pagination = $paginator->paginate(
-                $posts,
-                $page,
-                $limit
-            );
-        }
+        $limit = $postService->getConfig('page_limit');
+        $page = $this->get('request')->query->get('page', 1);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $posts,
+            $page,
+            $limit
+        );
 
         return array(
             'posts' => $pagination,
@@ -294,7 +296,7 @@ class PostController extends Controller
             );
         }
 
-        if (!$this->get('security.context')->isGranted('POST_EDIT', $post)) {
+        if (!$this->get('security.context')->isGranted('POST_EDIT', $post) && !$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException;
         }
 

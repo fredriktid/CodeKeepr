@@ -1,5 +1,4 @@
-page_limit: 40
-tag_group_limit: 15
+page_limit: 20
+tag_popular_limit: 12
 tag_cloud_limit: 100
 tag_autocomplete_limit: 5
-search_minimum_chars: 1

@@ -85,7 +85,7 @@ class PostService
     public function loadPopularTags($limit = null)
     {
         if ($limit === null) {
-            $limit = $this->getConfig('tag_group_limit');
+            $limit = $this->getConfig('tag_popular_limit');
         }
 
         $qb = $this->em->createQueryBuilder();
@@ -193,18 +193,24 @@ class PostService
             ->getResult();
     }
 
-    public function loadDay($timestamp)
+    public function isStarred($post)
     {
-        $dayTime = array(
+        $star = $this->em->getRepository('FriggKeeprBundle:Star')->findOneBy(array(
+            'User' => $this->currentUserId(),
+            'Post' => $post->getId()
+        ));
+
+        return ($star);
+    }
+
+    public function loadPeriod($fromTs, $toTs)
+    {
+        $period = array(
             'from_time' => new \DateTime(
-                date('Y-m-d H:i:s',
-                    mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
-                )
+                date('Y-m-d H:i:s', $fromTs)
             ),
             'to_time'   => new \DateTime(
-                date('Y-m-d H:i:s',
-                    mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
-                )
+                date('Y-m-d H:i:s', $toTs)
             )
         );
 
@@ -227,8 +233,8 @@ class PostService
             )
             ->orderBy('p.created_at', 'DESC')
             ->setParameters(array(
-                'from_time' => $dayTime['from_time'],
-                'to_time' => $dayTime['to_time'],
+                'from_time' => $period['from_time'],
+                'to_time' => $period['to_time'],
                 'private' => 1,
                 'current_user_id' => $this->currentUserId()
             ))
