@@ -8,8 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Doctrine\Common\Collections\ArrayCollection;
-use Frigg\KeeprBundle\Entity\Tag;
 
 /**
  * Tag controller.
@@ -18,136 +16,72 @@ use Frigg\KeeprBundle\Entity\Tag;
  */
 class TagController extends Controller
 {
+
+
     /**
-     * Lists all Tag entities.
+     * Tagged posts
      *
-     * @Route("/", name="tag")
+     * @Route("/", name="post_tags")
      * @Method("GET")
-     * @Template()
+     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */
     public function indexAction()
     {
-        $userService = $this->get('codekeepr.service.user');
-        $tagService = $this->get('codekeepr.service.tag');
-        $tagService->setUserService($userService);
-        $tagService->loadPopularTags($tagService->getConfig('tag_cloud_limit'));
-
         return array(
-            'title' => $this->get('translator')->trans('Tags'),
-            'collection' => $tagService->getLoadedCollection(),
-            'collection_share' => $tagService->getCloudPecentages()
-        );
-    }
-
-
-    /**
-     * Lists all Tag entities.
-     *
-     * @Route("/cloud", name="tag_cloud")
-     * @Method("GET")
-     * @Template()
-     */
-    public function cloudAction()
-    {
-        $userService = $this->get('codekeepr.service.user');
-        $tagService = $this->get('codekeepr.service.tag');
-        $tagService->setUserService($userService);
-        $tagService->loadPopularTags($tagService->getConfig('tag_cloud_limit'));
-
-        return array(
-            'title' => $this->get('translator')->trans('Tags'),
-            'collection' => $tagService->getLoadedCollection(),
-            'collection_share' => $tagService->getCloudPecentages()
+            'title' => 'Tags'
         );
     }
 
     /**
-     * Groups and ranks all tags
+     * Tagged posts
      *
-     * @Route("/group/{currentIdentifier}", name="tag_group", defaults={"currentIdentifier" = null})
-     * @Method("GET")
-     * @Template()
-     */
-    public function groupAction(Request $request, $currentIdentifier = null)
-    {
-        $userService = $this->get('codekeepr.service.user');
-        $tagService = $this->get('codekeepr.service.tag');
-        $tagService->setUserService($userService);
-        $tagService->loadPopularTags();
-
-        return array(
-            'current_identifier' => $currentIdentifier,
-            'collection' => $tagService->getLoadedCollection()
-        );
-    }
-
-    /**
-     * Finds and displays a Tag entity.
-     *
-     * @Route("/{identifier}", name="tag_show")
+     * @Route("/{identifier}", name="post_tag")
      * @Method("GET")
      * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */
     public function showAction($identifier)
     {
-        $tagService = $this->get('codekeepr.service.tag');
-        $tagService->loadEntityByIdentifier($identifier);
-
-        if (!$tagService->getEntity()) {
+        $em = $this->getDoctrine()->getManager();
+        if (!$tag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find tag')
             );
         }
 
-        $userService = $this->get('codekeepr.service.user');
-        $tagService->setUserService($userService);
-        $tagService->loadTagPosts();
+        $postService = $this->get('codekeepr.post.service');
+        $posts = $postService->loadByTag($tag);
+        $limit = $postService->getConfig('page_limit');
+        $page = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $tagService->getLoadedCollection(),
-            $this->get('request')->query->get('page', 1),
-            $tagService->getConfig('page_limit')
+            $posts,
+            $page,
+            $limit
         );
 
         return array(
             'tag_identifier' => $identifier,
-            'collection' => $pagination,
-            'title' => $tagService->getEntity()->getName()
+            'posts' => $pagination,
+            'title' => $tag->getName()
         );
     }
 
     /**
-     * Search for tag, returns json
+     * Sidebar template
      *
-     * @Route("/search/json", name="tag_search")
+     * @Route("/sidebar", name="post_tag_sidebar")
      * @Method("GET")
      * @Template()
      */
-    public function searchAction()
+    public function sidebarAction()
     {
-        $tagService = $this->get('codekeepr.service.tag');
-        $query = $this->get('request')->query->get('query');
-        $method = $this->get('request')->query->get('method');
+        $postService = $this->get('codekeepr.post.service');
+        $tags = $postService->loadPopularTags();
 
-        $collection = array();
-        if ($query && strlen($query) >= $tagService->getConfig('search_minimum_chars')) {
-            $tagSearch = $tagService->getFinder()->find($query.'*', $tagService->getConfig('tag_autocomplete_limit'));
-            foreach($tagSearch as $tag) {
-                $collection[] = array(
-                    'label' => $tag->getName(),
-                    'value' => $tag->getName()
-                );
-            }
-        }
-
-        switch ($method) {
-            case 'json':
-                $response = new Response(json_encode($collection));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-            default:
-                echo 'Method not supported'; die;
-        }
+        return array(
+            'current_identifier' => '',
+            'tags' => $tags
+        );
     }
 }

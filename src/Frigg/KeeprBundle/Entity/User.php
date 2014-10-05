@@ -47,6 +47,19 @@ class User extends BaseUser
         return $this->id;
     }
 
+    public function getUsername()
+    {
+        $username = '';
+        foreach (str_split($this->getEmail()) as $char) {
+            if (!preg_match("/^[A-Za-z\\-]$/", $char)) {
+                break;
+            }
+            $username .= $char;
+        }
+
+        return $username;
+    }
+
     /**
      * Override to exclude username
      *

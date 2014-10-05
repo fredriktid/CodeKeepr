@@ -39,14 +39,12 @@
                             </div>
                         </div>
                         <div class="row-fluid bs-docs-sidebar">
-                            {% block tag_group %}
-                                {{ render_esi(controller('FriggKeeprBundle:Tag:group')) }}
-                            {% endblock %}
+                            {{ render(controller('FriggKeeprBundle:Tag:sidebar')) }}
                         </div>
                     </div>
                     <div class="span9">
                         <div class="row-fluid">
-                            {{ include('FriggKeeprBundle::Search/form.html.twig') }}
+                            {{ render_esi(controller('FriggKeeprBundle:Search:form')) }}
                         </div>
                         <div class="content-wrap row-fluid">
                             {% for type, messages in app.session.flashbag.all() %}
@@ -69,8 +67,8 @@
         </div>
 
         <footer class="footer">
-            <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
-            <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>
+            {#<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>#}
         </footer>
 
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>

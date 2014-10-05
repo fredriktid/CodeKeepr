@@ -28,6 +28,8 @@ class PostVoter extends BaseVoter implements VoterInterface
             }
             switch ($this->securedArea($attribute)) {
                 case 'STAR':
+                case 'STAR_NEW':
+                case 'STAR_REMOVE':
                 case 'NEW':
                     if (is_object($this->currentUser)) {
                         return VoterInterface::ACCESS_GRANTED;

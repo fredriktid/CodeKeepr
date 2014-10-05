@@ -1,34 +1,33 @@
 <li class="nav-header">{{ 'Browse the archive'|trans }}</li>
-<li{% if currentRoute in ['home', 'post', 'post_show', 'post_date', 'post_user', 'post_delete_confirm', 'search'] %} class="active"{% endif %}>
+<li{% if currentRoute in ['home', 'post'] %} class="active"{% endif %}>
 	<a href="{{ path('home') }}">
 		<i class="icon-list"></i>
 		{{ 'Posts'|trans }}
 	</a>
 </li>
-<li{% if currentRoute in ['tag', 'tag_show'] %} class="active"{% endif %}>
-	<a href="{{ path('tag') }}">
+<li{% if currentRoute in ['post_tags', 'post_tag'] %} class="active"{% endif %}>
+	<a href="{{ path('post_tags') }}">
 		<i class="icon-tag"></i>
 		{{ 'Tags'|trans }}
 	</a>
 </li>
 <li class="divider"></li>
 {% if is_granted('ROLE_USER') %}
-    <li class="nav-header">{{ 'Always forgetting?'|trans }}</li>
-
+    <li class="nav-header">{{ 'Participate'|trans }}</li>
     <li{% if currentRoute in ['post_new', 'post_edit'] %} class="active"{% endif %}>
     	<a href="{{ path('post_new') }}">
     		<i class="icon-plus"></i>
     		{{ 'Add a post'|trans }}
     	</a>
    	</li>
-    <li{% if currentRoute in ['user_post'] %} class="active"{% endif %}>
-    	<a href="{{ path('user_post', {'id': app.user.id}) }}">
+    <li{% if currentRoute in ['post_user'] %} class="active"{% endif %}>
+    	<a href="{{ path('post_user', {'id': app.user.id}) }}">
 			<i class="icon-user"></i>
 			{{ 'My posts'|trans }}
 		</a>
 	</li>
-    <li{% if currentRoute in ['user_star'] %} class="active"{% endif %}>
-    	<a href="{{ path('user_star', {'id': app.user.id}) }}">
+    <li{% if currentRoute in ['post_user_star'] %} class="active"{% endif %}>
+    	<a href="{{ path('post_user_star', {'id': app.user.id}) }}">
     		<i class="icon-star"></i>
     		{{ 'Starred'|trans }}
     	</a>
@@ -38,13 +37,13 @@
     <li{% if currentRoute in ['fos_user_registration_register', 'fos_user_registration_check_email', 'fos_user_registration_confirm', 'fos_user_registration_confirmed'] %} class="active"{% endif %}>
     	<a href="{{ path('fos_user_registration_register') }}">
     		<i class="icon-user"></i>
-    		{{ 'Begin posting'|trans }}
+    		{{ 'Register to post'|trans }}
     	</a>
     </li>
     <li{% if currentRoute in ['fos_user_security_login', 'fos_user_resetting_request', 'fos_user_resetting_send_email', 'fos_user_resetting_check_email', 'fos_user_resetting_reset'] %} class="active"{% endif %}>
     	<a href="{{ path('fos_user_security_login') }}">
     		<i class="icon-ok-sign"></i>
-    		{{ 'Login to post'|trans }}
+    		{{ 'Login'|trans }}
     	</a>
     </li>
 {% endif %}

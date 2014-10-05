@@ -2,29 +2,19 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block search_form %}
-    <div class="row-fluid">
-        {% set query = (query is defined) ? query : '' %}
-        {{ include('FriggKeeprBundle::Search/form.html.twig', {'query': query}) }}
-    </div>
-{% endblock %}
-
-{% block tag_group %}
-    {% set identifier = (tag_identifier is defined and tag_identifier is not empty) ? tag_identifier : false %}
-    {{ render_esi(controller('FriggKeeprBundle:Tag:group', {'currentIdentifier': identifier})) }}
-{% endblock %}
-
 {% block body -%}
-    {% if collection.getTotalItemCount %}
-        <div class="accordion" id="accordion2">
-            {% for item in collection %}
-                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'view': 'line'}) }}
-            {% endfor %}
-            <div class="pull-right">
-                {{ knp_pagination_render(collection) }}
+    {% if posts is defined %}
+        {% if posts.getTotalItemCount %}
+            <div class="accordion" id="accordion2">
+                {% for post in posts %}
+                    {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': post, 'view': 'line'}) }}
+                {% endfor %}
+                <div class="pull-right">
+                    {{ knp_pagination_render(posts) }}
+                </div>
             </div>
-        </div>
-    {% else %}
-        <p class="muted">{{ 'No posts found'|trans }}</p>
+        {% else %}
+            <p class="muted">{{ 'No posts found'|trans }}</p>
+        {% endif %}
     {% endif %}
 {% endblock %}

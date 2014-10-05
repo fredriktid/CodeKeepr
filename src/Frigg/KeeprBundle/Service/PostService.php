@@ -3,59 +3,56 @@
 namespace Frigg\KeeprBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Frigg\KeeprBundle\Entity\User;
+use Symfony\Component\Yaml\Yaml;
 use Frigg\KeeprBundle\Entity\Tag;
-use Doctrine\Common\Collections\ArrayCollection;
-use FOS\ElasticaBundle\Finder\TransformedFinder;
 
-class PostService extends ParentServiceAbstract implements UserContainerInterface
+class PostService
 {
-    protected $finder;
-    protected $userService = null;
+    protected $em = null;
+    protected $config= null;
+    protected $securityContext = null;
+    protected $currentUser = null;
 
-    public function __construct(EntityManager $em, TransformedFinder $finder, $configFile)
+    public function __construct($em, $securityContext, $configFile)
     {
-        parent::__construct($em, $configFile);
-        $this->finder = $finder;
-    }
+        $this->em = $em;
+        $this->config = $this->loadConfig($configFile);
+        $this->securityContext = $securityContext;
 
-    public function getFinder()
-    {
-        return $this->finder;
-    }
-
-    public function getUserService()
-    {
-        return $this->userService;
-    }
-
-    public function setUserService(UserServiceInterface $userService)
-    {
-        $this->userService = $userService;
-        return $this;
-    }
-
-    public function loadEntityById($id)
-    {
-        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneById($id);
-        return $this;
-    }
-
-    public function loadEntityByIdentifier($identifier)
-    {
-        $this->entity = $this->em->getRepository('FriggKeeprBundle:Post')->findOneByIdentifier($identifier);
-        return $this;
-    }
-
-    public function loadAll()
-    {
-        if (!is_object($this->getUserService())) {
-            $this->collection = array();
-            return $this->collection();
+        $token = $this->securityContext->getToken();
+        if ($token) {
+            $this->currentUser = $token->getUser();
         }
+    }
 
+    public function loadConfig($configFile)
+    {
+        return Yaml::parse(
+            file_get_contents($configFile)
+        );
+    }
+
+    public function getConfig($key)
+    {
+        return (isset($this->config[$key])) ? $this->config[$key] : null;
+    }
+
+    public function currentUserId()
+    {
+        return (is_object($this->currentUser)) ? $this->currentUser->getId() : 0;
+    }
+
+    public function loadById($id)
+    {
+        return $this->em
+            ->getRepository('FriggKeeprBundle:Post')
+            ->findOneById($id);
+    }
+
+    public function load()
+    {
         $qb = $this->em->createQueryBuilder();
-        $this->collection = $qb->select('p')
+        return $qb->select('p')
             ->from('FriggKeeprBundle:Post', 'p')
             ->andWhere(
                 $qb->expr()->orX(
@@ -69,22 +66,87 @@ class PostService extends ParentServiceAbstract implements UserContainerInterfac
             ->orderBy('p.created_at', 'DESC')
             ->setParameters(array(
                 'private' => 1,
-                'current_user_id' => $this->getUserService()->getCurrentUserId()
+                'current_user_id' => $this->currentUserId()
             ))
-            ->getQuery()->getResult();
-
-        return $this;
+            ->getQuery()
+            ->getResult();
     }
 
-    public function loadUserPosts()
+    public function loadTags()
     {
-        if (!is_object($this->getUserService())) {
-            $this->collection = array();
-            return $this->collection();
+        $qb = $this->em->createQueryBuilder();
+        return $qb->select('t')
+            ->from('FriggKeeprBundle:Tag', 't')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function loadPopularTags($limit = null)
+    {
+        if ($limit === null) {
+            $limit = $this->getConfig('tag_group_limit');
         }
 
         $qb = $this->em->createQueryBuilder();
-        $this->collection = $qb->select('p')
+        return $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
+            ->from('FriggKeeprBundle:Post', 'p')
+            ->leftJoin('p.Tags', 't')
+            ->where('t.id IS NOT NULL')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('p.private', ':private'),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('p.private', ':private'),
+                        $qb->expr()->eq('p.User', ':current_user_id')
+                    )
+                )
+            )
+            ->orderBy('post_count', 'DESC')
+            ->groupBy('t.identifier')
+            ->setMaxResults($limit)
+            ->setParameters(array(
+                'private' => 1,
+                'current_user_id' => $this->currentUserId()
+            ))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function loadByTag(Tag $tag)
+    {
+        $qb = $this->em->createQueryBuilder();
+        return $qb->select('p')
+            ->from('FriggKeeprBundle:Post', 'p')
+            ->leftJoin('p.Tags', 't')
+            ->where('t.id = :tag_id')
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('p.private', ':private'),
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('p.private', ':private'),
+                        $qb->expr()->eq('p.User', ':current_user_id')
+                    )
+                )
+            )
+            ->orderBy('p.created_at', 'DESC')
+            ->setParameters(array(
+                'tag_id' => $tag->getId(),
+                'private' => 1,
+                'current_user_id' => $this->currentUserId()
+            ))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function loadByUser($user = null)
+    {
+        if (null === $user) {
+            $user = $this->currentUser;
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        return $qb->select('p')
             ->from('FriggKeeprBundle:Post', 'p')
             ->where($qb->expr()->eq(
                 'p.User',
@@ -101,41 +163,23 @@ class PostService extends ParentServiceAbstract implements UserContainerInterfac
             )
             ->orderBy('p.created_at', 'DESC')
             ->setParameters(array(
-                'user_id' => $this->getUserService()->getEntityId(),
-                'current_user_id' => $this->getUserService()->getCurrentUserId(),
+                'user_id' => $user->getId(),
+                'current_user_id' => $this->currentUserId(),
                 'private' => 1,
             ))
-            ->getQuery()->getResult();
-
-        return $this;
+            ->getQuery()
+            ->getResult();
     }
 
-    public function canStarEntity($currentStars = null)
+
+    public function loadStarred($user = null)
     {
-        if (!is_object($this->entity)) {
-            return false;
-        }
-
-        if ($currentStars === null) {
-            $this->loadUserStarPosts();
-            $currentStars = $this->getLoadedCollectionIds();
-        }
-
-        return (bool)!(static::arraySearchRecursive(
-            $this->entity->getId(),
-            $currentStars
-        ));
-    }
-
-    public function loadUserStarPosts()
-    {
-        if (!is_object($this->getUserService())) {
-            $this->collection = array();
-            return $this->collection();
+        if (null === $user) {
+            $user = $this->currentUser;
         }
 
         $qb = $this->em->createQueryBuilder();
-        $this->collection = $qb->select('p')
+        return $qb->select('p')
             ->from('FriggKeeprBundle:Post', 'p')
             ->leftJoin('p.Stars', 's')
             ->where(
@@ -143,31 +187,29 @@ class PostService extends ParentServiceAbstract implements UserContainerInterfac
             )
             ->orderBy('s.created_at', 'DESC')
             ->setParameters(array(
-                'user_id' => $this->getUserService()->getEntityId()
+                'user_id' => $user->getId()
             ))
-            ->getQuery()->getResult();
-
-        return $this;
+            ->getQuery()
+            ->getResult();
     }
 
-    public function loadByDay($timestamp)
+    public function loadDay($timestamp)
     {
-        if (!is_object($this->getUserService())) {
-            $this->collection = array();
-            return $this->collection();
-        }
-
-        $timeInterval = array(
-            'from_time' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
-            'to_time'   => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
-        );
-        $dateInterval = array(
-            'from_time' => new \DateTime(date('Y-m-d H:i:s', $timeInterval['from_time'])),
-            'to_time'   => new \DateTime(date('Y-m-d H:i:s', $timeInterval['to_time']))
+        $dayTime = array(
+            'from_time' => new \DateTime(
+                date('Y-m-d H:i:s',
+                    mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+                )
+            ),
+            'to_time'   => new \DateTime(
+                date('Y-m-d H:i:s',
+                    mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+                )
+            )
         );
 
         $qb = $this->em->createQueryBuilder();
-        $this->collection = $qb->select('p')
+        return $qb->select('p')
             ->from('FriggKeeprBundle:Post', 'p')
             ->where($qb->expr()->between(
                 'p.created_at',
@@ -185,13 +227,12 @@ class PostService extends ParentServiceAbstract implements UserContainerInterfac
             )
             ->orderBy('p.created_at', 'DESC')
             ->setParameters(array(
-                'from_time' => $dateInterval['from_time'],
-                'to_time' => $dateInterval['to_time'],
+                'from_time' => $dayTime['from_time'],
+                'to_time' => $dayTime['to_time'],
                 'private' => 1,
-                'current_user_id' => $this->getUserService()->getCurrentUserId()
+                'current_user_id' => $this->currentUserId()
             ))
-            ->getQuery()->getResult();
-
-        return $this;
+            ->getQuery()
+            ->getResult();
     }
 }
