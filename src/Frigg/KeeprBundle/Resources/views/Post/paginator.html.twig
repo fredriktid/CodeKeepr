@@ -2,7 +2,12 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block body -%}
+{% block search_form %}
+    {%  set query = (query is defined) ? query : '' %}
+    {{ render_esi(controller('FriggKeeprBundle:Search:form', {query: query})) }}
+{% endblock %}
+
+{% block body %}
     {% if posts is defined %}
         {% if posts.getTotalItemCount %}
             <div class="accordion" id="accordion2">

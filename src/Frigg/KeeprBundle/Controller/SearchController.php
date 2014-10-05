@@ -55,12 +55,14 @@ class SearchController extends Controller
     /**
      * Search form
      *
-     * @Route("/", name="search")
+     * @Route("/form/{query}", name="search_form", defaults={"query" = null})
      * @Method("GET")
      * @Template("FriggKeeprBundle:Search:form.html.twig")
      */
-    public function formAction()
+    public function formAction($query = null)
     {
-        return array();
+        return array(
+            'query' => $query
+        );
     }
 }

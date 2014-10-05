@@ -44,7 +44,9 @@
                     </div>
                     <div class="span9">
                         <div class="row-fluid">
-                            {{ render_esi(controller('FriggKeeprBundle:Search:form')) }}
+                            {% block search_form %}
+                                {{ render_esi(controller('FriggKeeprBundle:Search:form')) }}
+                            {% endblock %}
                         </div>
                         <div class="content-wrap row-fluid">
                             {% for type, messages in app.session.flashbag.all() %}
