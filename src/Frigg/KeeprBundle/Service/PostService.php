@@ -37,6 +37,11 @@ class PostService
         return (isset($this->config[$key])) ? $this->config[$key] : null;
     }
 
+    public function currentUser()
+    {
+        return $this->currentUser;
+    }
+
     public function currentUserId()
     {
         return (is_object($this->currentUser)) ? $this->currentUser->getId() : 0;
@@ -64,10 +69,10 @@ class PostService
                 )
             )
             ->orderBy('p.created_at', 'DESC')
-            ->setParameters(array(
+            ->setParameters([
                 'private' => 1,
                 'current_user_id' => $this->currentUserId()
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }
@@ -105,10 +110,10 @@ class PostService
             ->orderBy('post_count', 'DESC')
             ->groupBy('t.identifier')
             ->setMaxResults($limit)
-            ->setParameters(array(
+            ->setParameters([
                 'private' => 1,
                 'current_user_id' => $this->currentUserId()
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }
@@ -130,11 +135,11 @@ class PostService
                 )
             )
             ->orderBy('p.created_at', 'DESC')
-            ->setParameters(array(
+            ->setParameters([
                 'tag_id' => $tag->getId(),
                 'private' => 1,
                 'current_user_id' => $this->currentUserId()
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }
@@ -162,11 +167,11 @@ class PostService
                 )
             )
             ->orderBy('p.created_at', 'DESC')
-            ->setParameters(array(
+            ->setParameters([
                 'user_id' => $user->getId(),
                 'current_user_id' => $this->currentUserId(),
                 'private' => 1,
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }
@@ -186,33 +191,33 @@ class PostService
                 $qb->expr()->eq('s.User', ':user_id')
             )
             ->orderBy('s.created_at', 'DESC')
-            ->setParameters(array(
+            ->setParameters([
                 'user_id' => $user->getId()
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }
 
     public function isStarred($post)
     {
-        $star = $this->em->getRepository('FriggKeeprBundle:Star')->findOneBy(array(
+        $star = $this->em->getRepository('FriggKeeprBundle:Star')->findOneBy([
             'User' => $this->currentUserId(),
             'Post' => $post->getId()
-        ));
+        ]);
 
-        return ($star);
+        return ($star) ?: null;
     }
 
     public function loadPeriod($fromTs, $toTs)
     {
-        $period = array(
+        $period = [
             'from_time' => new \DateTime(
                 date('Y-m-d H:i:s', $fromTs)
             ),
             'to_time'   => new \DateTime(
                 date('Y-m-d H:i:s', $toTs)
             )
-        );
+        ];
 
         $qb = $this->em->createQueryBuilder();
         return $qb->select('p')
@@ -232,12 +237,12 @@ class PostService
                 )
             )
             ->orderBy('p.created_at', 'DESC')
-            ->setParameters(array(
+            ->setParameters([
                 'from_time' => $period['from_time'],
                 'to_time' => $period['to_time'],
                 'private' => 1,
                 'current_user_id' => $this->currentUserId()
-            ))
+            ])
             ->getQuery()
             ->getResult();
     }

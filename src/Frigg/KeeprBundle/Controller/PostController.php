@@ -41,10 +41,10 @@ class PostController extends Controller
             $limit
         );
 
-        return array(
+        return [
             'posts' => $pagination,
             'title' => $this->get('translator')->trans('Home')
-        );
+        ];
     }
 
     /**
@@ -73,10 +73,10 @@ class PostController extends Controller
             $limit
         );
 
-        return array(
+        return [
             'posts' => $pagination,
             'title' => $this->get('translator')->trans('By date')
-        );
+        ];
     }
 
     /**
@@ -107,10 +107,10 @@ class PostController extends Controller
             $limit
         );
 
-        return array(
+        return [
             'posts' => $pagination,
             'title' => $user->getUsername()
-        );
+        ];
     }
 
     /**
@@ -145,10 +145,10 @@ class PostController extends Controller
             $limit
         );
 
-        return array(
+        return [
             'posts' => $pagination,
             'title' => $this->get('translator')->trans('Starred')
-        );
+        ];
     }
 
 
@@ -194,16 +194,18 @@ class PostController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('post_show', array(
-                'id' => $entity->getId(),
-                'identifier' => $entity->getIdentifier()
-            )));
+            return $this->redirect(
+                $this->generateUrl('post_show', [
+                    'id' => $entity->getId(),
+                    'identifier' => $entity->getIdentifier()
+                ])
+            );
         }
 
-        return array(
+        return [
             'entity' => $entity,
             'form'   => $form->createView()
-        );
+        ];
     }
 
     /**
@@ -215,14 +217,14 @@ class PostController extends Controller
     */
     private function createCreateForm(Post $entity)
     {
-        $form = $this->createForm(new PostType(), $entity, array(
+        $form = $this->createForm(new PostType(), $entity, [
             'action' => $this->generateUrl('post_create'),
             'method' => 'POST',
-        ));
+        ]);
 
-        $form->add('submit', 'submit', array(
+        $form->add('submit', 'submit', [
             'label' => $this->get('translator')->trans('Create')
-        ));
+        ]);
 
         return $form;
     }
@@ -243,12 +245,12 @@ class PostController extends Controller
 
         $form = $this->createCreateForm($entity);
 
-        return array(
+        return [
             'edit_tag' => true,
             'title'  => $this->get('translator')->trans('Add code'),
             'entity' => $entity,
             'form'   => $form->createView()
-        );
+        ];
     }
 
     /**
@@ -273,11 +275,11 @@ class PostController extends Controller
 
         $deleteForm = $this->createDeleteForm($post->getId());
 
-        return array(
+        return [
             'title'  => $post->getTopic(),
             'entity' => $post,
             'delete_form' => $deleteForm->createView()
-        );
+        ];
     }
 
     /**
@@ -302,15 +304,15 @@ class PostController extends Controller
 
         $editForm = $this->createEditForm($post);
 
-        return array(
+        return [
             'edit_tag' => false,
             'entity' => $post,
             'form'   => $editForm->createView(),
             'title'  => $this->get('translator')->trans(
                 'Edit "topic"',
-                array('topic' => $post->getTopic())
+                ['topic' => $post->getTopic()]
             )
-        );
+        ];
     }
 
     /**
@@ -322,16 +324,16 @@ class PostController extends Controller
     */
     private function createEditForm(Post $entity)
     {
-        $form = $this->createForm(new PostType(), $entity, array(
-            'action' => $this->generateUrl('post_update', array(
+        $form = $this->createForm(new PostType(), $entity, [
+            'action' => $this->generateUrl('post_update', [
                 'id' => $entity->getId()
-            )),
+            ]),
             'method' => 'PUT',
-        ));
+        ]);
 
-        $form->add('submit', 'submit', array(
+        $form->add('submit', 'submit', [
             'label' => $this->get('translator')->trans('Update')
-        ));
+        ]);
 
         return $form;
     }
@@ -391,10 +393,10 @@ class PostController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('post_show', array(
+        return $this->redirect($this->generateUrl('post_show', [
             'id' => $post->getId(),
             'identifier' => $post->getIdentifier()
-        )));
+        ]));
     }
 
     /**
@@ -419,13 +421,13 @@ class PostController extends Controller
 
         $deleteForm = $this->createDeleteForm($post->getId());
 
-        return array(
+        return [
             'title' => $this->get('translator')->trans(
                 'Confirm delete of "topic"',
-                array('topic' => $post->getTopic())
+                ['topic' => $post->getTopic()]
             ),
             'delete_form' => $deleteForm->createView()
-        );
+        ];
     }
 
 
@@ -476,13 +478,13 @@ class PostController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('post_delete', array(
+            ->setAction($this->generateUrl('post_delete', [
                 'id' => $id
-            )))
+            ]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array(
+            ->add('submit', 'submit', [
                 'label' => $this->get('translator')->trans('Delete')
-            ))
+            ])
             ->getForm()
         ;
     }

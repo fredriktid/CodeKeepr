@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 class BaseVoter
 {
     protected $em = null;
-    protected $roles = array();
+    protected $roles = [];
     protected $attribute = null;
     protected $currentUser = null;
 
@@ -26,7 +26,7 @@ class BaseVoter
     {
         $this->currentUser = $token->getUser();
 
-        $roles = array();
+        $roles = [];
         if(count($token->getRoles())) {
             foreach ($token->getRoles() as $role) {
                $this->setRole($role->getRole());

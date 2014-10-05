@@ -27,11 +27,12 @@ class SearchController extends Controller
     {
         $postFinder = $this->get('fos_elastica.finder.website.post');
         $postService  = $this->get('codekeepr.post.service');
+
         $query = $this->get('request')->query->get('query');
         $limit = $postService->getConfig('page_limit');
         $page = $this->get('request')->query->get('page', 1);
 
-        $posts = array();
+        $posts = [];
         if ($query) {
             $paginator = $this->get('knp_paginator');
             $posts = $paginator->paginate(
@@ -41,15 +42,15 @@ class SearchController extends Controller
             );
         }
 
-        return array(
+        return [
             'query' => $query,
             'posts' => $posts,
             'limit' => $limit,
             'title' => $this->get('translator')->trans(
                 'Search: "query"',
-                array('query' => $query)
+                ['query' => $query]
             )
-        );
+        ];
     }
 
     /**
@@ -61,8 +62,8 @@ class SearchController extends Controller
      */
     public function formAction($query = null)
     {
-        return array(
+        return [
             'query' => $query
-        );
+        ];
     }
 }

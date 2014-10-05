@@ -10,9 +10,9 @@ class ActivityListener
 {
     protected $container = null;
     protected $entity = null;
-    protected $validEntities = array(
+    protected $validEntities = [
         'Post'
-    );
+    ];
 
     public function __construct(ContainerInterface $container)
     {
@@ -61,7 +61,7 @@ class ActivityListener
             return;
         }
 
-        call_user_func(array($this->entity, $method), $identifier);
+        call_user_func([$this->entity, $method], $identifier);
 
         $em = $this->container->get('doctrine.orm.entity_manager');
         $em->persist($this->entity);

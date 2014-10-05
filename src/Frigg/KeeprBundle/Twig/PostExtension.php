@@ -21,9 +21,9 @@ class PostExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('is_starred', array($this, 'isStarred'))
-        );
+        return [
+            new \Twig_SimpleFilter('is_starred', [$this, 'isStarred'])
+        ];
     }
 
     public function isStarred($post)

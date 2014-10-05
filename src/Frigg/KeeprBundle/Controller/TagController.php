@@ -27,9 +27,9 @@ class TagController extends Controller
      */
     public function indexAction()
     {
-        return array(
+        return [
             'title' => 'Tags'
-        );
+        ];
     }
 
     /**
@@ -60,11 +60,11 @@ class TagController extends Controller
             $limit
         );
 
-        return array(
+        return [
             'tag_identifier' => $identifier,
             'posts' => $pagination,
             'title' => $tag->getName()
-        );
+        ];
     }
 
     /**
@@ -79,9 +79,9 @@ class TagController extends Controller
         $postService = $this->get('codekeepr.post.service');
         $tags = $postService->loadPopularTags();
 
-        return array(
+        return [
             'current_identifier' => '',
             'tags' => $tags
-        );
+        ];
     }
 }

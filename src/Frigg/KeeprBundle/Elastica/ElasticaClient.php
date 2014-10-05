@@ -9,11 +9,11 @@ use Elastica\Response;
 use Elastica\Request;
 
 /**
- * An override to suppress exceptions
+ * Override to suppress exceptions
  */
 class ElasticaClient extends BaseClient
 {
-    public function request($path, $method = Request::GET, $data = array(), array $query = array())
+    public function request($path, $method = Request::GET, $data = [], array $query = [])
     {
         try {
             return parent::request($path, $method, $data, $query);

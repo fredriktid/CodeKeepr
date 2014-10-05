@@ -15,13 +15,13 @@ class TagType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array(
+            ->add('name', 'text', [
                 'label' => false,
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'tag-autocomplete ui-widget'
-                )
-            ))
+                ]
+            ])
         ;
     }
 
@@ -30,9 +30,9 @@ class TagType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'Frigg\KeeprBundle\Entity\Tag'
-        ));
+        ]);
     }
 
     /**

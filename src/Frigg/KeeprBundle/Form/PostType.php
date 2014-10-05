@@ -18,13 +18,13 @@ class PostType extends AbstractType
             ->add('topic')
             ->add('content')
             ->add('private')
-            ->add('Tags', 'collection', array(
+            ->add('Tags', 'collection', [
                 'type' => new TagType(),
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
                 'label' => false,
-            ))
+            ])
             ->add('Language')
         ;
     }
@@ -34,9 +34,9 @@ class PostType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'Frigg\KeeprBundle\Entity\Post'
-        ));
+        ]);
     }
 
     /**

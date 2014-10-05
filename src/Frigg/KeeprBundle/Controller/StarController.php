@@ -26,50 +26,51 @@ class StarController extends Controller
      */
     public function addAction($id)
     {
-        $session = $this->get('session');
-        $translator = $this->get('translator');
+        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+            $session->getFlashBag()->add(
+                'error',
+                $translator->trans('You must be logged in to star something')
+            );
 
-        $referer = $this->get('request')->headers->get('referer');
-        $referer = (!$referer ?: $this->generateUrl('post'));
-
-        $securityContext = $this->get('security.context');
-        if (!$securityContext->isGranted('ROLE_USER')) {
-            throw new AccessDeniedException;
+            return $this->redirect($referer);
         }
 
-        $em = $this->getDoctrine()->getManager();
-        if (!$post = $em->getRepository('FriggKeeprBundle:Post')->find($id)) {
+        $session = $this->get('session');
+        $translator = $this->get('translator');
+        $postService = $this->get('codekeepr.post.service');
+
+        if (!$post = $postService->loadById($id)) {
             throw new NotFoundHttpException(
                 $translator->trans('Post not found')
             );
         }
 
-        $user = $securityContext->getToken()->getUser();
-        $star = $em->getRepository('FriggKeeprBundle:Star')->findOneBy(array(
-            'User' => $user->getId(),
-            'Post' => $id
-        ));
-
-        if (!$star) {
-            if (!$securityContext->isGranted('POST_STAR_NEW', $post)) {
+        if (!$star = $postService->isStarred($post)) {
+            if (!$this->get('security.context')->isGranted('POST_STAR_NEW', $post)) {
                 throw new AccessDeniedException;
             }
 
+            $currentUser = $this->get('security.context')->getToken()->getUser();
+
             $star = new Star;
-            $star->setUser($user);
+            $star->setUser($currentUser);
             $star->setPost($post);
+
+            $em = $this->getDoctrine()->getManager();
             $em->persist($star);
             $em->flush();
+
             $session->getFlashBag()->add(
                 'success',
                 $translator->trans(
                     'Added star on "topic"',
-                    array(
-                        'topic' => $post->getTopic()
-                    )
+                    ['topic' => $post->getTopic()]
                 )
             );
         }
+
+        $referer = $this->get('request')->headers->get('referer');
+        $referer = ($referer ?: $this->generateUrl('post'));
 
         return $this->redirect($referer);
     }
@@ -84,13 +85,9 @@ class StarController extends Controller
     {
         $session = $this->get('session');
         $translator = $this->get('translator');
-        $securityContext = $this->get('security.context');
-        $em = $this->getDoctrine()->getManager();
+        $postService = $this->get('codekeepr.post.service');
 
-        $session = $this->get('session');
-        $translator = $this->get('translator');
-
-        if (!$securityContext->isGranted('ROLE_USER')) {
+        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
             $session->getFlashBag()->add(
                 'error',
                 $translator->trans('You must be logged in to star something')
@@ -99,35 +96,27 @@ class StarController extends Controller
             return $this->redirect($referer);
         }
 
-        if (!$post = $em->getRepository('FriggKeeprBundle:Post')->find($id)) {
+        if (!$post = $postService->loadById($id)) {
             throw new NotFoundHttpException(
                 $translator->trans('Post not found"')
             );
         }
 
-        $user = $securityContext->getToken()->getUser();
-        $starEntity = $em->getRepository('FriggKeeprBundle:Star')->findOneBy(array(
-            'User' => $user->getId(),
-            'Post' => $id
-        ));
-
-        if (!$starEntity) {
-            throw $this->createNotFoundException(
+        if (!$star = $postService->isStarred($post)) {
+            throw new NotFoundHttpException(
                 $translator->trans('Star not found')
             );
         }
 
-        if (!$securityContext->isGranted('POST_STAR_REMOVE', $starEntity)) {
-            throw new AccessDeniedException;
-        }
-
-        $em->remove($starEntity);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($star);
         $em->flush();
+
         $session->getFlashBag()->add(
             'notice',
             $translator->trans(
                 'Unstarred "topic"',
-                array('topic' => $post->getTopic())
+                ['topic' => $post->getTopic()]
             )
         );
 
