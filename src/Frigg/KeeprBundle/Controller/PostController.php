@@ -328,7 +328,7 @@ class PostController extends Controller
             'action' => $this->generateUrl('post_update', [
                 'id' => $entity->getId()
             ]),
-            'method' => 'PUT',
+            'method' => 'POST',
         ]);
 
         $form->add('submit', 'submit', [
@@ -341,7 +341,7 @@ class PostController extends Controller
      * Edits an existing Post entity.
      *
      * @Route("/{id}", name="post_update")
-     * @Method("PUT")
+     * @Method("POST")
      */
     public function updateAction(Request $request, $id)
     {
