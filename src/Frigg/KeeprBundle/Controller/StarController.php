@@ -21,45 +21,56 @@ class StarController extends Controller
     /**
      * Add star to a post
      *
-     * @Route("/add/{id}", requirements={"id" = "\d+"},  name="post_star_add")
+     * @Route("/{id}", requirements={"id" = "\d+"},  name="star_switch")
      * @Method("GET")
      */
-    public function addAction($id)
+    public function switchAction($id)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
-            $session->getFlashBag()->add(
-                'error',
-                $translator->trans('You must be logged in to star something')
-            );
-
-            return $this->redirect($referer);
-        }
-
         $session = $this->get('session');
         $translator = $this->get('translator');
+        $securityContext = $this->get('security.context');
+
+        if (!$securityContext->isGranted('ROLE_USER')) {
+            $message = $translator->trans('You must be logged in to star something');
+            $session->getFlashBag()->add(
+                'error',
+                $message
+            );
+
+            throw new AccessDeniedException(
+                $message
+            );
+        }
+
         $postService = $this->get('codekeepr.post.service');
 
         if (!$post = $postService->loadById($id)) {
+            $message = $translator->trans('Post not found');
+            $session->getFlashBag()->add(
+                'error',
+                $message
+            );
+
             throw new NotFoundHttpException(
-                $translator->trans('Post not found')
+                $message
             );
         }
 
+        if (!$securityContext->isGranted('POST_STAR_NEW', $post)) {
+            $message = $translator->trans('Insufficient permissions to add star');
+            throw new AccessDeniedException(
+                $message
+            );
+        }
+
+        $em = $this->getDoctrine()->getManager();
         if (!$star = $postService->isStarred($post)) {
-            if (!$this->get('security.context')->isGranted('POST_STAR_NEW', $post)) {
-                throw new AccessDeniedException;
-            }
-
-            $currentUser = $this->get('security.context')->getToken()->getUser();
-
+            $currentUser = $securityContext->getToken()->getUser();
             $star = new Star;
             $star->setUser($currentUser);
             $star->setPost($post);
-
-            $em = $this->getDoctrine()->getManager();
             $em->persist($star);
             $em->flush();
-
             $session->getFlashBag()->add(
                 'success',
                 $translator->trans(
@@ -67,65 +78,25 @@ class StarController extends Controller
                     ['topic' => $post->getTopic()]
                 )
             );
-        }
-
-        $referer = $this->get('request')->headers->get('referer');
-        $referer = ($referer ?: $this->generateUrl('post'));
-
-        return $this->redirect($referer);
-    }
-
-    /**
-     * Remove star from post
-     *
-     * @Route("/delete/{id}", requirements={"id" = "\d+"},  name="post_star_delete")
-     * @Method("GET")
-     */
-    public function deleteAction($id)
-    {
-        $session = $this->get('session');
-        $translator = $this->get('translator');
-        $postService = $this->get('codekeepr.post.service');
-
-        if (!$this->get('security.context')->isGranted('ROLE_USER')) {
+        } else {
+            $em->remove($star);
+            $em->flush();
             $session->getFlashBag()->add(
-                'error',
-                $translator->trans('You must be logged in to star something')
-            );
-
-            return $this->redirect($referer);
-        }
-
-        if (!$post = $postService->loadById($id)) {
-            throw new NotFoundHttpException(
-                $translator->trans('Post not found"')
+                'notice',
+                $translator->trans(
+                    'Unstarred "topic"',
+                    ['topic' => $post->getTopic()]
+                )
             );
         }
-
-        if (!$star = $postService->isStarred($post)) {
-            throw new NotFoundHttpException(
-                $translator->trans('Star not found')
-            );
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($star);
-        $em->flush();
-
-        $session->getFlashBag()->add(
-            'notice',
-            $translator->trans(
-                'Unstarred "topic"',
-                ['topic' => $post->getTopic()]
-            )
-        );
 
         if ($referer = $this->get('request')->headers->get('referer')) {
             return $this->redirect($referer);
         }
 
-        return $this->redirect($this->generateUrl(
-            'post'
-        ));
+        return $this->redirect($this->generateUrl('post_show', [
+            'id' => $post->getId(),
+            'identifier' => $post->getIdentifier()
+        ]));
     }
 }

@@ -1,11 +1,6 @@
 {% if post %}
-    {% if app.user and post|is_starred %}
-        <a href="{{ path('post_star_delete', {'id': post.id}) }}" title="{{ 'Unstar'|trans }}">
-            <i class="icon-star"></i>
-        </a>
-    {% else %}
-        <a href="{{ path('post_star_add', {'id': post.id}) }}" title="{{ 'Star'|trans }}">
-        	<i class="icon-star-empty"></i>
-        </a>
-    {% endif %}
+    {% set is_starred = (app.user and post|is_starred) %}
+    <a href="{{ path('star_switch', {'id': post.id}) }}" title="{{ is_starred ? 'Unstar'|trans : 'Star'|trans }}">
+        <i class="{{ is_starred ? 'icon-star' : 'icon-star-empty' }}"></i>
+    </a>
 {% endif %}
