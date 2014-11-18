@@ -85,7 +85,7 @@ class SearchController extends Controller
             $results = $finder->find($query . '*', 5);
             foreach ($results as $object) {
                 $collection[] = array(
-                    'label' => $object->__toString()
+                    'label' => $object->__toString(),
                     'value' => $object->__toString()
                 );
             }
