@@ -86,7 +86,9 @@ class SearchController extends Controller
             foreach ($results as $object) {
                 $collection[] = array(
                     'label' => $object->__toString(),
-                    'value' => $object->__toString()
+                    'url' => $this->generateUrl('search', [
+                        'query' => $object->__toString()
+                    ])
                 );
             }
         }
@@ -99,5 +101,5 @@ class SearchController extends Controller
                 return $response;
         }
     }
-}
 
+}
