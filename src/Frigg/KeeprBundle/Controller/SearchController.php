@@ -71,25 +71,28 @@ class SearchController extends Controller
     /**
      * Search form
      *
-     * @Route("/tag", name="search_tag")
+     * @Route("/autocomplete/{type}", name="search_autocomplete", defaults={"type" = "post"})
      * @Method("GET")
      */
-    public function tagAction()
+    public function autocompleteAction($type)
     {
-        $finder = $this->get('fos_elastica.finder.website.tag');
         $query = $this->get('request')->query->get('query', '');
         $method = $this->get('request')->query->get('method', 'json');
 
         $collection = array();
-        $results = $finder->find($query . '*', 10);
-        foreach ($results as $tag) {
-            $collection[] = array(
-                'label' => $tag->getName(),
-                'value' => $tag->getName()
-            );
+        if ($query) {
+            $finder = $this->get('fos_elastica.finder.website.' . $type);
+            $results = $finder->find($query . '*', 5);
+            foreach ($results as $tag) {
+                $collection[] = array(
+                    'label' => $tag->getName(),
+                    'value' => $tag->getName()
+                );
+            }
         }
 
         switch ($method) {
+            default:
             case 'json':
                 $response = new Response(json_encode($collection));
                 $response->headers->set('Content-Type', 'application/json');
