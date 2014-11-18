@@ -57,11 +57,11 @@ assetic:
         chosen_sprite:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite.png
-            output: chosen-sprite.png
+            output: css/chosen-sprite.png
         chosen_2x_sprite:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite@2x.png
-            output: chosen-sprite@2x.png
+            output: css/chosen-sprite@2x.png
 
         # javascript
         jquery_tagcanvas:

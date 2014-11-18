@@ -51,7 +51,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     $('.tag-autocomplete').autocomplete({
         source: function( request, response ) {
             jQuery.ajax({
-                url: '/tag/search/json',
+                url: '/search/tag',
                 dataType: 'json',
                 data: {
                     query: request.term,

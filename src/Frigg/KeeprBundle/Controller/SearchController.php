@@ -26,7 +26,7 @@ class SearchController extends Controller
     public function viewAction()
     {
         $postFinder = $this->get('fos_elastica.finder.website.post');
-        $postService  = $this->get('codekeepr.post.service');
+        $postService = $this->get('codekeepr.post.service');
 
         $query = $this->get('request')->query->get('query');
         $limit = $postService->getConfig('page_limit');
@@ -66,4 +66,34 @@ class SearchController extends Controller
             'query' => $query
         ];
     }
+
+    /**
+     * Search form
+     *
+     * @Route("/tag", name="search_tag")
+     * @Method("GET")
+     */
+    public function tagAction()
+    {
+        $finder = $this->get('fos_elastica.finder.website.tag');
+        $query = $this->get('request')->query->get('query', '');
+        $method = $this->get('request')->query->get('method', 'json');
+
+        $collection = array();
+        $results = $finder->find($query . '*', 10);
+        foreach ($results as $tag) {
+            $collection[] = array(
+                'label' => $tag->getName(),
+                'value' => $tag->getName()
+            );
+        }
+
+        switch ($method) {
+            case 'json':
+                $response = new Response(json_encode($collection));
+                $response->headers->set('Content-Type', 'application/json');
+                return $response;
+        }
+    }
 }
+
