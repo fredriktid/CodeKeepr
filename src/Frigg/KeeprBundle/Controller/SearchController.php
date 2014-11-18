@@ -83,10 +83,10 @@ class SearchController extends Controller
         if ($query) {
             $finder = $this->get('fos_elastica.finder.website.' . $type);
             $results = $finder->find($query . '*', 5);
-            foreach ($results as $tag) {
+            foreach ($results as $object) {
                 $collection[] = array(
-                    'label' => $tag->getName(),
-                    'value' => $tag->getName()
+                    'label' => $object->__toString()
+                    'value' => $object->__toString()
                 );
             }
         }
