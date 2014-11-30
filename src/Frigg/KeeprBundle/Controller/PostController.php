@@ -459,11 +459,12 @@ class PostController extends Controller
 
             foreach ($entity->getTags() as $tag) {
                 $tag->removePost($entity);
-                $em->persist($tag);
+                $em->persist($tag); 
             }
 
             foreach ($entity->getStars() as $star) {
                 $em->remove($star);
+                $em->persist($star);
             }
 
             $em->remove($entity);
