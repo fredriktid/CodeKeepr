@@ -464,7 +464,7 @@ class PostController extends Controller
 
             foreach ($entity->getStars() as $star) {
                 $em->remove($star);
-                $em->persist($star);
+                $em->flush();
             }
 
             $em->remove($entity);
