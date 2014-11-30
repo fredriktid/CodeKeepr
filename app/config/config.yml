@@ -66,16 +66,12 @@ assetic:
         # javascript
         jquery_tagcanvas:
             inputs:
-                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/jquery.tagcanvas.min.js
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/jquery.tagcanvas.min.js
             output: js/jquery.tagcanvas.min.js
         chosen_js:
             inputs:
-                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/chosen.jquery.min.js
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/chosen.jquery.min.js
             output: js/chosen.jquery.min.js
-        post_js:
-            inputs:
-                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/post.js
-            output: js/post.js
 
 # Doctrine Configuration
 doctrine:

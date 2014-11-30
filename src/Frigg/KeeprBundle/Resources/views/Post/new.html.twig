@@ -2,6 +2,8 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block mode %}edit{%  endblock %}
+
 {% block body -%}
     {{ form_start(form) }}
     <div class="row-fluid">
@@ -41,9 +43,4 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/post.js') }}"></script>
 {% endblock %}

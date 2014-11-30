@@ -19,7 +19,8 @@ class TagType extends AbstractType
                 'label' => false,
                 'required' => true,
                 'attr' => [
-                    'class' => 'tag-autocomplete ui-widget'
+                    'class' => 'autocomplete ui-widget',
+                    'data-type' => 'tag'
                 ]
             ])
         ;

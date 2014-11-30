@@ -77,19 +77,17 @@
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
         {% javascripts
-            '@FriggKeeprBundle/Resources/public/js/bootstrap.min.js'
-            '@FriggKeeprBundle/Resources/public/js/chosen.jquery.min.js'
-            '@FriggKeeprBundle/Resources/public/js/app.js'
+            '@FriggKeeprBundle/Resources/public/js/lib/bootstrap.min.js'
+            '@FriggKeeprBundle/Resources/public/js/lib/chosen.jquery.min.js'
+            '@FriggKeeprBundle/Resources/public/js/editor.js'
         %}
-        <script src="{{ asset_url }}"></script>
+            <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
         {% block javascripts %}
             <script type="text/javascript">
-                $(document).ready(function() {
-                    $('.chosen').chosen({
-                        disable_search_threshold: 5
-                    });
+                $(document).ready( function(){
+                    $('#wrap').editor().init().setMode('{% block mode %}main{% endblock %}').update();
                 });
             </script>
         {% endblock %}
