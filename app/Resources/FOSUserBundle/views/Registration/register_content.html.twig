@@ -1,6 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{{ form_start(form, {'attr': {'class': 'well'}}) }}
+{{ form_start(form) }}
     <div style="padding: 10px">
         <div>
             <label for="email">{{ 'Your e-mail'|trans }}</label>
@@ -19,5 +19,6 @@
             {{ form_widget(form._token) }}
             <input class="btn" type="submit" value="{{ 'Register'|trans }}" />
         </div>
+
     </div>
 {{ form_end(form) }}

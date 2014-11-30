@@ -28,17 +28,8 @@
             <div id="main" class="span12">
                 <div class="row-fluid">
                     <div class="span3">
-                        <div class="row-fluid">
-                            <div class="margin-bottom">
-                                <ul class="nav nav-list">
-                                    {% set currentRoute = app.request.attributes.get('_route') %}
-                                    {{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row-fluid bs-docs-sidebar">
-                            {{ render_esi(controller('FriggKeeprBundle:Tag:sidebar')) }}
-                        </div>
+                        {% set currentRoute = app.request.attributes.get('_route') %}
+                        {{ render_esi(controller('FriggKeeprBundle:Layout:sidebar', {'currentRoute': currentRoute})) }}
                     </div>
                     <div class="span9">
                         <div class="row-fluid">

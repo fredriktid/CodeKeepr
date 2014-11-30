@@ -66,22 +66,4 @@ class TagController extends Controller
             'title' => $tag->getName()
         ];
     }
-
-    /**
-     * Sidebar template
-     *
-     * @Route("/sidebar", name="post_tag_sidebar")
-     * @Method("GET")
-     * @Template()
-     */
-    public function sidebarAction()
-    {
-        $postService = $this->get('codekeepr.post.service');
-        $tags = $postService->loadPopularTags();
-
-        return [
-            'current_identifier' => '',
-            'tags' => $tags
-        ];
-    }
 }
