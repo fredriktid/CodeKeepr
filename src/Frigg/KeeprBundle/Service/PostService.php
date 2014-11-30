@@ -2,7 +2,6 @@
 
 namespace Frigg\KeeprBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Yaml\Yaml;
 use Frigg\KeeprBundle\Entity\Tag;
 

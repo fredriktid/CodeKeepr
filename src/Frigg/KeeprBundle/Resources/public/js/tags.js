@@ -1,15 +1,15 @@
 (function ($) {
 
-    $.fn.editorTags = function(options) {
+    $.fn.codekeeprTags = function(options) {
 
         var context = this;
 
-        this.editor = false;
+        this.app = false;
         this.tags = false;
 
-        this.init = function (editor) {
+        this.init = function (app) {
 
-            this.editor = editor;
+            this.app = app;
             this.tags = $(this);
 
             var $add = $('<a href="#" class="add_tag_link margin-bottom btn"><i class="icon-tag"></i> Add tag</a>');
@@ -40,13 +40,14 @@
 
             $button.data('index', index + 1);
 
-            var $newFormLi = $('<li></li>').append(newForm);
+            var $form = $('<li></li>').append(newForm);
 
-            $new.after($newFormLi);
+            $new.after($form);
 
-            context.editor.searcher();
+            // init autocomplete
+            context.app.searcher();
 
-            this.addDelete($newFormLi);
+            this.addDelete($form);
         }
 
         this.addDelete = function($form) {

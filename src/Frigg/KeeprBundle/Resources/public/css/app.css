@@ -123,30 +123,18 @@ pre.prettyprint {
 }
 
 #main {
-    margin-top: 90px;
+    margin-top: 10px;
     width: 100%;
     border-top: 1px solid #eee;
     padding-top: 15px;
 }
 
-.logo-right {
-    position: absolute;
-    left: 50%;
+#logo {
+    margin: 0 auto;
+    width: 300px;
 }
 
-.logo-left {
-    position: relative;
-    left: -50%;
-}
-
-.footer {
-    position: relative;
-    margin-top: -31px;
-    height: 20px;
-    clear: both;
-    padding: 5px 0;
-    background: inherit;
-    text-align: center;
+#footer {
 }
 
 .nav-wrap {

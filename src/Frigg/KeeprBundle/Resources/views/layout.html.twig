@@ -22,10 +22,8 @@
     </head>
     <body>
         <div id="wrap">
-            <div class="logo-right">
-                <div class="logo-left">
-                    <h1><a href="{{ path('home') }}">{{ 'CodeKeepr'|trans }}</a></h1>
-                </div>
+            <div id="logo">
+                <h1><a href="{{ path('home') }}">{{ 'CodeKeepr'|trans }}</a></h1>
             </div>
             <div id="main" class="span12">
                 <div class="row-fluid">
@@ -68,7 +66,7 @@
             </div>
         </div>
 
-        <footer class="footer">
+        <footer id="footer">
             {#<iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=fork&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="55" height="20"></iframe>
             <iframe src="http://ghbtns.com/github-btn.html?user=fredriktid&amp;repo=CodeKeepr&amp;type=follow&amp;size=small" allowtransparency="true" frameborder="0" scrolling="0" width="130" height="20"></iframe>#}
         </footer>
@@ -79,8 +77,8 @@
         {% javascripts
             '@FriggKeeprBundle/Resources/public/js/lib/bootstrap.min.js'
             '@FriggKeeprBundle/Resources/public/js/lib/chosen.jquery.min.js'
-            '@FriggKeeprBundle/Resources/public/js/editor-tags.js'
-            '@FriggKeeprBundle/Resources/public/js/editor.js'
+            '@FriggKeeprBundle/Resources/public/js/tags.js'
+            '@FriggKeeprBundle/Resources/public/js/app.js'
         %}
             <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
@@ -88,7 +86,7 @@
         {% block javascripts %}
             <script type="text/javascript">
                 $(document).ready( function(){
-                    $('#wrap').editor().init().setMode('{% block mode %}main{% endblock %}').update();
+                    $('#main').codekeepr().init().setMode('{% block mode %}main{% endblock %}').update();
                 });
             </script>
         {% endblock %}
