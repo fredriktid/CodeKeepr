@@ -29,7 +29,7 @@
                 <div class="row-fluid">
                     <div class="span3">
                         <div class="row-fluid">
-                            <div class="well">
+                            <div class="margin-bottom">
                                 <ul class="nav nav-list">
                                     {% set currentRoute = app.request.attributes.get('_route') %}
                                     {{ include('FriggKeeprBundle::navigation.html.twig', {'currentRoute': currentRoute })}}
@@ -71,9 +71,10 @@
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
+
         {% javascripts
-            '@FriggKeeprBundle/Resources/public/js/lib/bootstrap.min.js'
-            '@FriggKeeprBundle/Resources/public/js/lib/chosen.jquery.min.js'
             '@FriggKeeprBundle/Resources/public/js/search.js'
             '@FriggKeeprBundle/Resources/public/js/tags.js'
             '@FriggKeeprBundle/Resources/public/js/app.js'

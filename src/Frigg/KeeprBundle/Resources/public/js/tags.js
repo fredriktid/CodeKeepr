@@ -18,7 +18,7 @@
 
             $(this).prepend($new);
 
-            $(this).data('index', $(this).find(':input').length);
+            $(this).data('index', $(this).find(':i nput').length);
 
             $add.on('click', function (e) {
                 e.preventDefault();

@@ -19,7 +19,10 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Frigg\KeeprBundle\FriggKeeprBundle(),
-            new FOS\ElasticaBundle\FOSElasticaBundle()
+            new FOS\ElasticaBundle\FOSElasticaBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new FOS\CommentBundle\FOSCommentBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

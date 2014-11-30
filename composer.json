@@ -21,7 +21,10 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-paginator-bundle": "dev-master",
-        "friendsofsymfony/elastica-bundle": "3.0.*@dev"
+        "friendsofsymfony/elastica-bundle": "3.0.*@dev",
+        "friendsofsymfony/comment-bundle": "~2.0",
+        "friendsofsymfony/rest-bundle": "~1.4",
+        "jms/serializer-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

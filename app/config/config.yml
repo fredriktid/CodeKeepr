@@ -17,11 +17,12 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: '0.3  '
+        assets_version: '0.3'
     default_locale:  "%locale%"
     trusted_proxies: [192.0.0.1, 10.0.0.0/8, 127.0.0.1]
     session:         ~
     fragments:       ~
+    http_method_override: true
 
 # Twig Configuration
 twig:
@@ -32,7 +33,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ 'FriggKeeprBundle' ]
+    bundles:        [ "FriggKeeprBundle", "FOSCommentBundle" ]
     #java: /usr/bin/java
     filters:
         #uglifyjs2:
@@ -62,16 +63,25 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/chosen-sprite@2x.png
             output: css/chosen-sprite@2x.png
+        fos_comments_css:
+            inputs:
+                - %kernel.root_dir%/../vendor/friendsofsymfony/comment-bundle/FOS/CommentBundle/Resources/assets/css/comments.css
+            output: css/comments.css
 
         # javascript
-        jquery_tagcanvas:
-            inputs:
-                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/jquery.tagcanvas.min.js
-            output: js/jquery.tagcanvas.min.js
         chosen_js:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/chosen.jquery.min.js
             output: js/chosen.jquery.min.js
+        bootstrap_js:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/bootstrap.min.js
+            output: js/bootstrap.min.js
+        fos_comments_js:
+            inputs:
+                - %kernel.root_dir%/../vendor/friendsofsymfony/comment-bundle/FOS/CommentBundle/Resources/assets/js/comments.js
+            output: js/comments.js
+
 
 # Doctrine Configuration
 doctrine:
@@ -114,6 +124,13 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: Frigg\KeeprBundle\Entity\Comment
+            thread: Frigg\KeeprBundle\Entity\Thread
 
 fos_elastica:
     clients:

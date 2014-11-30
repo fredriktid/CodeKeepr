@@ -27,10 +27,6 @@
             return this;
         }
 
-        this.tags = function() {
-            return this.find('.tags').codekeeprTags();
-        }
-
         this.update = function() {
 
             switch (this.mode) {

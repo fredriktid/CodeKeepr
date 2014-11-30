@@ -1,4 +1,4 @@
-<li class="nav-header">{{ 'Browse the archive'|trans }}</li>
+{#<li class="nav-header">{{ 'Browse the archive'|trans }}</li>#}
 <li{% if currentRoute in ['home', 'post'] %} class="active"{% endif %}>
 	<a href="{{ path('home') }}">
 		<i class="icon-list"></i>
@@ -13,16 +13,16 @@
 </li>
 <li class="divider"></li>
 {% if is_granted('ROLE_USER') %}
-    <li class="nav-header">{{ 'Participate'|trans }}</li>
+    {#<li class="nav-header">{{ 'Participate'|trans }}</li>#}
     <li{% if currentRoute in ['post_new', 'post_edit'] %} class="active"{% endif %}>
     	<a href="{{ path('post_new') }}">
     		<i class="icon-plus"></i>
-    		{{ 'Add a post'|trans }}
+    		{{ 'Add post'|trans }}
     	</a>
    	</li>
     <li{% if currentRoute in ['post_user'] %} class="active"{% endif %}>
     	<a href="{{ path('post_user', {'id': app.user.id}) }}">
-			<i class="icon-user"></i>
+			<i class="icon-edit"></i>
 			{{ 'My posts'|trans }}
 		</a>
 	</li>
@@ -33,16 +33,16 @@
     	</a>
    	</li>
 {% else %}
-    <li class="nav-header">{{ 'Participate'|trans }}</li>
+    {#<li class="nav-header">{{ 'Participate'|trans }}</li>#}
     <li{% if currentRoute in ['fos_user_registration_register', 'fos_user_registration_check_email', 'fos_user_registration_confirm', 'fos_user_registration_confirmed'] %} class="active"{% endif %}>
     	<a href="{{ path('fos_user_registration_register') }}">
-    		<i class="icon-user"></i>
-    		{{ 'Register to post'|trans }}
+    		<i class="icon-check"></i>
+    		{{ 'Register'|trans }}
     	</a>
     </li>
     <li{% if currentRoute in ['fos_user_security_login', 'fos_user_resetting_request', 'fos_user_resetting_send_email', 'fos_user_resetting_check_email', 'fos_user_resetting_reset'] %} class="active"{% endif %}>
     	<a href="{{ path('fos_user_security_login') }}">
-    		<i class="icon-ok-sign"></i>
+    		<i class="icon-user"></i>
     		{{ 'Login'|trans }}
     	</a>
     </li>

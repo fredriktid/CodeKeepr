@@ -16,8 +16,6 @@
 *.DS_Store
 ._*
 *~
-composer.lock
-composer.phar
 php_errors.log
 *.sublime-workspace
 .idea

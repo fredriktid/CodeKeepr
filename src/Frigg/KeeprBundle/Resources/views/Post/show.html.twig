@@ -7,5 +7,15 @@
 {% endblock %}
 
 {% block body -%}
-    {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': entity, 'view': 'full'}) }}
+    {% include 'FriggKeeprBundle:Post:accordion.html.twig' with {'post': entity, 'view': 'full'} %}
+    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': 'post_' ~ entity.id} %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{%  endblock %}
+
+{% block stylesheets %}
+    {{  parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/comments.css') }}" />
 {% endblock %}
