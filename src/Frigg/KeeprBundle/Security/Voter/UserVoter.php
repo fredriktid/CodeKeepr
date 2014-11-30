@@ -21,6 +21,10 @@ class UserVoter extends BaseVoter implements VoterInterface
 
         $this->setCurrentUser($token);
 
+        if (in_array('ROLE_ADMIN', $this->roles)) {
+            return VoterInterface::ACCESS_GRANTED;
+        }
+
         foreach ($attributes as $attribute) {
             if (!$this->supportsAttribute($attribute)) {
                 continue;

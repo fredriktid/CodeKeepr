@@ -453,6 +453,10 @@ class PostController extends Controller
                 );
             }
 
+            if (!$this->get('security.context')->isGranted('POST_DELETE', $entity)) {
+                throw new AccessDeniedException;
+            }
+
             foreach ($entity->getTags() as $tag) {
                 $tag->removePost($entity);
                 $em->persist($tag);
