@@ -1,15 +1,12 @@
 (function ($) {
 
-    $.fn.codekeeprTags = function(options) {
+    $.fn.codekeeprTags = function() {
 
         var context = this;
-
-        this.app = false;
         this.tags = false;
 
-        this.init = function (app) {
+        this.buildForm = function() {
 
-            this.app = app;
             this.tags = $(this);
 
             var $add = $('<a href="#" class="add_tag_link margin-bottom btn"><i class="icon-tag"></i> Add tag</a>');
@@ -44,13 +41,15 @@
 
             $new.after($form);
 
-            // init autocomplete
-            context.app.searcher();
+            this.find('.autocomplete').each(function(index, value) {
+                $(this).codekeeprSearch().autocomplete();
+            });
 
             this.addDelete($form);
         }
 
         this.addDelete = function($form) {
+
             var $deleteForm = $('<a href="#" class="btn btn-danger btn-tag-delete"><i class="icon-trash icon-white"></i></a>');
             $form.prepend($deleteForm);
 
@@ -64,4 +63,5 @@
 
         return this;
     }
+
 }(jQuery));

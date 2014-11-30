@@ -55,11 +55,8 @@
                                 {% endfor %}
                             {% endfor %}
 
-                            <!-- Main content -->
                             {% block body %}
                             {% endblock %}
-                            <!-- /Main content -->
-
                         </div>
                     </div>
                 </div>
@@ -77,6 +74,7 @@
         {% javascripts
             '@FriggKeeprBundle/Resources/public/js/lib/bootstrap.min.js'
             '@FriggKeeprBundle/Resources/public/js/lib/chosen.jquery.min.js'
+            '@FriggKeeprBundle/Resources/public/js/search.js'
             '@FriggKeeprBundle/Resources/public/js/tags.js'
             '@FriggKeeprBundle/Resources/public/js/app.js'
         %}
