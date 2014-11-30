@@ -31,6 +31,7 @@
         <form class="form" action="{{ path("fos_user_security_check") }}" method="post" style="padding: 10px">
             <p class="muted">Login or <a href="{{ path('fos_user_registration_register') }}">{{ 'register here!'|trans }}</a></p>
             <input type="hidden" name="_csrf_token" value="{% render(controller('FriggKeeprBundle:Layout:getToken')) %}" />
+            <input type="hidden" id="remember_me" name="_remember_me" value="on">
             <input name="_username" type="text" class="input-medium" placeholder="Email"><br>
             <input name="_password" type="password" class="input-medium" placeholder="Password">
             <button name="_submit" type="submit" class="btn" style="margin-top: 5px">Login</button>

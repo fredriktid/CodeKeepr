@@ -16,22 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class TagController extends Controller
 {
-
-
-    /**
-     * Tagged posts
-     *
-     * @Route("/", name="post_tags")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
-     */
-    public function indexAction()
-    {
-        return [
-            'title' => 'Tags'
-        ];
-    }
-
     /**
      * Tagged posts
      *
