@@ -12,7 +12,7 @@
             var $add = $('<a href="#" class="add_tag_link margin-bottom btn"><i class="icon-tag"></i> Add tag</a>');
             var $new = $('<li></li>').append($add);
 
-            $(this).find('li').each(function () {
+            $(this).find('li').each(function() {
                 context.addDelete($(this));
             });
 
@@ -20,7 +20,7 @@
 
             $(this).data('index', $(this).find(':input').length);
 
-            $add.on('click', function (e) {
+            $add.on('click', function(e) {
                 e.preventDefault();
                 context.addForm(context.tags, $new);
             });
