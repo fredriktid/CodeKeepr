@@ -277,3 +277,11 @@ pre.prettyprint-plain {
 .fos_comment_submit input {
     font-size: 1em !important;
 }
+
+.fos_comment_comment_voting {
+    margin-top: -5px;
+}
+
+.fos_comment_comment_body {
+    margin-left: 5px;
+}
