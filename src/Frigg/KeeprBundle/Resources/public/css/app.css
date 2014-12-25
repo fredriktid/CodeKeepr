@@ -46,6 +46,10 @@ h1 a, h1 a:hover {
     margin-bottom: 10px;
 }
 
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
 .align-center {
     text-align: center;
 }
@@ -248,4 +252,28 @@ pre.prettyprint-plain {
 
 .tag-badge:hover  {
     background-color: #3a87ad;
+}
+
+.fos_comment_comment_form_holder {
+    margin-top: 20px;
+}
+
+.fos_comment_comment_form_holder textarea.full-border-box {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+}
+
+.fos_comment_comment_replies {
+    margin-left: 20px;
+}
+
+.fos_comment_comment_metas {
+    background: transparent !important;
+}
+
+.fos_comment_submit input {
+    font-size: 1em !important;
 }

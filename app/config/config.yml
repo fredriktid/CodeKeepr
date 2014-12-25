@@ -131,6 +131,7 @@ fos_comment:
         model:
             comment: Frigg\KeeprBundle\Entity\Comment
             thread: Frigg\KeeprBundle\Entity\Thread
+            vote: Frigg\KeeprBundle\Entity\Vote
 
 fos_elastica:
     clients:

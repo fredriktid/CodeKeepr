@@ -30,7 +30,7 @@
                         {% set currentRoute = app.request.attributes.get('_route') %}
                         {{ render_esi(controller('FriggKeeprBundle:Layout:sidebar', {'currentRoute': currentRoute})) }}
                     </div>
-                    <div class="span9">
+                    <div class="span9 margin-bottom-20">
                         <div class="row-fluid">
                             {% block search_form %}
                                 {{ render_esi(controller('FriggKeeprBundle:Search:form')) }}
