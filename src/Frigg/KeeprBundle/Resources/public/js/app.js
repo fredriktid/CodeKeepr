@@ -15,6 +15,10 @@
                 $(this).codekeeprSearch().autocomplete();
             });
 
+            this.find('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+
             return this;
         }
 

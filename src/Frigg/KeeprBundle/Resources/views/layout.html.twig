@@ -61,8 +61,9 @@
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('js/chosen.jquery.min.js') }}"></script>
+        <script src="{{ asset('js/lib/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/lib/chosen.jquery.min.js') }}"></script>
+        <script src="{{ asset('js/lib/highlight.pack.js') }}"></script>
 
         {% javascripts
             '@FriggKeeprBundle/Resources/public/js/search.js'
@@ -79,6 +80,5 @@
                 });
             </script>
         {% endblock %}
-        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=desert"></script>
     </body>
 </html>

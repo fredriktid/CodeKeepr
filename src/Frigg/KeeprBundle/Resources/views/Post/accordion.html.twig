@@ -18,11 +18,9 @@
 				</a>
 			</div>
 		</div>
-
-		{% set highlighter = 'php' %}
 		<div id="{{ post.identifier }}" class="accordion-body collapse{% if full_view %} in{% endif %}">
 			<div class="accordion-inner">
-				<pre class="prettyprint"><code{% if highlighter %} class="language-{{ post.language.identifier }}"{% endif %}>{{ post.content|trim }}</code></pre>
+				<pre><code class="{% if post.language.identifier %}{{ post.language.identifier }}{% else %}nohighlight{% endif %}"{% endif %}>{{ post.content|trim }}</code></pre>
 				<div class="pull-right">
 					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('post_user', {'id': post.user.id}) }}">{{ post.user.username }}</a></small></span>
 				</div>

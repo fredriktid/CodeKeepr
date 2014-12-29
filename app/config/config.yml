@@ -17,7 +17,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: '0.3'
+        assets_version: '0.4'
     default_locale:  "%locale%"
     trusted_proxies: [192.0.0.1, 10.0.0.0/8, 127.0.0.1]
     session:         ~
@@ -72,15 +72,15 @@ assetic:
         chosen_js:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/chosen.jquery.min.js
-            output: js/chosen.jquery.min.js
+            output: js/lib/chosen.jquery.min.js
         bootstrap_js:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/bootstrap.min.js
-            output: js/bootstrap.min.js
-        fos_comments_js:
+            output: js/lib/bootstrap.min.js
+        highlight_js:
             inputs:
-                - %kernel.root_dir%/../vendor/friendsofsymfony/comment-bundle/FOS/CommentBundle/Resources/assets/js/comments.js
-            output: js/comments.js
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/js/lib/highlight.pack.js
+            output: js/lib/highlight.pack.js
 
 
 # Doctrine Configuration
