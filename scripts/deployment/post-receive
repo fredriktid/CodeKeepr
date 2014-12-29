@@ -1,30 +1,27 @@
 #!/usr/bin/env ruby
 # post-receive
 
-puts "**************************************"
-puts "Post-receive: Deploying to production"
-puts "**************************************"
-
-# 1. Read from stdin in format: "from_commit to_commit branch_name"
 from, to, branch = ARGF.read.split " "
 
-# 2. Only deploy if master branch was pushed
 if (branch =~ /master$/) == nil
     puts "Received branch #{branch}, not deploying."
     exit
 end
 
-# 3. Copy files to deploy directory
-deploy_to_dir = File.expand_path('../www')
-`GIT_WORK_TREE="#{deploy_to_dir}" git checkout -f master`
-puts "DEPLOY: master(#{to}) copied to '#{deploy_to_dir}'"
+puts "Codekeepr: Deploying master"
 
-# 4. Post-deploy settings and cleanup
+deploy_to_dir = File.expand_path('../www')
+
+puts "Exporting master(#{to}) to '#{deploy_to_dir}'"
+
+`GIT_WORK_TREE="#{deploy_to_dir}" git checkout -f master`
+
+puts "Performing post deployment procedures"
+
 Dir.chdir("#{deploy_to_dir}")
 
-output = `#{"cp web/.htaccess_prod web/.htaccess" +
-" && php app/console assetic:dump --env=prod --no-debug --no-interaction" +
-" && php app/console cache:clear --env=prod --no-debug  --no-interaction"}`
+`#{"cp web/.htaccess_prod web/.htaccess" +
+" && php app/console cache:clear --env=prod --no-debug  --no-interaction" +
+" && php app/console assetic:dump --env=prod --no-debug --no-interaction"}`
 
 puts "Done."
-

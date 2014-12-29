@@ -92,6 +92,8 @@ a.muted:hover {
     display: inline;
     padding: 0;
     margin-left: 5px;
+    font-color: #444;
+    font-weight: bold;
 }
 
 .accordion-credit {
