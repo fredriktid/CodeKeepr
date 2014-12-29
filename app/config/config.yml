@@ -24,6 +24,10 @@ framework:
     fragments:       ~
     http_method_override: true
 
+services:
+    markup.sundown_markdown:
+        class: Frigg\KeeprBundle\Markup\Sundown
+
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
@@ -137,6 +141,7 @@ fos_comment:
             thread:  fos_comment.manager.thread.acl
             comment: fos_comment.manager.comment.acl
             vote:    fos_comment.manager.vote.acl
+        markup: markup.sundown_markdown
     acl_roles:
         comment:
             create: ROLE_USER

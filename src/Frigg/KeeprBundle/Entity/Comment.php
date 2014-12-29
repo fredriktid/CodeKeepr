@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\CommentBundle\Entity\Comment as BaseComment;
+use FOS\CommentBundle\Model\RawCommentInterface;
 use FOS\CommentBundle\Model\SignedCommentInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\CommentBundle\Model\VotableCommentInterface;
@@ -13,7 +14,7 @@ use FOS\CommentBundle\Model\VotableCommentInterface;
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\CommentRepository")
  */
-class Comment extends BaseComment implements SignedCommentInterface, VotableCommentInterface
+class Comment extends BaseComment implements SignedCommentInterface, VotableCommentInterface, RawCommentInterface
 {
     /**
      * @ORM\Id
@@ -43,6 +44,22 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
      * @var int
      */
     protected $score = 0;
+
+    /**
+     * @ORM\Column(name="rawBody", type="text", nullable=true)
+     * @var string
+     */
+    protected $rawBody;
+
+    public function setRawBody($rawBody)
+    {
+        $this->rawBody = $rawBody;
+    }
+
+    public function getRawBody()
+    {
+        return $this->rawBody;
+    }
 
     public function setAuthor(UserInterface $author)
     {
