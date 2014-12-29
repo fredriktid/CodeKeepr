@@ -7,7 +7,7 @@
                     {{ 'Add post'|trans }}
                 </a>
             </li>
-            <li{% if current_route in [user_posts] %} class="active"{% endif %}>
+            <li{% if current_route in ['user_posts'] %} class="active"{% endif %}>
                 <a href="{{ path('user_posts', {'id': app.user.id}) }}">
                     <i class="icon-edit"></i>
                     {{ 'My posts'|trans }}
