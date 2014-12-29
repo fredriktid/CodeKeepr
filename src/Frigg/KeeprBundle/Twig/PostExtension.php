@@ -24,8 +24,14 @@ class PostExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('is_starred', [$this, 'isStarred'])
+            new \Twig_SimpleFilter('is_starred', [$this, 'isStarred']),
+            new \Twig_SimpleFilter('comment_count', [$this, 'commentCount'])
         ];
+    }
+
+    public function commentCount($postEntity)
+    {
+        return $this->entityManager->getRepository('FriggKeeprBundle:Comment')->postCount($postEntity);
     }
 
     public function isStarred($postEntity)

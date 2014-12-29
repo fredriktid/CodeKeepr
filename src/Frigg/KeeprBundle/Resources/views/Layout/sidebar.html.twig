@@ -47,10 +47,10 @@
 
 {% if tags %}
     <div class="row-fluid">
-        <ul class="nav nav-tabs nav-stacked">
+        <ul class="nav nav-pills nav-stacked">
             {% for item in tags %}
                 <li>
-                    <a href="{{ path('post_tag', {'identifier': item.identifier}) }}">
+                    <a href="{{ path('tag_posts', {'identifier': item.identifier}) }}">
                         <span class="badge">{{ item.post_count }}</span> <strong>{{ item.name }}</strong>
                     </a>
                 </li>

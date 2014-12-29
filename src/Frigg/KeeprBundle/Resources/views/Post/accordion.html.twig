@@ -4,12 +4,23 @@
 		<div class="accordion-heading">
 			<div class="accordion-content">
 				<div class="pull-right">
-					{% set post_tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
-					{% for tag in post_tags %}
-						<a href="{{ path('post_tag', {'identifier': tag.identifier}) }}">
+					{% set tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
+					{% for tag in tags %}
+						<a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">
 							<span class="label label-inverse tag-badge">{{ tag.name }}</span>
 						</a>
 					{% endfor %}
+
+					{% set comment_count = post|comment_count %}
+					{% if comment_count %}
+					    <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
+					        <span class="badge badge-info">
+					            <i class="icon-comment"></i>
+					            {{ comment_count }}
+					        </span>
+					    </a>
+					{% endif %}
+
 					{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
 				</div>
 				{{ include('FriggKeeprBundle:Star:add.html.twig') }}

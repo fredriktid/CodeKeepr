@@ -19,7 +19,7 @@ class TagController extends Controller
     /**
      * Tagged posts
      *
-     * @Route("/{identifier}", name="post_tag")
+     * @Route("/{identifier}", name="tag_posts")
      * @Method("GET")
      * @Template("FriggKeeprBundle:Post:paginator.html.twig")
      */

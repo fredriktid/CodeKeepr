@@ -112,10 +112,6 @@ a.muted:hover {
     text-decoration: none;
 }
 
-pre.prettyprint {
-    margin-bottom: 5px;
-}
-
 /* Scaffolding styles */
 
 #wrap {
@@ -196,6 +192,10 @@ pre.prettyprint {
 
 /* Post */
 
+.accordion-group pre {
+    margin-bottom: 0;
+}
+
 textarea.code {
     height: 480px;
     font-family: 'Source Code Pro', sans-serif;
@@ -247,10 +247,7 @@ form#main-search input {
     margin-bottom: 0;
 }
 
-pre.prettyprint-plain {
-    display: block;
-    background-color: #333;
-}
+
 
 .tag-badge:hover  {
     background-color: #3a87ad;
