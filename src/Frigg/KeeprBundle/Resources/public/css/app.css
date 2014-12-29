@@ -91,7 +91,7 @@ a.muted:hover {
 .accordion-heading .accordion-toggle {
     display: inline;
     padding: 0;
-    margin-left: 5px;
+    margin-left: 2px;
     color: #444;
     font-weight: bold;
 }

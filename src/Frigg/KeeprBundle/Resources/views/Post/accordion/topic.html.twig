@@ -1,0 +1,12 @@
+{% set is_starred = (app.user and post|is_starred) %}
+<a href="{{ path('star_switch', {'id': post.id}) }}" title="{{ is_starred ? 'Unstar'|trans : 'Star'|trans }}">
+    <i class="{{ is_starred ? 'icon-star' : 'icon-star-empty' }}"></i>
+</a>
+
+{% if post.private %}
+    <i class="icon-lock"></i>
+{% endif %}
+
+<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
+    {{ post.topic }}
+</a>

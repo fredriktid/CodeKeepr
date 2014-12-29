@@ -1,43 +1,17 @@
-{% if post %}
-    {%  set full_view = (view is defined and view == 'full') %}
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<div class="accordion-content">
-				<div class="pull-right">
-
-					{% set comment_count = post|comment_count %}
-					{% if comment_count %}
-						<a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
-					        <span class="badge badge-info">
-					            <i class="icon-comment"></i>
-								{{ comment_count }}
-					        </span>
-						</a>
-					{% endif %}
-
-					{% set tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
-					{% for tag in tags %}
-						<a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">
-							<span class="label label-inverse tag-badge">{{ tag.name }}</span>
-						</a>
-					{% endfor %}
-
-					{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
-				</div>
-				{{ include('FriggKeeprBundle:Star:add.html.twig') }}
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{ post.identifier }}">
-					{{ post.topic }}
-				</a>
+{%  set full_view = (view is defined and view == 'full') %}
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<div class="accordion-content">
+			<div class="pull-right">
+				{% include 'FriggKeeprBundle:Post:accordion/metadata.html.twig' %}
 			</div>
-		</div>
-		<div id="{{ post.identifier }}" class="accordion-body collapse{% if full_view %} in{% endif %}">
-			<div class="accordion-inner">
-				<pre><code class="{% if post.language.identifier %}{{ post.language.identifier }}{% else %}nohighlight{% endif %}">{{ post.content|trim }}</code></pre>
-				<div class="pull-right">
-					<span class="muted"><small><a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('user_posts', {'id': post.user.id}) }}">{{ post.user.username }}</a></small></span>
-				</div>
-				{{ include('FriggKeeprBundle:Post:toolbar.html.twig') }}
-			</div>
+			{% include 'FriggKeeprBundle:Post:accordion/topic.html.twig' %}
 		</div>
 	</div>
-{% endif %}
+	<div id="{{ post.identifier }}" class="accordion-body collapse{% if full_view %} in{% endif %}">
+		<div class="accordion-inner">
+			{% include 'FriggKeeprBundle:Post:accordion/code.html.twig' %}
+			{% include 'FriggKeeprBundle:Post:accordion/toolbar.html.twig' %}
+		</div>
+	</div>
+</div>

@@ -26,12 +26,13 @@
                 </a>
             </li>
             <li class="divider"></li>
-            <li class="margin-bottom">
+            <li>
                 <a href="{{ path('fos_user_security_logout') }}">
                     <i class="icon-off"></i>
                     {{ 'Log out'|trans }}
                 </a>
             </li>
+            <li class="divider"></li>
         </ul>
     {% else %}
         <form class="form" action="{{ path("fos_user_security_check") }}" method="post" style="padding: 10px">
