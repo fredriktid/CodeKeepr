@@ -1,27 +1,27 @@
 #!/usr/bin/env ruby
-# post-receive
 
 from, to, branch = ARGF.read.split " "
 
 if (branch =~ /master$/) == nil
-    puts "Received branch #{branch}, not deploying."
+    puts "Received branch #{branch}, not deploying"
     exit
 end
 
-puts "Codekeepr: Deploying master"
+target = File.expand_path("../www")
 
-deploy_to_dir = File.expand_path('../www')
+puts "Deploying #{branch}"
 
-puts "Exporting master(#{to}) to '#{deploy_to_dir}'"
+puts "Exporting #{to} to #{target}"
 
-`GIT_WORK_TREE="#{deploy_to_dir}" git checkout -f master`
+`GIT_WORK_TREE="#{target}" git checkout -f #{branch}`
 
-puts "Performing post deployment procedures"
+puts "Post-deployment procedures"
 
-Dir.chdir("#{deploy_to_dir}")
+Dir.chdir("#{target}")
 
-`#{"cp web/.htaccess_prod web/.htaccess" +
-" && php app/console cache:clear --env=prod --no-debug  --no-interaction" +
-" && php app/console assetic:dump --env=prod --no-debug --no-interaction"}`
+`cp web/.htaccess_prod web/.htaccess`
+`php app/console cache:clear --env=prod --no-debug  --no-interaction`
+`php app/console assetic:dump --env=prod --no-debug --no-interaction`
 
-puts "Done."
+puts "Done"
+
