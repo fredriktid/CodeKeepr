@@ -27,12 +27,12 @@ class LayoutController extends Controller
      */
     public function sidebarAction($currentRoute)
     {
-        $postService = $this->get('codekeepr.post.service');
-        $tags = $postService->loadPopularTags();
+        $em = $this->get('doctrine.orm.entity_manager');
+        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular();
 
         return [
             'current_route' => $currentRoute,
-            'tags' => $tags
+            'tags' => $popularTags
         ];
     }
 

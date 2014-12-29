@@ -22,7 +22,7 @@ use Frigg\KeeprBundle\Form\PostType;
 class PostController extends Controller
 {
     /**
-     * All posts
+     * Loads all public posts
      *
      * @Route("/", name="post")
      * @Method("GET")
@@ -30,16 +30,15 @@ class PostController extends Controller
      */
     public function indexAction()
     {
-        $postService = $this->get('codekeepr.post.service');
-        $posts = $postService->load();
-        $limit = $postService->getConfig('page_limit');
-        $page = $this->get('request')->query->get('page', 1);
+        $em = $this->get('doctrine.orm.entity_manager');
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPublic();
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $posts,
-            $page,
-            $limit
+            $publicPosts,
+            $currentPage,
+            20
         );
 
         return [
@@ -49,7 +48,7 @@ class PostController extends Controller
     }
 
     /**
-     * Posts by date
+     * Public posts by date
      *
      * @Route("/date/{date}", name="post_date")
      * @Method("GET")
@@ -58,20 +57,20 @@ class PostController extends Controller
     public function dateAction($date)
     {
         $timestamp = strtotime($date);
-        $postService = $this->get('codekeepr.post.service');
-        $posts = $postService->loadPeriod(
-            mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
-            mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
-        );
+        $interval = [
+            'begin' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
+            'end' => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+        ];
 
-        $limit = $postService->getConfig('page_limit');
-        $page = $this->get('request')->query->get('page', 1);
+        $em = $this->get('doctrine.orm.entity_manager');
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPeriod($interval['begin'], $interval['end']);
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $posts,
-            $page,
-            $limit
+            $publicPosts,
+            $currentPage,
+            20
         );
 
         return [
@@ -81,7 +80,7 @@ class PostController extends Controller
     }
 
     /**
-     * Posts by date
+     * Public posts by user
      *
      * @Route("/user/{id}", requirements={"id" = "\d+"}, name="post_user")
      * @Method("GET")
@@ -89,28 +88,26 @@ class PostController extends Controller
      */
     public function userAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        if (!$user = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('User not found')
             );
         }
 
-        $postService = $this->get('codekeepr.post.service');
-        $posts = $postService->loadByUser($user);
-        $limit = $postService->getConfig('page_limit');
-        $page = $this->get('request')->query->get('page', 1);
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadByUser($userEntity);
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $posts,
-            $page,
-            $limit
+            $publicPosts,
+            $currentPage,
+            20
         );
 
         return [
             'posts' => $pagination,
-            'title' => $user->getUsername()
+            'title' => $userEntity->getUsername()
         ];
     }
 
@@ -123,27 +120,25 @@ class PostController extends Controller
      */
     public function starredAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        if (!$user = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->find($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('User not found')
             );
         }
 
-        if (!$this->get('security.context')->isGranted('USER_STAR_SHOW', $user)) {
+        if (!$this->get('security.context')->isGranted('USER_STAR_SHOW', $userEntity)) {
             throw new AccessDeniedException;
         }
 
-        $postService = $this->get('codekeepr.post.service');
-        $posts = $postService->loadStarred($user);
-        $limit = $postService->getConfig('page_limit');
-        $page = $this->get('request')->query->get('page', 1);
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadStarred($userEntity);
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $posts,
-            $page,
-            $limit
+            $publicPosts,
+            $currentPage,
+            20
         );
 
         return [
@@ -168,7 +163,7 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->get('doctrine.orm.entity_manager');
 
             // set user
             $currentUser = $this->get('security.context')->getToken()->getUser();
@@ -263,22 +258,23 @@ class PostController extends Controller
      */
     public function showAction($id, $identifier = null)
     {
-        $postService = $this->get('codekeepr.post.service');
-        if (!$post = $postService->loadById($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
             );
         }
 
-        if (!$this->get('security.context')->isGranted('POST_SHOW', $post)) {
+        if (!$this->get('security.context')->isGranted('POST_SHOW', $postEntity)) {
             throw new AccessDeniedException;
         }
 
-        $deleteForm = $this->createDeleteForm($post->getId());
+        $deleteForm = $this->createDeleteForm($postEntity->getId());
 
         return [
-            'title'  => $post->getTopic(),
-            'entity' => $post,
+            'title'  => $postEntity->getTopic(),
+            'entity' => $postEntity,
             'delete_form' => $deleteForm->createView()
         ];
     }
@@ -292,26 +288,33 @@ class PostController extends Controller
      */
     public function editAction($id)
     {
-        $postService = $this->get('codekeepr.post.service');
-        if (!$post = $postService->loadById($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
             );
         }
 
-        if (!$this->get('security.context')->isGranted('POST_EDIT', $post) && !$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (!$this->get('security.context')->isGranted('POST_EDIT', $postEntity)) {
+            $message = $this->get('translator')->trans('Access denied');
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $message
+            );
+
             throw new AccessDeniedException;
         }
 
-        $editForm = $this->createEditForm($post);
+        $editForm = $this->createEditForm($postEntity);
 
         return [
             'edit_tag' => false,
-            'entity' => $post,
+            'entity' => $postEntity,
             'form'   => $editForm->createView(),
             'title'  => $this->get('translator')->trans(
                 'Edit "topic"',
-                ['topic' => $post->getTopic()]
+                ['topic' => $postEntity->getTopic()]
             )
         ];
     }
@@ -346,57 +349,56 @@ class PostController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $postService = $this->get('codekeepr.post.service');
-        if (!$post = $postService->loadById($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
             );
         }
 
         $originalTags = new ArrayCollection();
-        foreach ($post->getTags() as $tag) {
+        foreach ($postEntity->getTags() as $tag) {
             $originalTags->add($tag);
         }
 
-        $deleteForm = $this->createDeleteForm($post->getId());
-        $editForm = $this->createEditForm($post);
+        $deleteForm = $this->createDeleteForm($postEntity->getId());
+        $editForm = $this->createEditForm($postEntity);
         $editForm->handleRequest($request);
-
-        $em = $this->getDoctrine()->getManager();
 
         if ($editForm->isValid()) {
             // remove tags
             foreach ($originalTags as $tag) {
-                if (false === $post->getTags()->contains($tag)) {
-                    $tag->removePost($post);
+                if (false === $postEntity->getTags()->contains($tag)) {
+                    $tag->removePost($postEntity);
                     $em->persist($tag);
                 }
             }
 
             // add tags
-            foreach ($post->getTags() as $tag) {
+            foreach ($postEntity->getTags() as $tag) {
                 // if the tag already exists we need to remove the new one from the form collection
                 // and then associate the existing tag with the this post instead
                 if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
-                    $post->getTags()->removeElement($tag);
-                    $post->addTag($currentTag);
-                    $currentTag->addPost($post);
+                    $postEntity->getTags()->removeElement($tag);
+                    $postEntity->addTag($currentTag);
+                    $currentTag->addPost($postEntity);
                     $em->persist($currentTag);
                     continue;
                 }
 
                 // but if it doest exist, associate and persist new tag
-                $tag->addPost($post);
+                $tag->addPost($postEntity);
                 $em->persist($tag);
             }
 
-            $em->persist($post);
+            $em->persist($postEntity);
             $em->flush();
         }
 
         return $this->redirect($this->generateUrl('post_show', [
-            'id' => $post->getId(),
-            'identifier' => $post->getIdentifier()
+            'id' => $postEntity->getId(),
+            'identifier' => $postEntity->getIdentifier()
         ]));
     }
 
@@ -409,24 +411,25 @@ class PostController extends Controller
      */
     public function deleteConfirmAction($id)
     {
-        $postService = $this->get('codekeepr.post.service');
-        if (!$post = $postService->loadById($id)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
             );
         }
 
-        if (!$this->get('security.context')->isGranted('POST_DELETE', $post)) {
+        if (!$this->get('security.context')->isGranted('POST_DELETE', $postEntity)) {
             throw new AccessDeniedException;
         }
 
-        $deleteForm = $this->createDeleteForm($post->getId());
+        $deleteForm = $this->createDeleteForm($postEntity->getId());
 
         return [
             'title' => $this->get('translator')->trans(
                 'Confirm delete of "topic"',
                 [
-                    'topic' => $post->getTopic()
+                    'topic' => $postEntity->getTopic()
                 ]
             ),
             'delete_form' => $deleteForm->createView()
@@ -446,7 +449,7 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->get('doctrine.orm.entity_manager');
             $entity = $em->getRepository('FriggKeeprBundle:Post')->find($id);
 
             if (!$entity) {
@@ -456,6 +459,12 @@ class PostController extends Controller
             }
 
             if (!$this->get('security.context')->isGranted('POST_DELETE', $entity)) {
+                $message = $this->get('translator')->trans('Access denied');
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    $message
+                );
+
                 throw new AccessDeniedException;
             }
 

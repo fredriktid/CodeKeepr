@@ -27,11 +27,9 @@ class SearchController extends Controller
     public function viewAction()
     {
         $postFinder = $this->get('fos_elastica.finder.website.post');
-        $postService = $this->get('codekeepr.post.service');
-
         $query = $this->get('request')->query->get('query');
-        $limit = $postService->getConfig('page_limit');
         $page = $this->get('request')->query->get('page', 1);
+        $limit = 20;
 
         $posts = [];
         if ($query) {

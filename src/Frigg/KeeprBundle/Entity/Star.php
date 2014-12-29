@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\StarRepository")
  */
 class Star
 {

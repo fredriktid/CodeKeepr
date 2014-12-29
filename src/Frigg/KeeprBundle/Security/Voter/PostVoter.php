@@ -4,13 +4,12 @@ namespace Frigg\KeeprBundle\Security\Voter;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Doctrine\ORM\EntityManager;
 
 class PostVoter extends BaseVoter implements VoterInterface
 {
-    public function __construct(EntityManager $em)
+    public function supportsAttribute($attribute)
     {
-        parent::__construct($em, 'POST_');
+        return (0 === strpos($attribute, 'POST'));
     }
 
     public function vote(TokenInterface $token, $postEntity, array $attributes)
@@ -19,9 +18,9 @@ class PostVoter extends BaseVoter implements VoterInterface
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
-        $this->setCurrentUser($token);
+        $this->loadRolesFromToken($token);
 
-        if (in_array('ROLE_ADMIN', $this->roles)) {
+        if (in_array('ROLE_ADMIN', $this->currentUserRoles)) {
             return VoterInterface::ACCESS_GRANTED;
         }
 
@@ -29,24 +28,25 @@ class PostVoter extends BaseVoter implements VoterInterface
             if (!$this->supportsAttribute($attribute)) {
                 continue;
             }
-            switch ($this->securedArea($attribute)) {
-                case 'STAR':
-                case 'STAR_NEW':
-                case 'STAR_REMOVE':
-                case 'NEW':
+
+            switch ($attribute) {
+                case 'POST_STAR':
+                case 'POST_STAR_NEW':
+                case 'POST_STAR_REMOVE':
+                case 'POST_NEW':
                     if (is_object($this->currentUser)) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
-                case 'DELETE':
-                case 'EDIT':
+                case 'POST_DELETE':
+                case 'POST_EDIT':
                     if (is_object($this->currentUser)) {
                         if ($this->currentUser->getId() == $postEntity->getUser()->getId()) {
                             return VoterInterface::ACCESS_GRANTED;
                         }
                     }
                     break;
-                case 'SHOW':
+                case 'POST_SHOW':
                     if ($postEntity->isPublic()) {
                         return VoterInterface::ACCESS_GRANTED;
                     }

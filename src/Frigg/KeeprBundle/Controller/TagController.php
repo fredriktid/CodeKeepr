@@ -25,29 +25,27 @@ class TagController extends Controller
      */
     public function showAction($identifier)
     {
-        $em = $this->getDoctrine()->getManager();
-        if (!$tag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        if (!$tagEntity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find tag')
             );
         }
 
-        $postService = $this->get('codekeepr.post.service');
-        $posts = $postService->loadByTag($tag);
-        $limit = $postService->getConfig('page_limit');
-        $page = $this->get('request')->query->get('page', 1);
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadByTag($tagEntity);
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
-            $posts,
-            $page,
-            $limit
+            $publicPosts,
+            $currentPage,
+            20
         );
 
         return [
-            'tag_identifier' => $identifier,
-            'posts' => $pagination,
-            'title' => $tag->getName()
+            'title' => $tagEntity->getName(),
+            'tag_identifier' => $tagEntity->getIdentifier(),
+            'posts' => $pagination
         ];
     }
 }

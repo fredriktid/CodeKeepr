@@ -42,9 +42,9 @@ class StarController extends Controller
             );
         }
 
-        $postService = $this->get('codekeepr.post.service');
+        $em = $this->get('doctrine.orm.entity_manager');
 
-        if (!$post = $postService->loadById($id)) {
+        if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             $message = $translator->trans('Post not found');
             $session->getFlashBag()->add(
                 'error',
@@ -56,36 +56,42 @@ class StarController extends Controller
             );
         }
 
-        if (!$securityContext->isGranted('POST_STAR_NEW', $post)) {
+        if (!$securityContext->isGranted('POST_STAR_NEW', $postEntity)) {
             $message = $translator->trans('Insufficient permissions to add star');
+            $session->getFlashBag()->add(
+                'error',
+                $message
+            );
+
             throw new AccessDeniedException(
                 $message
             );
         }
 
-        $em = $this->getDoctrine()->getManager();
-        if (!$star = $postService->isStarred($post)) {
-            $currentUser = $securityContext->getToken()->getUser();
-            $star = new Star;
-            $star->setUser($currentUser);
-            $star->setPost($post);
-            $em->persist($star);
+        $securityToken = $securityContext->getToken();
+        $currentUser = $securityToken->getUser();
+
+        if (!$starEntity = $em->getRepository('FriggKeeprBundle:Star')->isStarred($postEntity, $currentUser)) {
+            $starEntity = new Star;
+            $starEntity->setUser($currentUser);
+            $starEntity->setPost($postEntity);
+            $em->persist($starEntity);
             $em->flush();
             $session->getFlashBag()->add(
                 'success',
                 $translator->trans(
                     'Added star on "topic"',
-                    ['topic' => $post->getTopic()]
+                    ['topic' => $postEntity->getTopic()]
                 )
             );
         } else {
-            $em->remove($star);
+            $em->remove($starEntity);
             $em->flush();
             $session->getFlashBag()->add(
                 'notice',
                 $translator->trans(
                     'Unstarred "topic"',
-                    ['topic' => $post->getTopic()]
+                    ['topic' => $postEntity->getTopic()]
                 )
             );
         }
@@ -95,8 +101,8 @@ class StarController extends Controller
         }
 
         return $this->redirect($this->generateUrl('post_show', [
-            'id' => $post->getId(),
-            'identifier' => $post->getIdentifier()
+            'id' => $postEntity->getId(),
+            'identifier' => $postEntity->getIdentifier()
         ]));
     }
 }

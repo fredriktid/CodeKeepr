@@ -6,31 +6,20 @@ use Doctrine\ORM\EntityManager;
 
 class BaseVoter
 {
-    protected $em = null;
-    protected $roles = [];
-    protected $attribute = null;
-    protected $currentUser = null;
+    protected $currentUser;
+    protected $currentUserRoles;
 
-    public function __construct(EntityManager $em, $attribute)
+    public function __construct()
     {
-        $this->em = $em;
-        $this->attribute = $attribute;
+        $this->currentUser = null;
+        $this->currentUserRoles = [];
     }
 
-    protected function setRole($role)
-    {
-        $this->roles[] = $role;
-    }
-
-    protected function setCurrentUser($token)
+    protected function loadRolesFromToken($token)
     {
         $this->currentUser = $token->getUser();
-
-        $roles = [];
-        if(count($token->getRoles())) {
-            foreach ($token->getRoles() as $role) {
-               $this->setRole($role->getRole());
-            }
+        foreach ($token->getRoles() as $role) {
+           $this->currentUserRoles[] = $role;
         }
     }
 
@@ -40,18 +29,8 @@ class BaseVoter
         return array_pop($classChunks);
     }
 
-    protected function securedArea($attribute)
-    {
-        return substr($attribute, strlen($this->attribute));
-    }
-
     public function supportsClass($entity)
     {
         return 0 === strpos($this->className(get_called_class()), $this->className(get_class($entity)));
-    }
-
-    public function supportsAttribute($attribute)
-    {
-        return 0 === strpos($attribute, $this->attribute);
     }
 }

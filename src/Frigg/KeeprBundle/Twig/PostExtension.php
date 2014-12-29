@@ -2,16 +2,18 @@
 
 namespace Frigg\KeeprBundle\Twig;
 
-use Frigg\KeeprBundle\Entity\Post;
-use Frigg\KeeprBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class PostExtension extends \Twig_Extension
 {
-    protected $postService;
+    private $entityManager;
+    private $securityContext;
 
-    public function __construct($postService)
+    public function __construct(EntityManager $entityManager, SecurityContextInterface $securityContext)
     {
-        $this->postService = $postService;
+        $this->entityManager = $entityManager;
+        $this->securityContext = $securityContext;
     }
 
     public function getName()
@@ -26,8 +28,18 @@ class PostExtension extends \Twig_Extension
         ];
     }
 
-    public function isStarred($post)
+    public function isStarred($postEntity)
     {
-       return $this->postService->isStarred($post);
+        if (!$this->securityContext->isGranted('ROLE_USER')) {
+            return false;
+        }
+
+        $securityToken = $this->securityContext->getToken();
+        $currentUserEntity = $securityToken->getUser();
+
+        return $this->entityManager->getRepository('FriggKeeprBundle:Star')->isStarred(
+            $postEntity,
+            $currentUserEntity
+        );
     }
 }

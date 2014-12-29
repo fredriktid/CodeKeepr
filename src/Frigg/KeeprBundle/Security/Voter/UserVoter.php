@@ -4,13 +4,12 @@ namespace Frigg\KeeprBundle\Security\Voter;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Doctrine\ORM\EntityManager;
 
 class UserVoter extends BaseVoter implements VoterInterface
 {
-    public function __construct(EntityManager $em)
+    public function supportsAttribute($attribute)
     {
-        parent::__construct($em, 'USER_');
+        return (0 === strpos($attribute, 'USER'));
     }
 
     public function vote(TokenInterface $token, $userEntity, array $attributes)
@@ -19,9 +18,9 @@ class UserVoter extends BaseVoter implements VoterInterface
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
-        $this->setCurrentUser($token);
+        $this->loadRolesFromToken($token);
 
-        if (in_array('ROLE_ADMIN', $this->roles)) {
+        if (in_array('ROLE_ADMIN', $this->currentUserRoles)) {
             return VoterInterface::ACCESS_GRANTED;
         }
 
@@ -30,17 +29,17 @@ class UserVoter extends BaseVoter implements VoterInterface
                 continue;
             }
 
-            switch ($this->securedArea($attribute)) {
-                case 'STAR_DELETE':
-                case 'STAR_SHOW':
-                case 'POSTS':
+            switch ($attribute) {
+                case 'USER_STAR_DELETE':
+                case 'USER_STAR_SHOW':
+                case 'USER_POSTS':
                     if (is_object($this->currentUser)) {
                         if ($userEntity->getId() == $this->currentUser->getId()) {
                             return VoterInterface::ACCESS_GRANTED;
                         }
                     }
                     break;
-                case 'STAR_NEW':
+                case 'USER_STAR_NEW':
                     if (is_object($this->currentUser)) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
