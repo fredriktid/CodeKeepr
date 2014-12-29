@@ -4,14 +4,18 @@
         <div class="fos_comment_comment_metas">
             {% block fos_comment_comment_metas %}
                 {% block fos_comment_comment_metas_authorline %}
-                    {% trans from 'FOSCommentBundle' %}fos_comment_comment_show_by{% endtrans %}
                     <span class="fos_comment_comment_authorname">
                     {% if comment is fos_comment_in_state(constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')) %}
                         {% trans from 'FOSCommentBundle' %}fos_comment_comment_deleted{% endtrans %}
                     {% else %}
-                        {{ comment.authorName }}
+                        {% if comment.author %}
+                            <strong><a href="{{ path('user_posts', {'id': comment.author.id}) }}">{{ comment.authorName }}</a></strong>
+                        {% else %}
+                            {{ comment.authorName }}
+                        {% endif %}
                     {% endif %}
-                </span> - {{ comment.createdAt|date }}
+                    </span>
+                    <small class="muted">- {{ comment.createdAt|date }}</small>
                 {% endblock fos_comment_comment_metas_authorline %}
 
                 {% block fos_comment_comment_metas_edit %}
@@ -24,22 +28,22 @@
                     {% if fos_comment_can_delete_comment(comment) %}
                         {% if comment is fos_comment_in_state(constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')) %}
                             {# undelete #}
-                            <button data-url="{{ url("fos_comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value": constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_VISIBLE') }) }}" class="btn fos_comment_comment_remove">{% trans from 'FOSCommentBundle' %}fos_comment_comment_undelete{% endtrans %}</button>
+                            <button data-url="{{ url("fos_comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value": constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_VISIBLE') }) }}" class="btn btn-warning fos_comment_comment_remove">{% trans from 'FOSCommentBundle' %}fos_comment_comment_undelete{% endtrans %}</button>
                         {% else %}
                             {# delete #}
-                            <button data-url="{{ url("fos_comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value":  constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')}) }}" class="btn fos_comment_comment_remove">{% trans from 'FOSCommentBundle' %}fos_comment_comment_delete{% endtrans %}</button>
+                            <button data-url="{{ url("fos_comment_remove_thread_comment", {"id": comment.thread.id, "commentId": comment.id, "value":  constant('FOS\\CommentBundle\\Model\\CommentInterface::STATE_DELETED')}) }}" class="btn btn-danger fos_comment_comment_remove">{% trans from 'FOSCommentBundle' %}fos_comment_comment_delete{% endtrans %}</button>
                         {% endif %}
                     {% endif %}
                 {% endblock fos_comment_comment_metas_delete %}
 
                 {% block fos_comment_comment_metas_voting %}
-                    {% if fos_comment_can_vote(comment) %}
-                        <div class="fos_comment_comment_voting">
+                    <div class="fos_comment_comment_voting">
+                        {% if fos_comment_can_vote(comment) %}
                             <button data-url="{{ url("fos_comment_new_thread_comment_votes", {"id": comment.thread.id, "commentId": comment.id, "value": 1}) }}" class="btn btn-success fos_comment_comment_vote">{% trans from 'FOSCommentBundle' %}+{% endtrans %}</button>
                             <button data-url="{{ url("fos_comment_new_thread_comment_votes", {"id": comment.thread.id, "commentId": comment.id, "value": -1}) }}" class="btn btn-danger fos_comment_comment_vote">{% trans from 'FOSCommentBundle' %}-{% endtrans %}</button>
-                            <div class="fos_comment_comment_score" id="fos_comment_score_{{ comment.id }}">{% include "FOSCommentBundle:Thread:comment_votes.html.twig" with { 'commentScore': comment.score } %}</div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                        <div class="fos_comment_comment_score" id="fos_comment_score_{{ comment.id }}">{% include "FOSCommentBundle:Thread:comment_votes.html.twig" with { 'commentScore': comment.score } %}</div>
+                    </div>
                 {% endblock fos_comment_comment_metas_voting %}
             {% endblock fos_comment_comment_metas %}
         </div>

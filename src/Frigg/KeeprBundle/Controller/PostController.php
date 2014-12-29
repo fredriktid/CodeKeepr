@@ -436,4 +436,30 @@ class PostController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Handles threads and comments
+     *
+     * @Route("/thread/{threadId}", name="post_thread")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:thread.html.twig")
+     */
+    public function threadAction(Request $request, $threadId)
+    {
+        $thread = $this->container->get('fos_comment.manager.thread')->findThreadById($threadId);
+
+        if (null === $thread) {
+            $thread = $this->container->get('fos_comment.manager.thread')->createThread();
+            $thread->setId($threadId);
+            $thread->setPermalink($request->getUri());
+            $this->container->get('fos_comment.manager.thread')->saveThread($thread);
+        }
+
+        $comments = $this->container->get('fos_comment.manager.comment')->findCommentTreeByThread($thread);
+
+        return [
+            'comments' => $comments,
+            'thread' => $thread
+        ];
+    }
 }

@@ -16,7 +16,7 @@ class TagRepository extends EntityRepository
             ->getResult();
     }
 
-    public function loadPopular($limit = 20)
+    public function loadPopular($limit = 15)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')

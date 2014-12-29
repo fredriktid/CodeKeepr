@@ -1,1 +1,1 @@
-<span class="badge" style="font-size: 13px;padding: 8px 10px;">{{ commentScore }}</span>
+<span class="badge{% if commentScore < 0  %} badge-important{% endif %}" style="font-size: 12px;padding: 8px 10px;">{{ commentScore }}</span>
