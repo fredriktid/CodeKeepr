@@ -425,7 +425,9 @@ class PostController extends Controller
         return [
             'title' => $this->get('translator')->trans(
                 'Confirm delete of "topic"',
-                ['topic' => $post->getTopic()]
+                [
+                    'topic' => $post->getTopic()
+                ]
             ),
             'delete_form' => $deleteForm->createView()
         ];
@@ -435,8 +437,8 @@ class PostController extends Controller
     /**
      * Deletes a Post entity.
      *
-     * @Route("/{id}", name="post_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="post_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -459,7 +461,7 @@ class PostController extends Controller
 
             foreach ($entity->getTags() as $tag) {
                 $tag->removePost($entity);
-                $em->persist($tag); 
+                $em->persist($tag);
             }
 
             foreach ($entity->getStars() as $star) {
@@ -487,7 +489,7 @@ class PostController extends Controller
             ->setAction($this->generateUrl('post_delete', [
                 'id' => $id
             ]))
-            ->setMethod('DELETE')
+            ->setMethod('POST')
             ->add('submit', 'submit', [
                 'label' => $this->get('translator')->trans('Delete')
             ])
