@@ -32,6 +32,7 @@ class UserVoter extends BaseVoter implements VoterInterface
             switch ($attribute) {
                 case 'USER_STAR_DELETE':
                 case 'USER_STAR_SHOW':
+                case 'USER_PRIVATE_POSTS':
                 case 'USER_POSTS':
                     if (is_object($this->currentUser)) {
                         if ($userEntity->getId() == $this->currentUser->getId()) {
