@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="FOSUser")
+ * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\UserRepository")
  */
 class User extends BaseUser
 {
@@ -47,10 +48,28 @@ class User extends BaseUser
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
+        return $this->generateUsername();
+    }
+
+    /**
+     * Generate username based on email address
+     *
+     * @param null $email
+     * @return string
+     */
+    public function generateUsername($email = null)
+    {
+        if (null === $email) {
+            $email = $this->getEmail();
+        }
+
         $username = '';
-        foreach (str_split($this->getEmail()) as $char) {
+        foreach (str_split($email) as $char) {
             if (!preg_match("/^[A-Za-z\\-]$/", $char)) {
                 break;
             }

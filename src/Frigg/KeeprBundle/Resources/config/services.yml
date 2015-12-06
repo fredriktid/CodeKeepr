@@ -4,6 +4,7 @@ parameters:
     codekeepr.activity.class: Frigg\KeeprBundle\EventListener\ActivityListener
     codekeepr.post.twig.class: Frigg\KeeprBundle\Twig\PostExtension
     codekeepr.post.voter.class: Frigg\KeeprBundle\Security\Voter\PostVoter
+    codekeepr.user.twig.class: Frigg\KeeprBundle\Twig\UserExtension
     codekeepr.user.voter.class: Frigg\KeeprBundle\Security\Voter\UserVoter
 
 
@@ -29,6 +30,13 @@ services:
         arguments: [@doctrine.orm.entity_manager, @security.context]
         tags:
             - { name: twig.extension }
+
+    codekeepr.user.twig:
+        class: %codekeepr.user.twig.class%
+        arguments: [@doctrine.orm.entity_manager, @security.context]
+        tags:
+            - { name: twig.extension }
+
 
     # voters
     codekeepr.post.voter:
