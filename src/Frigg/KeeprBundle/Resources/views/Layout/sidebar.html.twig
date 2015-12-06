@@ -47,12 +47,28 @@
 </div>
 
 {% if tags %}
-    <div class="row-fluid">
+    <div class="row-fluid sidebar-section">
         <ul class="nav nav-pills nav-stacked">
+            <li class="nav-header">Populære tags</li>
             {% for item in tags %}
                 <li>
                     <a href="{{ path('tag_posts', {'identifier': item.identifier}) }}">
                         <span class="badge">{{ item.post_count }}</span> <strong>{{ item.name }}</strong>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if users is defined %}
+    <div class="row-fluid sidebar-section">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="nav-header">Aktive brukere</li>
+            {% for user in users %}
+                <li>
+                    <a href="{{ path('user_posts', {'id': user.id}) }}">
+                        <span class="badge">{{ user.post_count }}</span> <strong>{{ user.email|generate_username }}</strong>
                     </a>
                 </li>
             {% endfor %}
