@@ -28,11 +28,13 @@ class LayoutController extends Controller
     public function sidebarAction($currentRoute)
     {
         $em = $this->get('doctrine.orm.entity_manager');
-        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular();
+        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular(10);
+        $popularUsers = $em->getRepository('FriggKeeprBundle:User')->loadMostActive(5);
 
         return [
             'current_route' => $currentRoute,
-            'tags' => $popularTags
+            'tags' => $popularTags,
+            'users' => $popularUsers
         ];
     }
 

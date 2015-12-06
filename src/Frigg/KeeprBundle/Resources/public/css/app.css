@@ -177,6 +177,10 @@ a.muted:hover {
     width: 21.97%;
 }
 
+.sidebar-section {
+    margin-bottom: 10px;
+}
+
 @media (max-width: 767px) {
     .sidebar-wrap-fixed {
         width:auto;
