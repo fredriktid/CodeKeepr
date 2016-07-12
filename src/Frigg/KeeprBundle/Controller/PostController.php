@@ -293,7 +293,7 @@ class PostController extends Controller
             $originalTags->add($tag);
         }
 
-        $deleteForm = $this->createDeleteForm($postEntity->getId());
+        $this->createDeleteForm($postEntity->getId());
         $editForm = $this->createEditForm($postEntity);
         $editForm->handleRequest($request);
 

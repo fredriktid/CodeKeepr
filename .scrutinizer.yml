@@ -1,10 +1,10 @@
 filter:
     excluded_paths:
+        - app/*
         - bin/*
+        - scripts/*
         - web/index.php
         - web/index_*.php
-        - ezpublish/java/*
-        - src/MetalFrance/LegacyBundle/ezpublish_legacy/*
         - vendor/*
 
 build:
