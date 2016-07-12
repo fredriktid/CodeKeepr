@@ -1,0 +1,55 @@
+filter:
+    excluded_paths:
+        - bin/*
+        - web/index.php
+        - web/index_*.php
+        - ezpublish/java/*
+        - src/MetalFrance/LegacyBundle/ezpublish_legacy/*
+        - vendor/*
+
+build:
+    cache:
+        directories:
+            - vendor/
+            - bin/
+
+    dependencies:
+        before:
+            - mysql -e "CREATE DATABASE codekeepr"
+            - cp app/config/parameters.yml.dist app/config/parameters.yml
+        override:
+            - composer install --no-dev --no-interaction
+
+    environment:
+        ruby: 2.0.0-p481
+        php:
+            version: 5.6
+            ini:
+                max_execution_time: 3600
+                memory_limit: -1
+
+    tests:
+        override:
+            - true
+#    tests:
+#        override:
+#            -
+#                command: 'phpunit -c ezpublish --coverage-clover=coverage.xml'
+#                coverage:
+#                    file: 'coverage.xml'
+#                    format: 'php-clover'
+
+coding_style:
+    php:
+        spaces:
+            other:
+                after_type_cast: false
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
+build_failure_conditions:
+    - 'elements.rating(<= D).new.exists'
+    - 'issues.severity(>= MAJOR).new.exists'
