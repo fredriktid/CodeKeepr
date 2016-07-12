@@ -49,7 +49,42 @@ checks:
     php:
         code_rating: true
         duplication: true
-
+        require_php_tag_first: true
+        psr2_switch_declaration: true
+        no_exit: true
+        one_class_per_file: true
+        parameters_in_camelcaps: true
+        php5_style_constructor: true
+        psr2_class_declaration: true
+        properties_in_camelcaps: true
+        require_scope_for_properties: true
+        side_effects_or_types: true
+        uppercase_constants: true
+        use_self_instead_of_fqcn: true
+        variable_existence: true
+        align_assignments: true
+        avoid_closing_tag: true
+        avoid_multiple_statements_on_same_line: true
+        avoid_superglobals: true
+        avoid_todo_comments: true
+        classes_in_camel_caps: true
+        encourage_shallow_comparison: true
+        encourage_single_quotes: true
+        function_in_camel_caps: true
+        naming_conventions:
+            local_variable: '^[a-z][a-zA-Z0-9]*$'
+            abstract_class_name: ^Abstract|Factory$
+            utility_class_name: 'Utils?$'
+            constant_name: '^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$'
+            property_name: '^[a-z][a-zA-Z0-9]*$'
+            method_name: '^(?:[a-z]|__)[a-zA-Z0-9]*$'
+            parameter_name: '^[a-z][a-zA-Z0-9]*$'
+            interface_name: '^[A-Z][a-zA-Z0-9]*Interface$'
+            type_name: '^[A-Z][a-zA-Z0-9]*$'
+            exception_name: '^[A-Z][a-zA-Z0-9]*Exception$'
+            isser_method_name: '^(?:is|has|should|may|supports)'
+        return_doc_comments: true
+        
 build_failure_conditions:
     - 'elements.rating(<= D).new.exists'
     - 'issues.severity(>= MAJOR).new.exists'
