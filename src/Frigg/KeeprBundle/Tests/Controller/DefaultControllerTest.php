@@ -5,13 +5,12 @@ namespace Frigg\KeeprBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class DefaultControllerTest
- * @package Frigg\KeeprBundle\Tests\Controller
+ * Class DefaultControllerTest.
  */
 class DefaultControllerTest extends WebTestCase
 {
     /**
-     * Tests basic functionality
+     * Tests basic functionality.
      */
     public function testIndex()
     {

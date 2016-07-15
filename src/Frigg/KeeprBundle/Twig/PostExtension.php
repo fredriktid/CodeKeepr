@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Class PostExtension
- * @package Frigg\KeeprBundle\Twig
+ * Class PostExtension.
  */
 class PostExtension extends \Twig_Extension
 {
@@ -22,7 +21,8 @@ class PostExtension extends \Twig_Extension
 
     /**
      * PostExtension constructor.
-     * @param EntityManager $entityManager
+     *
+     * @param EntityManager            $entityManager
      * @param SecurityContextInterface $securityContext
      */
     public function __construct(EntityManager $entityManager, SecurityContextInterface $securityContext)
@@ -46,12 +46,13 @@ class PostExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter('is_starred', [$this, 'isStarred']),
-            new \Twig_SimpleFilter('comment_count', [$this, 'commentCount'])
+            new \Twig_SimpleFilter('comment_count', [$this, 'commentCount']),
         ];
     }
 
     /**
      * @param $postEntity
+     *
      * @return mixed
      */
     public function commentCount($postEntity)
@@ -61,6 +62,7 @@ class PostExtension extends \Twig_Extension
 
     /**
      * @param $postEntity
+     *
      * @return bool|null
      */
     public function isStarred($postEntity)

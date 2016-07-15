@@ -3,17 +3,13 @@
 namespace Frigg\KeeprBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\UserEvent;
-use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class RegistrationListener
- * @package Frigg\KeeprBundle\EventListener
+ * Class RegistrationListener.
  */
 class RegistrationListener implements EventSubscriberInterface
 {
@@ -24,6 +20,7 @@ class RegistrationListener implements EventSubscriberInterface
 
     /**
      * RegistrationListener constructor.
+     *
      * @param UrlGeneratorInterface $router
      */
     public function __construct(UrlGeneratorInterface $router)
@@ -32,12 +29,12 @@ class RegistrationListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess'
+            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
         ];
     }
 

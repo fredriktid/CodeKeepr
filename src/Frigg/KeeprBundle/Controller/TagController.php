@@ -4,7 +4,6 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Frigg\KeeprBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class TagController extends Controller
 {
     /**
-     * Tagged posts
+     * Tagged posts.
      *
      * @Route("/{identifier}", name="tag_posts")
      * @Method("GET")
@@ -48,7 +47,7 @@ class TagController extends Controller
         return [
             'title' => $tagEntity->getName(),
             'tag_identifier' => $tagEntity->getIdentifier(),
-            'posts' => $pagination
+            'posts' => $pagination,
         ];
     }
 }

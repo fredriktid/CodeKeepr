@@ -2,7 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 class Star
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -37,9 +36,9 @@ class Star
     private $created_at;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -47,9 +46,10 @@ class Star
     }
 
     /**
-     * Set User
+     * Set User.
      *
      * @param User $user
+     *
      * @return Star
      */
     public function setUser(User $user)
@@ -60,7 +60,7 @@ class Star
     }
 
     /**
-     * Get User
+     * Get User.
      *
      * @return User
      */
@@ -70,9 +70,10 @@ class Star
     }
 
     /**
-     * Set Post
+     * Set Post.
      *
      * @param Post $post
+     *
      * @return Star
      */
     public function setPost(Post $post)
@@ -83,7 +84,7 @@ class Star
     }
 
     /**
-     * Get Post
+     * Get Post.
      *
      * @return \Frigg\KeeprBundle\Entity\Post
      */
@@ -93,9 +94,10 @@ class Star
     }
 
     /**
-     * Set created_at
+     * Set created_at.
      *
      * @param \DateTime $createdAt
+     *
      * @return Star
      */
     public function setCreatedAt($createdAt)
@@ -106,7 +108,7 @@ class Star
     }
 
     /**
-     * Get created_at
+     * Get created_at.
      *
      * @return \DateTime
      */

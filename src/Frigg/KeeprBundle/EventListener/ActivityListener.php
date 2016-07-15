@@ -4,11 +4,9 @@ namespace Frigg\KeeprBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 
 /**
- * Class ActivityListener
- * @package Frigg\KeeprBundle\EventListener
+ * Class ActivityListener.
  */
 class ActivityListener
 {
@@ -24,11 +22,12 @@ class ActivityListener
      * @var array
      */
     protected $validEntities = [
-        'Post'
+        'Post',
     ];
 
     /**
      * ActivityListener constructor.
+     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -54,6 +53,7 @@ class ActivityListener
         }
 
         $classChunks = explode('\\', get_class($this->entity));
+
         return in_array(end($classChunks), $this->validEntities);
     }
 

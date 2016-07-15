@@ -7,8 +7,7 @@ use Sundown\Markdown;
 use Sundown\Render\HTML;
 
 /**
- * Class Sundown
- * @package Frigg\KeeprBundle\Markup
+ * Class Sundown.
  */
 class Sundown implements ParserInterface
 {
@@ -25,10 +24,10 @@ class Sundown implements ParserInterface
         if (null === $this->parser) {
             $this->parser = new Markdown(
                 new HTML([
-                    'filter_html' => true
+                    'filter_html' => true,
                     ],
                     [
-                        'autolink' => true
+                        'autolink' => true,
                     ]
                 )
             );
@@ -39,6 +38,7 @@ class Sundown implements ParserInterface
 
     /**
      * @param string $raw
+     *
      * @return mixed
      */
     public function parse($raw)

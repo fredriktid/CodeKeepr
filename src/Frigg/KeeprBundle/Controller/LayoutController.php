@@ -2,11 +2,8 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class LayoutController extends Controller
 {
     /**
-     * Sidebar template
+     * Sidebar template.
      *
      * @Route("/sidebar", name="layout_sidebar", defaults={"currentRoute": null})
      * @Method("GET")
@@ -34,13 +31,12 @@ class LayoutController extends Controller
         return [
             'current_route' => $currentRoute,
             'tags' => $popularTags,
-            'users' => $popularUsers
+            'users' => $popularUsers,
         ];
     }
 
-
     /**
-     * Security token
+     * Security token.
      *
      * @Route("/token", name="layout_token")
      * @Method("GET")

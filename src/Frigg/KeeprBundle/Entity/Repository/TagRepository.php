@@ -5,8 +5,7 @@ namespace Frigg\KeeprBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class TagRepository
- * @package Frigg\KeeprBundle\Entity\Repository
+ * Class TagRepository.
  */
 class TagRepository extends EntityRepository
 {
@@ -16,6 +15,7 @@ class TagRepository extends EntityRepository
     public function loadPublic()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
+
         return $qb->select('t')
             ->from('FriggKeeprBundle:Tag', 't')
             ->orderBy('t.name', 'ASC')
@@ -25,11 +25,13 @@ class TagRepository extends EntityRepository
 
     /**
      * @param int $limit
+     *
      * @return array
      */
     public function loadPopular($limit = 15)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
+
         return $qb->select('t.id, t.identifier, t.name, COUNT(p.id) AS post_count')
             ->from('FriggKeeprBundle:Post', 'p')
             ->leftJoin('p.Tags', 't')
@@ -39,7 +41,7 @@ class TagRepository extends EntityRepository
             ->groupBy('t.identifier')
             ->setMaxResults($limit)
             ->setParameters([
-                'private' => 1
+                'private' => 1,
             ])
             ->getQuery()
             ->getResult();

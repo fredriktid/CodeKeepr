@@ -7,14 +7,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class TagType
- * @package Frigg\KeeprBundle\Form
+ * Class TagType.
  */
 class TagType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,8 +23,8 @@ class TagType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'autocomplete ui-widget',
-                    'data-type' => 'tag'
-                ]
+                    'data-type' => 'tag',
+                ],
             ])
         ;
     }
@@ -36,7 +35,7 @@ class TagType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Frigg\KeeprBundle\Entity\Tag'
+            'data_class' => 'Frigg\KeeprBundle\Entity\Tag',
         ]);
     }
 

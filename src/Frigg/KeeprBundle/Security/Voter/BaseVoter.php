@@ -2,14 +2,11 @@
 
 namespace Frigg\KeeprBundle\Security\Voter;
 
-use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * Class BaseVoter
- * @package Frigg\KeeprBundle\Security\Voter
+ * Class BaseVoter.
  */
 class BaseVoter
 {
@@ -37,25 +34,28 @@ class BaseVoter
      */
     protected function loadRolesFromToken($token)
     {
-        /** @var UserInterface currentUser */
+        /* @var UserInterface currentUser */
         $this->currentUser = $token->getUser();
         foreach ($token->getRoles() as $role) {
-           $this->currentUserRoles[] = $role;
+            $this->currentUserRoles[] = $role;
         }
     }
 
     /**
      * @param $entity
+     *
      * @return mixed
      */
     protected function className($entity)
     {
         $classChunks = explode('\\', $entity);
+
         return array_pop($classChunks);
     }
 
     /**
      * @param $entity
+     *
      * @return bool
      */
     public function supportsClass($entity)

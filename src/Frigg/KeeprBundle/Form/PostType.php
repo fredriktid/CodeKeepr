@@ -7,14 +7,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class PostType
- * @package Frigg\KeeprBundle\Form
+ * Class PostType.
  */
 class PostType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -39,7 +38,7 @@ class PostType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Frigg\KeeprBundle\Entity\Post'
+            'data_class' => 'Frigg\KeeprBundle\Entity\Post',
         ]);
     }
 

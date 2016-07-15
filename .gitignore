@@ -19,3 +19,4 @@
 php_errors.log
 *.sublime-workspace
 .idea
+/php-cs-fixer

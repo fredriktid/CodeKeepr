@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Frigg\KeeprBundle\Entity\Star;
 
 /**
@@ -20,7 +19,7 @@ use Frigg\KeeprBundle\Entity\Star;
 class StarController extends Controller
 {
     /**
-     * Add star to a post
+     * Add star to a post.
      *
      * @Route("/{id}", requirements={"id" = "\d+"},  name="star_switch")
      * @Method("GET")
@@ -75,7 +74,7 @@ class StarController extends Controller
 
         /** @var Star $starEntity */
         if (!$starEntity = $em->getRepository('FriggKeeprBundle:Star')->isStarred($postEntity, $currentUser)) {
-            $starEntity = new Star;
+            $starEntity = new Star();
             $starEntity->setUser($currentUser);
             $starEntity->setPost($postEntity);
             $em->persist($starEntity);
@@ -105,7 +104,7 @@ class StarController extends Controller
 
         return $this->redirect($this->generateUrl('post_show', [
             'id' => $postEntity->getId(),
-            'identifier' => $postEntity->getIdentifier()
+            'identifier' => $postEntity->getIdentifier(),
         ]));
     }
 }

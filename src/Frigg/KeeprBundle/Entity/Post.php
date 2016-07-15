@@ -2,8 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
-use Symfony\Component\Validator\Constraints;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -73,7 +72,7 @@ class Post
     private $Stars;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -87,9 +86,9 @@ class Post
     }
 
     /**
-     * Id
+     * Id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -97,9 +96,10 @@ class Post
     }
 
     /**
-     * Sanitize a string to create an identifier
+     * Sanitize a string to create an identifier.
      *
      * @param string $string
+     *
      * @return string
      */
     public function sanitize($string)
@@ -108,9 +108,10 @@ class Post
     }
 
     /**
-     * Set identifier
+     * Set identifier.
      *
      * @param string $identifier
+     *
      * @return Post
      */
     public function setIdentifier($identifier)
@@ -121,7 +122,7 @@ class Post
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return string
      */
@@ -144,9 +145,10 @@ class Post
     }
 
     /**
-     * Set created_at
+     * Set created_at.
      *
      * @param \DateTime $createdAt
+     *
      * @return Post
      */
     public function setCreatedAt($createdAt)
@@ -157,7 +159,7 @@ class Post
     }
 
     /**
-     * Get created_at
+     * Get created_at.
      *
      * @return \DateTime
      */
@@ -167,9 +169,10 @@ class Post
     }
 
     /**
-     * Set modified_at
+     * Set modified_at.
      *
      * @param \DateTime $modifiedAt
+     *
      * @return Post
      */
     public function setModifiedAt($modifiedAt)
@@ -180,7 +183,7 @@ class Post
     }
 
     /**
-     * Get modified_at
+     * Get modified_at.
      *
      * @return \DateTime
      */
@@ -190,19 +193,21 @@ class Post
     }
 
     /**
-     * Set topic
+     * Set topic.
      *
      * @param string $topic
+     *
      * @return Post
      */
     public function setTopic($topic)
     {
         $this->topic = $topic;
+
         return $this;
     }
 
     /**
-     * Get topic
+     * Get topic.
      *
      * @return string
      */
@@ -212,9 +217,10 @@ class Post
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Post
      */
     public function setContent($content)
@@ -225,7 +231,7 @@ class Post
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -235,9 +241,10 @@ class Post
     }
 
     /**
-     * Set User
+     * Set User.
      *
      * @param User $user
+     *
      * @return Post
      */
     public function setUser(User $user)
@@ -248,7 +255,7 @@ class Post
     }
 
     /**
-     * Get User
+     * Get User.
      *
      * @return User
      */
@@ -258,9 +265,10 @@ class Post
     }
 
     /**
-     * Add Tags
+     * Add Tags.
      *
      * @param Tag $tags
+     *
      * @return Post
      */
     public function addTag(Tag $tags)
@@ -273,7 +281,7 @@ class Post
     }
 
     /**
-     * Remove Tags
+     * Remove Tags.
      *
      * @param Tag $tags
      */
@@ -283,7 +291,7 @@ class Post
     }
 
     /**
-     * Get Tags
+     * Get Tags.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -293,9 +301,10 @@ class Post
     }
 
     /**
-     * Set Language
+     * Set Language.
      *
      * @param Language $language
+     *
      * @return Post
      */
     public function setLanguage(Language $language)
@@ -306,7 +315,7 @@ class Post
     }
 
     /**
-     * Get Language
+     * Get Language.
      *
      * @return Language
      */
@@ -316,9 +325,10 @@ class Post
     }
 
     /**
-     * Add Stars
+     * Add Stars.
      *
      * @param Star $stars
+     *
      * @return Post
      */
     public function addStar(Star $stars)
@@ -329,7 +339,7 @@ class Post
     }
 
     /**
-     * Remove Stars
+     * Remove Stars.
      *
      * @param Star $stars
      */
@@ -339,7 +349,7 @@ class Post
     }
 
     /**
-     * Get Stars
+     * Get Stars.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -349,9 +359,10 @@ class Post
     }
 
     /**
-     * Set private
+     * Set private.
      *
-     * @param boolean $private
+     * @param bool $private
+     *
      * @return Post
      */
     public function setPrivate($private)
@@ -362,9 +373,9 @@ class Post
     }
 
     /**
-     * Get private
+     * Get private.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPrivate()
     {
@@ -374,7 +385,7 @@ class Post
     /**
      * Is this a public post?
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {

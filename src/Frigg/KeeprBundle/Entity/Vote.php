@@ -21,7 +21,7 @@ class Vote extends BaseVote implements SignedVoteInterface
     protected $id;
 
     /**
-     * Comment of this vote
+     * Comment of this vote.
      *
      * @var Comment
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\Comment")
@@ -29,9 +29,10 @@ class Vote extends BaseVote implements SignedVoteInterface
     protected $comment;
 
     /**
-     * Author of the vote
+     * Author of the vote.
      *
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\User")
+     *
      * @var User
      */
     protected $voter;
@@ -45,7 +46,7 @@ class Vote extends BaseVote implements SignedVoteInterface
     }
 
     /**
-     * Sets the owner of the vote
+     * Sets the owner of the vote.
      *
      * @param UserInterface $voter
      */
@@ -55,7 +56,7 @@ class Vote extends BaseVote implements SignedVoteInterface
     }
 
     /**
-     * Gets the owner of the vote
+     * Gets the owner of the vote.
      *
      * @return UserInterface
      */

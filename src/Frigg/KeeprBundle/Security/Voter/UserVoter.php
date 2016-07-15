@@ -6,24 +6,25 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * Class UserVoter
- * @package Frigg\KeeprBundle\Security\Voter
+ * Class UserVoter.
  */
 class UserVoter extends BaseVoter implements VoterInterface
 {
     /**
      * @param string $attribute
+     *
      * @return bool
      */
     public function supportsAttribute($attribute)
     {
-        return (0 === strpos($attribute, 'USER'));
+        return 0 === strpos($attribute, 'USER');
     }
 
     /**
      * @param TokenInterface $token
-     * @param null|object $userEntity
-     * @param array $attributes
+     * @param null|object    $userEntity
+     * @param array          $attributes
+     *
      * @return int
      */
     public function vote(TokenInterface $token, $userEntity, array $attributes)

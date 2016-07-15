@@ -5,8 +5,6 @@ namespace Frigg\KeeprBundle\Controller;
 use Frigg\KeeprBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,7 +21,7 @@ use Frigg\KeeprBundle\Form\PostType;
 class PostController extends Controller
 {
     /**
-     * Loads all public posts
+     * Loads all public posts.
      *
      * @Route("/", name="post")
      * @Method("GET")
@@ -44,12 +42,12 @@ class PostController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $this->get('translator')->trans('Home')
+            'title' => $this->get('translator')->trans('Home'),
         ];
     }
 
     /**
-     * Public posts by date
+     * Public posts by date.
      *
      * @Route("/date/{date}", name="post_date")
      * @Method("GET")
@@ -60,7 +58,7 @@ class PostController extends Controller
         $timestamp = strtotime($date);
         $interval = [
             'begin' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
-            'end' => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp))
+            'end' => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
         ];
 
         $em = $this->get('doctrine.orm.entity_manager');
@@ -76,7 +74,7 @@ class PostController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $this->get('translator')->trans('By date')
+            'title' => $this->get('translator')->trans('By date'),
         ];
     }
 
@@ -125,24 +123,24 @@ class PostController extends Controller
             return $this->redirect(
                 $this->generateUrl('post_show', [
                     'id' => $entity->getId(),
-                    'identifier' => $entity->getIdentifier()
+                    'identifier' => $entity->getIdentifier(),
                 ])
             );
         }
 
         return [
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
     /**
-    * Creates a form to create a Post entity.
-    *
-    * @param Post $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to create a Post entity.
+     *
+     * @param Post $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createCreateForm(Post $entity)
     {
         $form = $this->createForm(new PostType(), $entity, [
@@ -151,7 +149,7 @@ class PostController extends Controller
         ]);
 
         $form->add('submit', 'submit', [
-            'label' => $this->get('translator')->trans('Create')
+            'label' => $this->get('translator')->trans('Create'),
         ]);
 
         return $form;
@@ -168,16 +166,16 @@ class PostController extends Controller
     {
         $entity = new Post();
         if (!$this->get('security.context')->isGranted('POST_NEW', $entity)) {
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $form = $this->createCreateForm($entity);
 
         return [
             'edit_tag' => true,
-            'title'  => $this->get('translator')->trans('Add code'),
+            'title' => $this->get('translator')->trans('Add code'),
             'entity' => $entity,
-            'form'   => $form->createView()
+            'form' => $form->createView(),
         ];
     }
 
@@ -200,15 +198,15 @@ class PostController extends Controller
         }
 
         if (!$this->get('security.context')->isGranted('POST_SHOW', $postEntity)) {
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $deleteForm = $this->createDeleteForm($postEntity->getId());
 
         return [
-            'title'  => $postEntity->getTopic(),
+            'title' => $postEntity->getTopic(),
             'entity' => $postEntity,
-            'delete_form' => $deleteForm->createView()
+            'delete_form' => $deleteForm->createView(),
         ];
     }
 
@@ -237,7 +235,7 @@ class PostController extends Controller
                 $message
             );
 
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $editForm = $this->createEditForm($postEntity);
@@ -245,32 +243,32 @@ class PostController extends Controller
         return [
             'edit_tag' => false,
             'entity' => $postEntity,
-            'form'   => $editForm->createView(),
-            'title'  => $this->get('translator')->trans(
+            'form' => $editForm->createView(),
+            'title' => $this->get('translator')->trans(
                 'Edit "topic"',
                 ['topic' => $postEntity->getTopic()]
-            )
+            ),
         ];
     }
 
     /**
-    * Creates a form to edit a Post entity.
-    *
-    * @param Post $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Post entity.
+     *
+     * @param Post $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Post $entity)
     {
         $form = $this->createForm(new PostType(), $entity, [
             'action' => $this->generateUrl('post_update', [
-                'id' => $entity->getId()
+                'id' => $entity->getId(),
             ]),
             'method' => 'POST',
         ]);
 
         $form->add('submit', 'submit', [
-            'label' => $this->get('translator')->trans('Update')
+            'label' => $this->get('translator')->trans('Update'),
         ]);
 
         return $form;
@@ -334,12 +332,12 @@ class PostController extends Controller
 
         return $this->redirect($this->generateUrl('post_show', [
             'id' => $postEntity->getId(),
-            'identifier' => $postEntity->getIdentifier()
+            'identifier' => $postEntity->getIdentifier(),
         ]));
     }
 
     /**
-     * Confirms deletion of an entity
+     * Confirms deletion of an entity.
      *
      * @Route("/delete/{id}", name="post_delete_confirm")
      * @Method("GET")
@@ -357,7 +355,7 @@ class PostController extends Controller
         }
 
         if (!$this->get('security.context')->isGranted('POST_DELETE', $postEntity)) {
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $deleteForm = $this->createDeleteForm($postEntity->getId());
@@ -366,10 +364,10 @@ class PostController extends Controller
             'title' => $this->get('translator')->trans(
                 'Confirm delete of "topic"',
                 [
-                    'topic' => $postEntity->getTopic()
+                    'topic' => $postEntity->getTopic(),
                 ]
             ),
-            'delete_form' => $deleteForm->createView()
+            'delete_form' => $deleteForm->createView(),
         ];
     }
 
@@ -401,7 +399,7 @@ class PostController extends Controller
                     $message
                 );
 
-                throw new AccessDeniedException;
+                throw new AccessDeniedException();
             }
 
             foreach ($entity->getTags() as $tag) {
@@ -432,18 +430,18 @@ class PostController extends Controller
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('post_delete', [
-                'id' => $id
+                'id' => $id,
             ]))
             ->setMethod('POST')
             ->add('submit', 'submit', [
-                'label' => $this->get('translator')->trans('Delete')
+                'label' => $this->get('translator')->trans('Delete'),
             ])
             ->getForm()
         ;
     }
 
     /**
-     * Handles threads and comments
+     * Handles threads and comments.
      *
      * @Route("/thread/{threadId}", name="post_thread")
      * @Method("GET")
@@ -464,7 +462,7 @@ class PostController extends Controller
 
         return [
             'comments' => $comments,
-            'thread' => $thread
+            'thread' => $thread,
         ];
     }
 }
