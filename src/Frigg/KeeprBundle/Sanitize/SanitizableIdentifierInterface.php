@@ -2,7 +2,6 @@
 
 namespace Frigg\KeeprBundle\Sanitize;
 
-
 /**
  * Interface SanitizableIdentifierInterface
  */
@@ -14,4 +13,12 @@ interface SanitizableIdentifierInterface
      * @return string
      */
     public function generateSanitizedIdentifier();
+
+    /**
+     * Sets an identifier
+     *
+     * @param string $identifier
+     * @return mixed
+     */
+    public function setIdentifier($identifier);
 }

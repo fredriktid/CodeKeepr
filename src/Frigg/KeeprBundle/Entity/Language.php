@@ -72,8 +72,6 @@ class Language implements SanitizableIdentifierInterface
     {
         $this->name = $name;
 
-        $this->setIdentifier($this->generateSanitizedIdentifier());
-
         return $this;
     }
 
