@@ -36,6 +36,9 @@ class Vote extends BaseVote implements SignedVoteInterface
      */
     protected $voter;
 
+    /**
+     * @return $this
+     */
     public function getClass()
     {
         return $this;
@@ -44,7 +47,7 @@ class Vote extends BaseVote implements SignedVoteInterface
     /**
      * Sets the owner of the vote
      *
-     * @param string $user
+     * @param UserInterface $voter
      */
     public function setVoter(UserInterface $voter)
     {

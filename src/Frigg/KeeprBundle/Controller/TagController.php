@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Frigg\KeeprBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,6 +27,8 @@ class TagController extends Controller
     public function showAction($identifier)
     {
         $em = $this->get('doctrine.orm.entity_manager');
+
+        /** @var Tag $tagEntity */
         if (!$tagEntity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($identifier)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find tag')

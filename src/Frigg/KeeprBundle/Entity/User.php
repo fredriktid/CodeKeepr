@@ -31,6 +31,9 @@ class User extends BaseUser
      */
     private $Stars;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -82,7 +85,7 @@ class User extends BaseUser
     /**
      * Override to exclude username
      *
-     * @param string $email
+     * @param string $username
      * @return User
      */
     public function setUsername($username)

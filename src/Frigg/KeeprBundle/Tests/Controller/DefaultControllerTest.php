@@ -4,14 +4,25 @@ namespace Frigg\KeeprBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class DefaultControllerTest
+ * @package Frigg\KeeprBundle\Tests\Controller
+ */
 class DefaultControllerTest extends WebTestCase
 {
+    /**
+     * Tests basic functionality
+     */
     public function testIndex()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/hello/Fabien');
+        $crawler = $client->request('GET', '/');
 
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->getStatusCode() == 200);
+
+        $this->assertTrue($crawler->filter('html:contains("CodeKeepr")')->count() > 0);
     }
 }

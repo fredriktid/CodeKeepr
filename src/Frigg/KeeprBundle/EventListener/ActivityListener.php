@@ -6,24 +6,47 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 
+/**
+ * Class ActivityListener
+ * @package Frigg\KeeprBundle\EventListener
+ */
 class ActivityListener
 {
+    /**
+     * @var null|ContainerInterface
+     */
     protected $container = null;
+    /**
+     * @var null
+     */
     protected $entity = null;
+    /**
+     * @var array
+     */
     protected $validEntities = [
         'Post'
     ];
 
+    /**
+     * ActivityListener constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param $entity
+     */
     public function setEntity($entity)
     {
         $this->entity = $entity;
     }
 
+    /**
+     * @return bool
+     */
     protected function isValidEntity()
     {
         if (!is_object($this->entity)) {
@@ -34,6 +57,9 @@ class ActivityListener
         return in_array(end($classChunks), $this->validEntities);
     }
 
+    /**
+     * @param LifecycleEventArgs $arguments
+     */
     public function postPersist(LifecycleEventArgs $arguments)
     {
         $this->setEntity($arguments->getEntity());
@@ -45,6 +71,9 @@ class ActivityListener
         $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
     }
 
+    /**
+     * @param LifecycleEventArgs $arguments
+     */
     public function postUpdate(LifecycleEventArgs $arguments)
     {
         $this->setEntity($arguments->getEntity());
@@ -55,6 +84,10 @@ class ActivityListener
         $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
     }
 
+    /**
+     * @param $method
+     * @param $identifier
+     */
     protected function persist($method, $identifier)
     {
         if (!method_exists($this->entity, $method)) {

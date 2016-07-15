@@ -11,10 +11,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Class RegistrationListener
+ * @package Frigg\KeeprBundle\EventListener
+ */
 class RegistrationListener implements EventSubscriberInterface
 {
+    /**
+     * @var UrlGeneratorInterface
+     */
     private $router;
 
+    /**
+     * RegistrationListener constructor.
+     * @param UrlGeneratorInterface $router
+     */
     public function __construct(UrlGeneratorInterface $router)
     {
         $this->router = $router;
@@ -30,6 +41,9 @@ class RegistrationListener implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param FormEvent $event
+     */
     public function onRegistrationSuccess(FormEvent $event)
     {
         $url = $this->router->generate('home');

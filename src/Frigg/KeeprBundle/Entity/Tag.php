@@ -147,7 +147,7 @@ class Tag
      * Set created_at
      *
      * @param \DateTime $createdAt
-     * @return Flight
+     * @return Tag
      */
     public function setCreatedAt($createdAt)
     {
@@ -169,10 +169,10 @@ class Tag
     /**
      * Set TagType
      *
-     * @param \Frigg\KeeprBundle\Entity\TagType $tagType
+     * @param TagType $tagType
      * @return Tag
      */
-    public function setTagType(\Frigg\KeeprBundle\Entity\TagType $tagType)
+    public function setTagType(TagType $tagType)
     {
         $this->TagType = $tagType;
 
@@ -182,7 +182,7 @@ class Tag
     /**
      * Get TagType
      *
-     * @return \Frigg\KeeprBundle\Entity\TagType
+     * @return TagType
      */
     public function getTagType()
     {

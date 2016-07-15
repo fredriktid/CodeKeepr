@@ -5,13 +5,27 @@ namespace Frigg\KeeprBundle\Security\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+/**
+ * Class PostVoter
+ * @package Frigg\KeeprBundle\Security\Voter
+ */
 class PostVoter extends BaseVoter implements VoterInterface
 {
+    /**
+     * @param string $attribute
+     * @return bool
+     */
     public function supportsAttribute($attribute)
     {
         return (0 === strpos($attribute, 'POST'));
     }
 
+    /**
+     * @param TokenInterface $token
+     * @param null|object $postEntity
+     * @param array $attributes
+     * @return int
+     */
     public function vote(TokenInterface $token, $postEntity, array $attributes)
     {
         if (!$this->supportsClass($postEntity)) {

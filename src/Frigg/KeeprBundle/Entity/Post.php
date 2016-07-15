@@ -147,7 +147,7 @@ class Post
      * Set created_at
      *
      * @param \DateTime $createdAt
-     * @return Flight
+     * @return Post
      */
     public function setCreatedAt($createdAt)
     {
@@ -170,7 +170,7 @@ class Post
      * Set modified_at
      *
      * @param \DateTime $modifiedAt
-     * @return Flight
+     * @return Post
      */
     public function setModifiedAt($modifiedAt)
     {
@@ -237,10 +237,10 @@ class Post
     /**
      * Set User
      *
-     * @param \Frigg\KeeprBundle\Entity\User $user
+     * @param User $user
      * @return Post
      */
-    public function setUser(\Frigg\KeeprBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->User = $user;
 
@@ -250,7 +250,7 @@ class Post
     /**
      * Get User
      *
-     * @return \Frigg\KeeprBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -260,10 +260,10 @@ class Post
     /**
      * Add Tags
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     * @param Tag $tags
      * @return Post
      */
-    public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function addTag(Tag $tags)
     {
         if (!$this->Tags->contains($tags)) {
             $this->Tags->add($tags);
@@ -275,9 +275,9 @@ class Post
     /**
      * Remove Tags
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     * @param Tag $tags
      */
-    public function removeTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function removeTag(Tag $tags)
     {
         $this->Tags->removeElement($tags);
     }
@@ -295,10 +295,10 @@ class Post
     /**
      * Set Language
      *
-     * @param \Frigg\KeeprBundle\Entity\Language $language
+     * @param Language $language
      * @return Post
      */
-    public function setLanguage(\Frigg\KeeprBundle\Entity\Language $language)
+    public function setLanguage(Language $language)
     {
         $this->Language = $language;
 
@@ -308,7 +308,7 @@ class Post
     /**
      * Get Language
      *
-     * @return \Frigg\KeeprBundle\Entity\Language
+     * @return Language
      */
     public function getLanguage()
     {
@@ -318,10 +318,10 @@ class Post
     /**
      * Add Stars
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @param Star $stars
      * @return Post
      */
-    public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function addStar(Star $stars)
     {
         $this->Stars[] = $stars;
 
@@ -331,9 +331,9 @@ class Post
     /**
      * Remove Stars
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @param Star $stars
      */
-    public function removeStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function removeStar(Star $stars)
     {
         $this->Stars->removeElement($stars);
     }

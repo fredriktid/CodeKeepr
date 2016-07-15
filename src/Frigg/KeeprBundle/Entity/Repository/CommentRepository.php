@@ -5,8 +5,16 @@ namespace Frigg\KeeprBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Frigg\KeeprBundle\Entity\Post;
 
+/**
+ * Class CommentRepository
+ * @package Frigg\KeeprBundle\Entity\Repository
+ */
 class CommentRepository extends EntityRepository
 {
+    /**
+     * @param Post $post
+     * @return mixed
+     */
     public function postCount(Post $post)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

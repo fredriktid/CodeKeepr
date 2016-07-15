@@ -3,10 +3,19 @@
 namespace Frigg\KeeprBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use FOS\UserBundle\Model\UserInterface;
 use Frigg\KeeprBundle\Entity\Tag;
+use Frigg\KeeprBundle\Entity\User;
 
+/**
+ * Class PostRepository
+ * @package Frigg\KeeprBundle\Entity\Repository
+ */
 class PostRepository extends EntityRepository
 {
+    /**
+     * @return array
+     */
     public function loadPublic()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -21,6 +30,10 @@ class PostRepository extends EntityRepository
             ->getResult();
     }
 
+    /**
+     * @param $user
+     * @return array
+     */
     public function loadPrivate($user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -38,6 +51,10 @@ class PostRepository extends EntityRepository
     }
 
 
+    /**
+     * @param Tag $tag
+     * @return array
+     */
     public function loadByTag(Tag $tag)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -55,7 +72,11 @@ class PostRepository extends EntityRepository
             ->getResult();
     }
 
-    public function loadByUser($user)
+    /**
+     * @param UserInterface $user
+     * @return array
+     */
+    public function loadByUser(UserInterface $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $qb->select('p')
@@ -71,8 +92,11 @@ class PostRepository extends EntityRepository
             ->getResult();
     }
 
-
-    public function loadStarred($user)
+    /**
+     * @param UserInterface $user
+     * @return array
+     */
+    public function loadStarred(UserInterface $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $qb->select('p')
@@ -87,7 +111,11 @@ class PostRepository extends EntityRepository
             ->getResult();
     }
 
-
+    /**
+     * @param $fromTs
+     * @param $toTs
+     * @return array
+     */
     public function loadPeriod($fromTs, $toTs)
     {
         $period = [

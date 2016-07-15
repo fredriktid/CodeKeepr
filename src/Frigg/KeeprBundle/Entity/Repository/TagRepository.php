@@ -4,8 +4,15 @@ namespace Frigg\KeeprBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class TagRepository
+ * @package Frigg\KeeprBundle\Entity\Repository
+ */
 class TagRepository extends EntityRepository
 {
+    /**
+     * @return array
+     */
     public function loadPublic()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -16,6 +23,10 @@ class TagRepository extends EntityRepository
             ->getResult();
     }
 
+    /**
+     * @param int $limit
+     * @return array
+     */
     public function loadPopular($limit = 15)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

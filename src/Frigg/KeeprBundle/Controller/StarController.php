@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Frigg\KeeprBundle\Entity\Post;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,6 +45,7 @@ class StarController extends Controller
 
         $em = $this->get('doctrine.orm.entity_manager');
 
+        /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             $message = $translator->trans('Post not found');
             $session->getFlashBag()->add(
@@ -71,6 +73,7 @@ class StarController extends Controller
         $securityToken = $securityContext->getToken();
         $currentUser = $securityToken->getUser();
 
+        /** @var Star $starEntity */
         if (!$starEntity = $em->getRepository('FriggKeeprBundle:Star')->isStarred($postEntity, $currentUser)) {
             $starEntity = new Star;
             $starEntity->setUser($currentUser);

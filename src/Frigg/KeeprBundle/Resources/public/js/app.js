@@ -20,7 +20,7 @@
             });
 
             return this;
-        }
+        };
 
         this.setMode = function(mode) {
 
@@ -29,7 +29,7 @@
             this.mode = mode;
 
             return this;
-        }
+        };
 
         this.update = function() {
 
@@ -49,7 +49,7 @@
             }
 
             return this;
-        }
+        };
 
         this.data('context', this);
 

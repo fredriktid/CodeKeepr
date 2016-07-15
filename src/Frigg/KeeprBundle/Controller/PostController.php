@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Frigg\KeeprBundle\Entity\Tag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,10 +101,10 @@ class PostController extends Controller
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
-            // process tags
+            // if the tag already exists we need to remove the new one from the form collection
+            // and then associate the existing tag with this post instead
             foreach ($entity->getTags() as $tag) {
-                // if the tag already exists we need to remove the new one from the form collection
-                // and then associate the existing tag with this post instead
+                /** @var Tag $currentTag */
                 if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
                     $entity->getTags()->removeElement($tag);
                     $entity->addTag($currentTag);
@@ -191,6 +192,7 @@ class PostController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
+        /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
@@ -221,6 +223,7 @@ class PostController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
+        /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
@@ -272,6 +275,7 @@ class PostController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Post entity.
      *
@@ -282,6 +286,7 @@ class PostController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
+        /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
@@ -306,10 +311,10 @@ class PostController extends Controller
                 }
             }
 
-            // add tags
+            // if the tag already exists we need to remove the new one from the form collection
+            // and then associate the existing tag with the this post instead
             foreach ($postEntity->getTags() as $tag) {
-                // if the tag already exists we need to remove the new one from the form collection
-                // and then associate the existing tag with the this post instead
+                /** @var Tag $currentTag */
                 if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
                     $postEntity->getTags()->removeElement($tag);
                     $postEntity->addTag($currentTag);
@@ -344,6 +349,7 @@ class PostController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
+        /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             throw $this->createNotFoundException(
                 $this->get('translator')->trans('Unable to find post')
@@ -366,7 +372,6 @@ class PostController extends Controller
             'delete_form' => $deleteForm->createView()
         ];
     }
-
 
     /**
      * Deletes a Post entity.

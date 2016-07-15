@@ -99,7 +99,7 @@ class Language
      * Set identifier
      *
      * @param string $identifier
-     * @return Post
+     * @return Language
      */
     public function setIdentifier($identifier)
     {
@@ -121,10 +121,10 @@ class Language
     /**
      * Add Posts
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
      * @return Language
      */
-    public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function addPost(Post $posts)
     {
         $this->Posts[] = $posts;
 
@@ -134,11 +134,14 @@ class Language
     /**
      * Remove Posts
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
+     * @return Language
      */
-    public function removePost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function removePost(Post $posts)
     {
         $this->Posts->removeElement($posts);
+
+        return $this;
     }
 
     /**

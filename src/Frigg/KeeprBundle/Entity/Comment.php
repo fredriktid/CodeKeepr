@@ -51,26 +51,41 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
      */
     protected $rawBody;
 
+    /**
+     * @param string $rawBody
+     */
     public function setRawBody($rawBody)
     {
         $this->rawBody = $rawBody;
     }
 
+    /**
+     * @return string
+     */
     public function getRawBody()
     {
         return $this->rawBody;
     }
 
+    /**
+     * @param UserInterface $author
+     */
     public function setAuthor(UserInterface $author)
     {
         $this->author = $author;
     }
 
+    /**
+     * @return User
+     */
     public function getAuthor()
     {
         return $this->author;
     }
 
+    /**
+     * @return string
+     */
     public function getAuthorName()
     {
         if (null === $this->getAuthor()) {
@@ -105,7 +120,7 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
      * Increments the comment score by the provided
      * value.
      *
-     * @param integer value
+     * @param integer $by
      *
      * @return integer The new comment score
      */

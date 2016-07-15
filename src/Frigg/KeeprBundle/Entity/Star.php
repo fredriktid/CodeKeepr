@@ -49,10 +49,10 @@ class Star
     /**
      * Set User
      *
-     * @param \Frigg\KeeprBundle\Entity\User $user
+     * @param User $user
      * @return Star
      */
-    public function setUser(\Frigg\KeeprBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->User = $user;
 
@@ -62,7 +62,7 @@ class Star
     /**
      * Get User
      *
-     * @return \Frigg\KeeprBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -72,10 +72,10 @@ class Star
     /**
      * Set Post
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $post
+     * @param Post $post
      * @return Star
      */
-    public function setPost(\Frigg\KeeprBundle\Entity\Post $post)
+    public function setPost(Post $post)
     {
         $this->Post = $post;
 
@@ -96,7 +96,7 @@ class Star
      * Set created_at
      *
      * @param \DateTime $createdAt
-     * @return Flight
+     * @return Star
      */
     public function setCreatedAt($createdAt)
     {
