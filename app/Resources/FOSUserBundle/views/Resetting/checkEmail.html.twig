@@ -1,0 +1,11 @@
+{% extends 'FriggKeeprBundle::layout.html.twig' %}
+
+{% block title %}{{ 'Reset password'|trans }}{% endblock %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block body %}
+<p>
+{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+{% endblock %}
