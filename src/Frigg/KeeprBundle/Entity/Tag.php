@@ -26,7 +26,7 @@ class Tag implements SanitizableIdentifierInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", unique=false, length=255)
+     * @ORM\Column(type="string", unique=false, length=255, nullable=true)
      */
     private $identifier;
 
