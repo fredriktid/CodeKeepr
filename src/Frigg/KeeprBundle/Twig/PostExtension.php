@@ -40,7 +40,7 @@ class PostExtension extends \Twig_Extension
     }
 
     /**
-     * @return array
+     * @return \Twig_SimpleFilter[]
      */
     public function getFilters()
     {
