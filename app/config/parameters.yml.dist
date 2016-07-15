@@ -10,8 +10,8 @@ parameters:
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
-    mailer_from_address: ~
-    mailer_from_name:  ~
+    mailer_from_address: postmaster@codekeepr.no
+    mailer_from_name:  Codekeepr
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
