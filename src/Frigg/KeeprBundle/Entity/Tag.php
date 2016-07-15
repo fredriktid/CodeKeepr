@@ -4,13 +4,14 @@ namespace Frigg\KeeprBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\TagRepository")
  */
-class Tag
+class Tag implements SanitizableIdentifierInterface
 {
     /**
      * @ORM\Id
@@ -58,6 +59,9 @@ class Tag
         $this->Posts = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function __toString()
     {
         return $this->name;
@@ -83,7 +87,6 @@ class Tag
     public function setName($name)
     {
         $this->name = $name;
-        $this->setIdentifier($name);
 
         return $this;
     }
@@ -99,6 +102,16 @@ class Tag
     }
 
     /**
+     * Generate safe, sanitized identifier
+     *
+     * @return string
+     */
+    public function generateSanitizedIdentifier()
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($this->getName())), '_');
+    }
+
+    /**
      * Set identifier.
      *
      * @param string $identifier
@@ -107,7 +120,7 @@ class Tag
      */
     public function setIdentifier($identifier)
     {
-        $this->identifier = $this->sanitize($identifier);
+        $this->identifier = $identifier;
 
         return $this;
     }
