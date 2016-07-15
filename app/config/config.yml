@@ -117,6 +117,9 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Frigg\KeeprBundle\Entity\User
+    from_email:
+        address:        %mailer_from_address%
+        sender_name:    %mailer_from_name%
 
 knp_paginator:
     page_range: 25                     # default page range used in pagination control
