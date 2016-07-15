@@ -4,13 +4,14 @@ namespace Frigg\KeeprBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Frigg\KeeprBundle\Entity\Repository\PostRepository")
  */
-class Post
+class Post implements SanitizableIdentifierInterface
 {
     /**
      * @ORM\Id
@@ -96,15 +97,13 @@ class Post
     }
 
     /**
-     * Sanitize a string to create an identifier.
-     *
-     * @param string $string
+     * Return a sanitized identifier
      *
      * @return string
      */
-    public function sanitize($string)
+    public function generateSanitizedIdentifier()
     {
-        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($this->getTopic())), '_');
     }
 
     /**

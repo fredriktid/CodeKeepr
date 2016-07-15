@@ -99,18 +99,6 @@ class Tag
     }
 
     /**
-     * Sanitize a string to create an identifier.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public function sanitize($string)
-    {
-        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
-    }
-
-    /**
      * Set identifier.
      *
      * @param string $identifier

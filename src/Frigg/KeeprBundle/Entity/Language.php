@@ -4,11 +4,12 @@ namespace Frigg\KeeprBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
 
 /**
  * @ORM\Entity
  */
-class Language
+class Language implements SanitizableIdentifierInterface
 {
     /**
      * @ORM\Id
@@ -70,7 +71,8 @@ class Language
     public function setName($name)
     {
         $this->name = $name;
-        $this->setIdentifier($name);
+
+        $this->setIdentifier($this->generateSanitizedIdentifier());
 
         return $this;
     }
@@ -86,29 +88,27 @@ class Language
     }
 
     /**
-     * Sanitize a string to create an identifier.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public function sanitize($string)
-    {
-        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($string)), '_');
-    }
-
-    /**
      * Set identifier.
      *
      * @param string $identifier
      *
-     * @return Language
+     * @return $this
      */
     public function setIdentifier($identifier)
     {
-        $this->identifier = $this->sanitize($identifier);
+        $this->identifier = $identifier;
 
         return $this;
+    }
+
+    /**
+     * Sanitized identifier
+     *
+     * @return string
+     */
+    public function generateSanitizedIdentifier()
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($this->getName())), '_');
     }
 
     /**

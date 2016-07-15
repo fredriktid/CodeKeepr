@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\EventListener;
 
+use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -11,19 +12,13 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class ActivityListener
 {
     /**
-     * @var null|ContainerInterface
+     * @var ContainerInterface
      */
-    protected $container = null;
+    protected $container;
     /**
-     * @var null
+     * @var SanitizableIdentifierInterface
      */
-    protected $entity = null;
-    /**
-     * @var array
-     */
-    protected $validEntities = [
-        'Post',
-    ];
+    protected $entity;
 
     /**
      * ActivityListener constructor.
@@ -36,7 +31,7 @@ class ActivityListener
     }
 
     /**
-     * @param $entity
+     * @param SanitizableIdentifierInterface $entity
      */
     public function setEntity($entity)
     {
@@ -48,13 +43,7 @@ class ActivityListener
      */
     protected function isValidEntity()
     {
-        if (!is_object($this->entity)) {
-            return false;
-        }
-
-        $classChunks = explode('\\', get_class($this->entity));
-
-        return in_array(end($classChunks), $this->validEntities);
+        return ($this->entity instanceof SanitizableIdentifierInterface);
     }
 
     /**
@@ -62,13 +51,15 @@ class ActivityListener
      */
     public function postPersist(LifecycleEventArgs $arguments)
     {
-        $this->setEntity($arguments->getEntity());
+        /** @var SanitizableIdentifierInterface $entity */
+        $entity = $arguments->getEntity();
+        $this->setEntity($entity);
 
         if (!$this->isValidEntity()) {
             return;
         }
 
-        $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
+        $this->persist('setIdentifier', $this->entity->generateSanitizedIdentifier());
     }
 
     /**
@@ -76,12 +67,15 @@ class ActivityListener
      */
     public function postUpdate(LifecycleEventArgs $arguments)
     {
-        $this->setEntity($arguments->getEntity());
+        /** @var SanitizableIdentifierInterface $entity */
+        $entity = $arguments->getEntity();
+        $this->setEntity($entity);
+
         if (!$this->isValidEntity()) {
             return;
         }
 
-        $this->persist('setIdentifier', $this->entity->sanitize($this->entity->getTopic()));
+        $this->persist('setIdentifier', $this->entity->generateSanitizedIdentifier());
     }
 
     /**
