@@ -24,7 +24,7 @@ class Language implements SanitizableIdentifierInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=255)
+     * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
     private $identifier;
 
