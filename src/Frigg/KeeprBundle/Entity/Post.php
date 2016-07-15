@@ -102,7 +102,7 @@ class Post implements SanitizableIdentifierInterface
      *
      * @return string
      */
-    public function generateSanitizedIdentifier()
+    public function generateIdentifier()
     {
         return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($this->getTopic())), '_');
     }
