@@ -21,6 +21,8 @@ class UpdateIdentifierListener
     /**
      * UpdateIdentifierListener constructor.
      *
+     * So the whole containers needs to be injected to prevent a circular reference with the entity manager
+     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
