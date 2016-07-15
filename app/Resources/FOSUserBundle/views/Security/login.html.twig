@@ -9,7 +9,7 @@
 {% block body %}
     {% if error %}
         <div class="alert fade in">
-            {{ error|trans }}
+            {{ error.message|trans }}
         </div>
     {% endif %}
     <form action="{{ path("fos_user_security_check") }}" method="post" class="well">
