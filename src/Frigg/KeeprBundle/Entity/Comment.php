@@ -24,7 +24,7 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
     protected $id;
 
     /**
-     * Thread of this comment
+     * Thread of this comment.
      *
      * @var Thread
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\Thread")
@@ -32,45 +32,63 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
     protected $thread;
 
     /**
-     * Author of the comment
+     * Author of the comment.
      *
      * @ORM\ManyToOne(targetEntity="Frigg\KeeprBundle\Entity\User")
+     *
      * @var User
      */
     protected $author;
 
     /**
      * @ORM\Column(type="integer")
+     *
      * @var int
      */
     protected $score = 0;
 
     /**
      * @ORM\Column(name="rawBody", type="text", nullable=true)
+     *
      * @var string
      */
     protected $rawBody;
 
+    /**
+     * @param string $rawBody
+     */
     public function setRawBody($rawBody)
     {
         $this->rawBody = $rawBody;
     }
 
+    /**
+     * @return string
+     */
     public function getRawBody()
     {
         return $this->rawBody;
     }
 
+    /**
+     * @param UserInterface $author
+     */
     public function setAuthor(UserInterface $author)
     {
         $this->author = $author;
     }
 
+    /**
+     * @return User
+     */
     public function getAuthor()
     {
         return $this->author;
     }
 
+    /**
+     * @return string
+     */
     public function getAuthorName()
     {
         if (null === $this->getAuthor()) {
@@ -80,11 +98,10 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
         return $this->getAuthor()->getUsername();
     }
 
-
     /**
      * Sets the score of the comment.
      *
-     * @param integer $score
+     * @param int $score
      */
     public function setScore($score)
     {
@@ -94,7 +111,7 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
     /**
      * Returns the current score of the comment.
      *
-     * @return integer
+     * @return int
      */
     public function getScore()
     {
@@ -105,9 +122,9 @@ class Comment extends BaseComment implements SignedCommentInterface, VotableComm
      * Increments the comment score by the provided
      * value.
      *
-     * @param integer value
+     * @param int $by
      *
-     * @return integer The new comment score
+     * @return int The new comment score
      */
     public function incrementScore($by = 1)
     {

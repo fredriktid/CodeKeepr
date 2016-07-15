@@ -2,7 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -27,7 +27,7 @@ class TagType
      */
     private $Tags;
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -35,9 +35,9 @@ class TagType
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -45,9 +45,10 @@ class TagType
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return TagType
      */
     public function setName($name)
@@ -58,7 +59,7 @@ class TagType
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -68,9 +69,10 @@ class TagType
     }
 
     /**
-     * Add Tags
+     * Add Tags.
      *
      * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     *
      * @return TagType
      */
     public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
@@ -81,7 +83,7 @@ class TagType
     }
 
     /**
-     * Remove Tags
+     * Remove Tags.
      *
      * @param \Frigg\KeeprBundle\Entity\Tag $tags
      */
@@ -91,7 +93,7 @@ class TagType
     }
 
     /**
-     * Get Tags
+     * Get Tags.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

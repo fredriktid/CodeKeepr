@@ -4,8 +4,6 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class UserController extends Controller
 {
     /**
-     * Public posts by a user
+     * Public posts by a user.
      *
      * @Route("/{id}", requirements={"id" = "\d+"}, name="user_posts")
      * @Method("GET")
@@ -46,12 +44,12 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $userEntity->getUsername()
+            'title' => $userEntity->getUsername(),
         ];
     }
 
     /**
-     * Private posts by a user
+     * Private posts by a user.
      *
      * @Route("/{id}/private", requirements={"id" = "\d+"}, name="user_private_posts")
      * @Method("GET")
@@ -67,7 +65,7 @@ class UserController extends Controller
         }
 
         if (!$this->get('security.context')->isGranted('USER_PRIVATE_POSTS', $userEntity)) {
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $privatePosts = $em->getRepository('FriggKeeprBundle:Post')->loadPrivate($userEntity);
@@ -82,12 +80,12 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $userEntity->getUsername()
+            'title' => $userEntity->getUsername(),
         ];
     }
 
     /**
-     * Starred post by user
+     * Starred post by user.
      *
      * @Route("/{id}/starred", name="user_starred_posts")
      * @Method("GET")
@@ -103,7 +101,7 @@ class UserController extends Controller
         }
 
         if (!$this->get('security.context')->isGranted('USER_STAR_SHOW', $userEntity)) {
-            throw new AccessDeniedException;
+            throw new AccessDeniedException();
         }
 
         $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadStarred($userEntity);
@@ -118,7 +116,7 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $this->get('translator')->trans('Starred')
+            'title' => $this->get('translator')->trans('Starred'),
         ];
     }
 }

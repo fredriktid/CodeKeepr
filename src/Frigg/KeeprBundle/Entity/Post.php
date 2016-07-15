@@ -2,8 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
-use Symfony\Component\Validator\Constraints;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -73,7 +72,7 @@ class Post
     private $Stars;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -87,9 +86,9 @@ class Post
     }
 
     /**
-     * Id
+     * Id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -97,9 +96,10 @@ class Post
     }
 
     /**
-     * Sanitize a string to create an identifier
+     * Sanitize a string to create an identifier.
      *
      * @param string $string
+     *
      * @return string
      */
     public function sanitize($string)
@@ -108,9 +108,10 @@ class Post
     }
 
     /**
-     * Set identifier
+     * Set identifier.
      *
      * @param string $identifier
+     *
      * @return Post
      */
     public function setIdentifier($identifier)
@@ -121,7 +122,7 @@ class Post
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return string
      */
@@ -144,10 +145,11 @@ class Post
     }
 
     /**
-     * Set created_at
+     * Set created_at.
      *
      * @param \DateTime $createdAt
-     * @return Flight
+     *
+     * @return Post
      */
     public function setCreatedAt($createdAt)
     {
@@ -157,7 +159,7 @@ class Post
     }
 
     /**
-     * Get created_at
+     * Get created_at.
      *
      * @return \DateTime
      */
@@ -167,10 +169,11 @@ class Post
     }
 
     /**
-     * Set modified_at
+     * Set modified_at.
      *
      * @param \DateTime $modifiedAt
-     * @return Flight
+     *
+     * @return Post
      */
     public function setModifiedAt($modifiedAt)
     {
@@ -180,7 +183,7 @@ class Post
     }
 
     /**
-     * Get modified_at
+     * Get modified_at.
      *
      * @return \DateTime
      */
@@ -190,19 +193,21 @@ class Post
     }
 
     /**
-     * Set topic
+     * Set topic.
      *
      * @param string $topic
+     *
      * @return Post
      */
     public function setTopic($topic)
     {
         $this->topic = $topic;
+
         return $this;
     }
 
     /**
-     * Get topic
+     * Get topic.
      *
      * @return string
      */
@@ -212,9 +217,10 @@ class Post
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Post
      */
     public function setContent($content)
@@ -225,7 +231,7 @@ class Post
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -235,12 +241,13 @@ class Post
     }
 
     /**
-     * Set User
+     * Set User.
      *
-     * @param \Frigg\KeeprBundle\Entity\User $user
+     * @param User $user
+     *
      * @return Post
      */
-    public function setUser(\Frigg\KeeprBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->User = $user;
 
@@ -248,9 +255,9 @@ class Post
     }
 
     /**
-     * Get User
+     * Get User.
      *
-     * @return \Frigg\KeeprBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -258,12 +265,13 @@ class Post
     }
 
     /**
-     * Add Tags
+     * Add Tags.
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     * @param Tag $tags
+     *
      * @return Post
      */
-    public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function addTag(Tag $tags)
     {
         if (!$this->Tags->contains($tags)) {
             $this->Tags->add($tags);
@@ -273,17 +281,17 @@ class Post
     }
 
     /**
-     * Remove Tags
+     * Remove Tags.
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     * @param Tag $tags
      */
-    public function removeTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function removeTag(Tag $tags)
     {
         $this->Tags->removeElement($tags);
     }
 
     /**
-     * Get Tags
+     * Get Tags.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -293,12 +301,13 @@ class Post
     }
 
     /**
-     * Set Language
+     * Set Language.
      *
-     * @param \Frigg\KeeprBundle\Entity\Language $language
+     * @param Language $language
+     *
      * @return Post
      */
-    public function setLanguage(\Frigg\KeeprBundle\Entity\Language $language)
+    public function setLanguage(Language $language)
     {
         $this->Language = $language;
 
@@ -306,9 +315,9 @@ class Post
     }
 
     /**
-     * Get Language
+     * Get Language.
      *
-     * @return \Frigg\KeeprBundle\Entity\Language
+     * @return Language
      */
     public function getLanguage()
     {
@@ -316,12 +325,13 @@ class Post
     }
 
     /**
-     * Add Stars
+     * Add Stars.
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @param Star $stars
+     *
      * @return Post
      */
-    public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function addStar(Star $stars)
     {
         $this->Stars[] = $stars;
 
@@ -329,17 +339,17 @@ class Post
     }
 
     /**
-     * Remove Stars
+     * Remove Stars.
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @param Star $stars
      */
-    public function removeStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function removeStar(Star $stars)
     {
         $this->Stars->removeElement($stars);
     }
 
     /**
-     * Get Stars
+     * Get Stars.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -349,9 +359,10 @@ class Post
     }
 
     /**
-     * Set private
+     * Set private.
      *
-     * @param boolean $private
+     * @param bool $private
+     *
      * @return Post
      */
     public function setPrivate($private)
@@ -362,9 +373,9 @@ class Post
     }
 
     /**
-     * Get private
+     * Get private.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPrivate()
     {
@@ -374,7 +385,7 @@ class Post
     /**
      * Is this a public post?
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {

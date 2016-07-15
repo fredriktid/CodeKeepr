@@ -24,7 +24,7 @@
                 e.preventDefault();
                 context.addForm(context.tags, $new);
             });
-        }
+        };
 
         this.addForm = function($button, $new) {
 
@@ -46,7 +46,7 @@
             });
 
             this.addDelete($form);
-        }
+        };
 
         this.addDelete = function($form) {
 
@@ -57,7 +57,7 @@
                 e.preventDefault();
                 $form.remove();
             });
-        }
+        };
 
         this.data('context', this);
 

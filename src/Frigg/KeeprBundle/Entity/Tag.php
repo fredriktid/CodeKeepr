@@ -2,7 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -51,7 +51,7 @@ class Tag
     private $Posts;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -64,9 +64,9 @@ class Tag
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -74,9 +74,10 @@ class Tag
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Tag
      */
     public function setName($name)
@@ -88,7 +89,7 @@ class Tag
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -98,9 +99,10 @@ class Tag
     }
 
     /**
-     * Sanitize a string to create an identifier
+     * Sanitize a string to create an identifier.
      *
      * @param string $string
+     *
      * @return string
      */
     public function sanitize($string)
@@ -109,9 +111,10 @@ class Tag
     }
 
     /**
-     * Set identifier
+     * Set identifier.
      *
      * @param string $identifier
+     *
      * @return Tag
      */
     public function setIdentifier($identifier)
@@ -122,7 +125,7 @@ class Tag
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return string
      */
@@ -144,10 +147,11 @@ class Tag
     }
 
     /**
-     * Set created_at
+     * Set created_at.
      *
      * @param \DateTime $createdAt
-     * @return Flight
+     *
+     * @return Tag
      */
     public function setCreatedAt($createdAt)
     {
@@ -157,7 +161,7 @@ class Tag
     }
 
     /**
-     * Get created_at
+     * Get created_at.
      *
      * @return \DateTime
      */
@@ -167,12 +171,13 @@ class Tag
     }
 
     /**
-     * Set TagType
+     * Set TagType.
      *
-     * @param \Frigg\KeeprBundle\Entity\TagType $tagType
+     * @param TagType $tagType
+     *
      * @return Tag
      */
-    public function setTagType(\Frigg\KeeprBundle\Entity\TagType $tagType)
+    public function setTagType(TagType $tagType)
     {
         $this->TagType = $tagType;
 
@@ -180,9 +185,9 @@ class Tag
     }
 
     /**
-     * Get TagType
+     * Get TagType.
      *
-     * @return \Frigg\KeeprBundle\Entity\TagType
+     * @return TagType
      */
     public function getTagType()
     {
@@ -190,9 +195,10 @@ class Tag
     }
 
     /**
-     * Add Posts
+     * Add Posts.
      *
      * @param \Frigg\KeeprBundle\Entity\Post $posts
+     *
      * @return Tag
      */
     public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
@@ -205,7 +211,7 @@ class Tag
     }
 
     /**
-     * Remove Posts
+     * Remove Posts.
      *
      * @param \Frigg\KeeprBundle\Entity\Post $posts
      */
@@ -215,7 +221,7 @@ class Tag
     }
 
     /**
-     * Get Posts
+     * Get Posts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

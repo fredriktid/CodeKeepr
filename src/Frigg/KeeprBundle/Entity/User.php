@@ -4,7 +4,6 @@ namespace Frigg\KeeprBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -31,6 +30,9 @@ class User extends BaseUser
      */
     private $Stars;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -39,9 +41,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -57,9 +59,10 @@ class User extends BaseUser
     }
 
     /**
-     * Generate username based on email address
+     * Generate username based on email address.
      *
      * @param null $email
+     *
      * @return string
      */
     public function generateUsername($email = null)
@@ -70,7 +73,7 @@ class User extends BaseUser
 
         $username = '';
         foreach (str_split($email) as $char) {
-            if (!preg_match("/^[A-Za-z\\-]$/", $char)) {
+            if (!preg_match('/^[A-Za-z\\-]$/', $char)) {
                 break;
             }
             $username .= $char;
@@ -80,9 +83,10 @@ class User extends BaseUser
     }
 
     /**
-     * Override to exclude username
+     * Override to exclude username.
      *
-     * @param string $email
+     * @param string $username
+     *
      * @return User
      */
     public function setUsername($username)
@@ -91,9 +95,10 @@ class User extends BaseUser
     }
 
     /**
-     * Override to set email and username
+     * Override to set email and username.
      *
      * @param string $email
+     *
      * @return User
      */
     public function setEmail($email)
@@ -105,9 +110,10 @@ class User extends BaseUser
     }
 
     /**
-     * Override to set canonical email and username
+     * Override to set canonical email and username.
      *
      * @param string $emailCanonical
+     *
      * @return User
      */
     public function setEmailCanonical($emailCanonical)
@@ -119,9 +125,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add Posts
+     * Add Posts.
      *
      * @param \Frigg\KeeprBundle\Entity\Post $posts
+     *
      * @return User
      */
     public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
@@ -132,7 +139,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove Posts
+     * Remove Posts.
      *
      * @param \Frigg\KeeprBundle\Entity\Post $posts
      */
@@ -142,7 +149,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get Posts
+     * Get Posts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -152,9 +159,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add Stars
+     * Add Stars.
      *
      * @param \Frigg\KeeprBundle\Entity\Star $stars
+     *
      * @return User
      */
     public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
@@ -165,7 +173,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove Stars
+     * Remove Stars.
      *
      * @param \Frigg\KeeprBundle\Entity\Star $stars
      */
@@ -175,7 +183,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get Stars
+     * Get Stars.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

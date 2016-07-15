@@ -2,7 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -33,7 +33,7 @@ class Language
     private $Posts;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -41,7 +41,7 @@ class Language
     }
 
     /**
-     * String representation of entity
+     * String representation of entity.
      *
      * @return string
      */
@@ -51,9 +51,9 @@ class Language
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -61,9 +61,10 @@ class Language
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Language
      */
     public function setName($name)
@@ -75,7 +76,7 @@ class Language
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -84,10 +85,11 @@ class Language
         return $this->name;
     }
 
-   /**
-     * Sanitize a string to create an identifier
+    /**
+     * Sanitize a string to create an identifier.
      *
      * @param string $string
+     *
      * @return string
      */
     public function sanitize($string)
@@ -96,10 +98,11 @@ class Language
     }
 
     /**
-     * Set identifier
+     * Set identifier.
      *
      * @param string $identifier
-     * @return Post
+     *
+     * @return Language
      */
     public function setIdentifier($identifier)
     {
@@ -109,7 +112,7 @@ class Language
     }
 
     /**
-     * Get identifier
+     * Get identifier.
      *
      * @return string
      */
@@ -119,12 +122,13 @@ class Language
     }
 
     /**
-     * Add Posts
+     * Add Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
+     *
      * @return Language
      */
-    public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function addPost(Post $posts)
     {
         $this->Posts[] = $posts;
 
@@ -132,17 +136,21 @@ class Language
     }
 
     /**
-     * Remove Posts
+     * Remove Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
+     *
+     * @return Language
      */
-    public function removePost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function removePost(Post $posts)
     {
         $this->Posts->removeElement($posts);
+
+        return $this;
     }
 
     /**
-     * Get Posts
+     * Get Posts.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

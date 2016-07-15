@@ -7,8 +7,7 @@ use Frigg\KeeprBundle\Entity\User;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Class UserExtension
- * @package Frigg\KeeprBundle\Twig
+ * Class UserExtension.
  */
 class UserExtension extends \Twig_Extension
 {
@@ -23,7 +22,7 @@ class UserExtension extends \Twig_Extension
     private $securityContext;
 
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManager            $entityManager
      * @param SecurityContextInterface $securityContext
      */
     public function __construct(EntityManager $entityManager, SecurityContextInterface $securityContext)
@@ -52,11 +51,13 @@ class UserExtension extends \Twig_Extension
 
     /**
      * @param $email
+     *
      * @return mixed
      */
     public function generateUsername($email)
     {
         $user = new User();
+
         return $user->generateUsername($email);
     }
 }

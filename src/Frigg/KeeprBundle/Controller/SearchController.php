@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -18,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController extends Controller
 {
     /**
-     * Perform search with Elastica
+     * Perform search with Elastica.
      *
      * @Route("/", name="search")
      * @Method("GET")
@@ -48,12 +47,12 @@ class SearchController extends Controller
             'title' => $this->get('translator')->trans(
                 'Search: "query"',
                 ['query' => $query]
-            )
+            ),
         ];
     }
 
     /**
-     * Search form
+     * Search form.
      *
      * @Route("/form/{query}", name="search_form", defaults={"query" = null})
      * @Method("GET")
@@ -62,12 +61,12 @@ class SearchController extends Controller
     public function formAction($query = null)
     {
         return [
-            'query' => $query
+            'query' => $query,
         ];
     }
 
     /**
-     * Search form
+     * Search form.
      *
      * @Route("/autocomplete/{type}", name="search_autocomplete", defaults={"type" = "post"})
      * @Method("GET")
@@ -79,14 +78,14 @@ class SearchController extends Controller
 
         $collection = array();
         if ($query) {
-            $finder = $this->get('fos_elastica.finder.website.' . $type);
-            $results = $finder->find($query . '*', 5);
+            $finder = $this->get('fos_elastica.finder.website.'.$type);
+            $results = $finder->find($query.'*', 5);
             foreach ($results as $object) {
                 $collection[] = array(
                     'label' => $object->__toString(),
                     'url' => $this->generateUrl('search', [
-                        'query' => $object->__toString()
-                    ])
+                        'query' => $object->__toString(),
+                    ]),
                 );
             }
         }
@@ -96,8 +95,8 @@ class SearchController extends Controller
             case 'json':
                 $response = new Response(json_encode($collection));
                 $response->headers->set('Content-Type', 'application/json');
+
                 return $response;
         }
     }
-
 }
