@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -26,6 +27,7 @@ class TagType
      * @ORM\OneToMany(targetEntity="Frigg\KeeprBundle\Entity\Tag", mappedBy="TagType")
      */
     private $Tags;
+
     /**
      * Constructor.
      */
@@ -48,7 +50,6 @@ class TagType
      * Set name.
      *
      * @param string $name
-     *
      * @return TagType
      */
     public function setName($name)
@@ -71,11 +72,10 @@ class TagType
     /**
      * Add Tags.
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
-     *
+     * @param Tag $tags
      * @return TagType
      */
-    public function addTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function addTag(Tag $tags)
     {
         $this->Tags[] = $tags;
 
@@ -85,17 +85,20 @@ class TagType
     /**
      * Remove Tags.
      *
-     * @param \Frigg\KeeprBundle\Entity\Tag $tags
+     * @param Tag $tags
+     * @return TagType
      */
-    public function removeTag(\Frigg\KeeprBundle\Entity\Tag $tags)
+    public function removeTag(Tag $tags)
     {
         $this->Tags->removeElement($tags);
+
+        return $this;
     }
 
     /**
      * Get Tags.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getTags()
     {

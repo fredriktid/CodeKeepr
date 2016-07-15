@@ -25,7 +25,6 @@ class TagRepository extends EntityRepository
 
     /**
      * @param int $limit
-     *
      * @return array
      */
     public function loadPopular($limit = 15)

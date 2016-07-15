@@ -81,7 +81,6 @@ class Tag implements SanitizableIdentifierInterface
      * Set name.
      *
      * @param string $name
-     *
      * @return Tag
      */
     public function setName($name)
@@ -115,7 +114,6 @@ class Tag implements SanitizableIdentifierInterface
      * Set identifier.
      *
      * @param string $identifier
-     *
      * @return Tag
      */
     public function setIdentifier($identifier)
@@ -151,7 +149,6 @@ class Tag implements SanitizableIdentifierInterface
      * Set created_at.
      *
      * @param \DateTime $createdAt
-     *
      * @return Tag
      */
     public function setCreatedAt($createdAt)
@@ -175,7 +172,6 @@ class Tag implements SanitizableIdentifierInterface
      * Set TagType.
      *
      * @param TagType $tagType
-     *
      * @return Tag
      */
     public function setTagType(TagType $tagType)
@@ -198,11 +194,10 @@ class Tag implements SanitizableIdentifierInterface
     /**
      * Add Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
-     *
+     * @param Post $posts
      * @return Tag
      */
-    public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function addPost(Post $posts)
     {
         if (!$this->Posts->contains($posts)) {
             $this->Posts->add($posts);
@@ -214,11 +209,14 @@ class Tag implements SanitizableIdentifierInterface
     /**
      * Remove Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
+     * @return Tag
      */
-    public function removePost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function removePost(Post $posts)
     {
         $this->Posts->removeElement($posts);
+
+        return $this;
     }
 
     /**

@@ -12,7 +12,7 @@ use FOS\CommentBundle\Entity\Thread as BaseThread;
 class Thread extends BaseThread
 {
     /**
-     * @var string
+     * @var string $id
      *
      * @ORM\Id
      * @ORM\Column(type="string")

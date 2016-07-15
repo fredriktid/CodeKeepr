@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -62,7 +63,6 @@ class User extends BaseUser
      * Generate username based on email address.
      *
      * @param null $email
-     *
      * @return string
      */
     public function generateUsername($email = null)
@@ -86,7 +86,6 @@ class User extends BaseUser
      * Override to exclude username.
      *
      * @param string $username
-     *
      * @return User
      */
     public function setUsername($username)
@@ -98,7 +97,6 @@ class User extends BaseUser
      * Override to set email and username.
      *
      * @param string $email
-     *
      * @return User
      */
     public function setEmail($email)
@@ -113,7 +111,6 @@ class User extends BaseUser
      * Override to set canonical email and username.
      *
      * @param string $emailCanonical
-     *
      * @return User
      */
     public function setEmailCanonical($emailCanonical)
@@ -127,13 +124,12 @@ class User extends BaseUser
     /**
      * Add Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
-     *
+     * @param Post $post
      * @return User
      */
-    public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function addPost(Post $post)
     {
-        $this->Posts[] = $posts;
+        $this->Posts[] = $post;
 
         return $this;
     }
@@ -141,17 +137,20 @@ class User extends BaseUser
     /**
      * Remove Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $post
+     * @return User
      */
-    public function removePost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function removePost(Post $post)
     {
-        $this->Posts->removeElement($posts);
+        $this->Posts->removeElement($post);
+
+        return $this;
     }
 
     /**
      * Get Posts.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getPosts()
     {
@@ -161,13 +160,12 @@ class User extends BaseUser
     /**
      * Add Stars.
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
-     *
+     * @param Star $star
      * @return User
      */
-    public function addStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function addStar(Star $star)
     {
-        $this->Stars[] = $stars;
+        $this->Stars[] = $star;
 
         return $this;
     }
@@ -175,17 +173,20 @@ class User extends BaseUser
     /**
      * Remove Stars.
      *
-     * @param \Frigg\KeeprBundle\Entity\Star $stars
+     * @param Star $star
+     * @return User
      */
-    public function removeStar(\Frigg\KeeprBundle\Entity\Star $stars)
+    public function removeStar(Star $star)
     {
-        $this->Stars->removeElement($stars);
+        $this->Stars->removeElement($star);
+
+        return $this;
     }
 
     /**
      * Get Stars.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getStars()
     {

@@ -12,7 +12,6 @@ class UserVoter extends BaseVoter implements VoterInterface
 {
     /**
      * @param string $attribute
-     *
      * @return bool
      */
     public function supportsAttribute($attribute)
@@ -24,7 +23,6 @@ class UserVoter extends BaseVoter implements VoterInterface
      * @param TokenInterface $token
      * @param null|object    $userEntity
      * @param array          $attributes
-     *
      * @return int
      */
     public function vote(TokenInterface $token, $userEntity, array $attributes)
