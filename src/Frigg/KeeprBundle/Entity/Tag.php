@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
@@ -194,13 +195,13 @@ class Tag implements SanitizableIdentifierInterface
     /**
      * Add Posts.
      *
-     * @param Post $posts
+     * @param Post $post
      * @return Tag
      */
-    public function addPost(Post $posts)
+    public function addPost(Post $post)
     {
-        if (!$this->Posts->contains($posts)) {
-            $this->Posts->add($posts);
+        if (!$this->Posts->contains($post)) {
+            $this->Posts->add($post);
         }
 
         return $this;
@@ -209,12 +210,12 @@ class Tag implements SanitizableIdentifierInterface
     /**
      * Remove Posts.
      *
-     * @param Post $posts
+     * @param Post $post
      * @return Tag
      */
-    public function removePost(Post $posts)
+    public function removePost(Post $post)
     {
-        $this->Posts->removeElement($posts);
+        $this->Posts->removeElement($post);
 
         return $this;
     }
@@ -222,7 +223,7 @@ class Tag implements SanitizableIdentifierInterface
     /**
      * Get Posts.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getPosts()
     {
