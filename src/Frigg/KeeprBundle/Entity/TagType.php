@@ -72,12 +72,12 @@ class TagType
     /**
      * Add Tags.
      *
-     * @param Tag $tags
+     * @param Tag $tag
      * @return TagType
      */
-    public function addTag(Tag $tags)
+    public function addTag(Tag $tag)
     {
-        $this->Tags[] = $tags;
+        $this->Tags[] = $tag;
 
         return $this;
     }
@@ -85,12 +85,12 @@ class TagType
     /**
      * Remove Tags.
      *
-     * @param Tag $tags
+     * @param Tag $tag
      * @return TagType
      */
-    public function removeTag(Tag $tags)
+    public function removeTag(Tag $tag)
     {
-        $this->Tags->removeElement($tags);
+        $this->Tags->removeElement($tag);
 
         return $this;
     }

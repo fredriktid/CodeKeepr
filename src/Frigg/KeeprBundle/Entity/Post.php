@@ -352,7 +352,7 @@ class Post implements SanitizableIdentifierInterface
     /**
      * Get Stars.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getStars()
     {
