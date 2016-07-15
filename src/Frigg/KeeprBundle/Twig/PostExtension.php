@@ -52,7 +52,6 @@ class PostExtension extends \Twig_Extension
 
     /**
      * @param $postEntity
-     *
      * @return mixed
      */
     public function commentCount($postEntity)
@@ -62,7 +61,6 @@ class PostExtension extends \Twig_Extension
 
     /**
      * @param $postEntity
-     *
      * @return bool|null
      */
     public function isStarred($postEntity)

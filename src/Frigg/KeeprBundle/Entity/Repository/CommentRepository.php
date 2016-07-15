@@ -12,7 +12,6 @@ class CommentRepository extends EntityRepository
 {
     /**
      * @param Post $post
-     *
      * @return mixed
      */
     public function postCount(Post $post)

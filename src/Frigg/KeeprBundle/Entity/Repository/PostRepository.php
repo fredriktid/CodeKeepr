@@ -31,8 +31,6 @@ class PostRepository extends EntityRepository
     }
 
     /**
-     * @param $user
-     *
      * @return array
      */
     public function loadPrivate($user)
@@ -54,7 +52,6 @@ class PostRepository extends EntityRepository
 
     /**
      * @param Tag $tag
-     *
      * @return array
      */
     public function loadByTag(Tag $tag)
@@ -77,7 +74,6 @@ class PostRepository extends EntityRepository
 
     /**
      * @param UserInterface $user
-     *
      * @return array
      */
     public function loadByUser(UserInterface $user)
@@ -99,7 +95,6 @@ class PostRepository extends EntityRepository
 
     /**
      * @param UserInterface $user
-     *
      * @return array
      */
     public function loadStarred(UserInterface $user)
@@ -121,7 +116,6 @@ class PostRepository extends EntityRepository
     /**
      * @param $fromTs
      * @param $toTs
-     *
      * @return array
      */
     public function loadPeriod($fromTs, $toTs)

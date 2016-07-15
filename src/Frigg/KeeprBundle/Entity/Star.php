@@ -73,7 +73,6 @@ class Star
      * Set Post.
      *
      * @param Post $post
-     *
      * @return Star
      */
     public function setPost(Post $post)
@@ -86,7 +85,7 @@ class Star
     /**
      * Get Post.
      *
-     * @return \Frigg\KeeprBundle\Entity\Post
+     * @return Post
      */
     public function getPost()
     {
@@ -97,7 +96,6 @@ class Star
      * Set created_at.
      *
      * @param \DateTime $createdAt
-     *
      * @return Star
      */
     public function setCreatedAt($createdAt)

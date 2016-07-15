@@ -43,7 +43,6 @@ class BaseVoter
 
     /**
      * @param $entity
-     *
      * @return mixed
      */
     protected function className($entity)
@@ -55,7 +54,6 @@ class BaseVoter
 
     /**
      * @param $entity
-     *
      * @return bool
      */
     public function supportsClass($entity)

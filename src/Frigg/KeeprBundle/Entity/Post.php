@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -267,14 +268,14 @@ class Post
     /**
      * Add Tags.
      *
-     * @param Tag $tags
+     * @param Tag $tag
      *
      * @return Post
      */
-    public function addTag(Tag $tags)
+    public function addTag(Tag $tag)
     {
-        if (!$this->Tags->contains($tags)) {
-            $this->Tags->add($tags);
+        if (!$this->Tags->contains($tag)) {
+            $this->Tags->add($tag);
         }
 
         return $this;
@@ -283,17 +284,20 @@ class Post
     /**
      * Remove Tags.
      *
-     * @param Tag $tags
+     * @param Tag $tag
+     * @return Post
      */
-    public function removeTag(Tag $tags)
+    public function removeTag(Tag $tag)
     {
-        $this->Tags->removeElement($tags);
+        $this->Tags->removeElement($tag);
+
+        return $this;
     }
 
     /**
      * Get Tags.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getTags()
     {
@@ -304,7 +308,6 @@ class Post
      * Set Language.
      *
      * @param Language $language
-     *
      * @return Post
      */
     public function setLanguage(Language $language)
@@ -327,13 +330,12 @@ class Post
     /**
      * Add Stars.
      *
-     * @param Star $stars
-     *
+     * @param Star $star
      * @return Post
      */
-    public function addStar(Star $stars)
+    public function addStar(Star $star)
     {
-        $this->Stars[] = $stars;
+        $this->Stars[] = $star;
 
         return $this;
     }
@@ -341,11 +343,11 @@ class Post
     /**
      * Remove Stars.
      *
-     * @param Star $stars
+     * @param Star $star
      */
-    public function removeStar(Star $stars)
+    public function removeStar(Star $star)
     {
-        $this->Stars->removeElement($stars);
+        $this->Stars->removeElement($star);
     }
 
     /**
@@ -362,7 +364,6 @@ class Post
      * Set private.
      *
      * @param bool $private
-     *
      * @return Post
      */
     public function setPrivate($private)

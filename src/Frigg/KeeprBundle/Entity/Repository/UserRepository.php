@@ -11,7 +11,6 @@ class UserRepository extends EntityRepository
 {
     /**
      * @param $limit
-     *
      * @return array
      */
     public function loadMostActive($limit)

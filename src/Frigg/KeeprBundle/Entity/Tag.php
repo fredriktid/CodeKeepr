@@ -77,7 +77,6 @@ class Tag
      * Set name.
      *
      * @param string $name
-     *
      * @return Tag
      */
     public function setName($name)
@@ -114,7 +113,6 @@ class Tag
      * Set identifier.
      *
      * @param string $identifier
-     *
      * @return Tag
      */
     public function setIdentifier($identifier)
@@ -150,7 +148,6 @@ class Tag
      * Set created_at.
      *
      * @param \DateTime $createdAt
-     *
      * @return Tag
      */
     public function setCreatedAt($createdAt)
@@ -174,7 +171,6 @@ class Tag
      * Set TagType.
      *
      * @param TagType $tagType
-     *
      * @return Tag
      */
     public function setTagType(TagType $tagType)
@@ -197,11 +193,10 @@ class Tag
     /**
      * Add Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
-     *
+     * @param Post $posts
      * @return Tag
      */
-    public function addPost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function addPost(Post $posts)
     {
         if (!$this->Posts->contains($posts)) {
             $this->Posts->add($posts);
@@ -213,11 +208,14 @@ class Tag
     /**
      * Remove Posts.
      *
-     * @param \Frigg\KeeprBundle\Entity\Post $posts
+     * @param Post $posts
+     * @return Tag
      */
-    public function removePost(\Frigg\KeeprBundle\Entity\Post $posts)
+    public function removePost(Post $posts)
     {
         $this->Posts->removeElement($posts);
+
+        return $this;
     }
 
     /**
