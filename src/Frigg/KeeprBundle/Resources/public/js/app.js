@@ -7,8 +7,6 @@
 
         this.init = function() {
 
-            console.log('INIT');
-
             this.find('.chosen').chosen({
                 disable_search_threshold: 5
             });
@@ -38,7 +36,7 @@
             switch (this.mode) {
 
                 case 'main':
-                    this.find('input.search-query').select();
+                    this.find('input#search').select();
                     break;
 
                 case 'edit':

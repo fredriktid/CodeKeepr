@@ -58,7 +58,7 @@
         {% block javascripts %}
             <script type="text/javascript">
                 $(document).ready( function(){
-                    $('#content').codekeepr().init().setMode('{% block mode %}main{% endblock %}').update();
+                    $('body').codekeepr().init().setMode('{% block mode %}main{% endblock %}').update();
                 });
             </script>
         {% endblock %}
