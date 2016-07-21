@@ -90,7 +90,7 @@ class StarController extends Controller
             $em->remove($starEntity);
             $em->flush();
             $session->getFlashBag()->add(
-                'notice',
+                'info',
                 $translator->trans(
                     'Unstarred "topic"',
                     ['topic' => $postEntity->getTopic()]
