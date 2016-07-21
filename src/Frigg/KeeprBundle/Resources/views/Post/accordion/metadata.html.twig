@@ -1,24 +1,46 @@
-{% set tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
-
-{% for tag in tags %}
-    <a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">
-        <span class="label label-inverse tag-badge">{{ tag.name }}</span>
+<div class="accordion-author">
+    <a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">
+        {{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('user_posts', {'id': post.user.id}) }}">{{ post.user.username }}
     </a>
-{% endfor %}
+</div>
+<div class="accordion-metadata">
 
-{% set comment_count = post|comment_count %}
+    {% if is_granted('POST_EDIT', post) %}
+        <a href="{{ path('post_edit', {'id': post.id}) }}" title="{{ 'Edit'|trans }}">
+            <span class="badge">
+                <i class="glyphicon glyphicon-edit"></i>
+            </span>
+        </a>
+    {% endif %}
 
-{% if comment_count %}
-    <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
-        <span class="badge badge-info">
-            <i class="icon-comment"></i>
+    {% if is_granted('POST_DELETE', post) %}
+        <a href="{{ path('post_delete_confirm', {'id': post.id}) }}" title="{{ 'Delete'|trans }}">
+            <span class="badge">
+                <i class="glyphicon glyphicon-trash"></i>
+            </span>
+        </a>
+    {% endif %}
+
+    {% if not full_view %}
+        <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}">
+            <span class="badge">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </span>
+        </a>
+    {% endif %}
+
+    {% if comment_count %}
+        <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
+            <i class="glyphicon glyphicon-comment"></i>
             {{ comment_count }}
-        </span>
-    </a>
-{% endif %}
+        </a>
+    {% endif %}
 
-{% if not full_view %}
-    <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}">
-        <i class="icon-fullscreen"></i>
-    </a>
-{% endif %}
+    {% for tag in tags %}
+        <a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">
+            <span class="badge">
+                {{ tag.name }}
+            </span>
+        </a>
+    {% endfor %}
+</div>

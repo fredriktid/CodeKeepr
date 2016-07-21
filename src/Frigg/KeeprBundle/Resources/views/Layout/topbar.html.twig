@@ -1,0 +1,35 @@
+<h1 id="logo">
+    <a href="{{ path('home') }}">{{ 'CodeKeepr'|trans }}</a>
+</h1>
+<div class="crumb hidden-sm hidden-xs">
+    <i class="glyphicon glyphicon-chevron-right"></i>
+    {{ crumb }}
+</div>
+<div class="menu">
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('user_posts', {'id': app.user.id}) }}">
+            <i class="glyphicon glyphicon-book"></i>
+            <span class="menu-item">{{ 'My posts'|trans }}</span>
+        </a>
+
+        <a href="{{ path('user_starred_posts', {'id': app.user.id}) }}">
+            <i class="glyphicon glyphicon-star"></i>
+            <span class="menu-item">{{ 'Starred'|trans }}</span>
+        </a>
+
+        <a href="{{ path('user_private_posts', {'id': app.user.id}) }}">
+            <i class="glyphicon glyphicon-lock"></i>
+            <span class="menu-item">{{ 'Private'|trans }}</span>
+        </a>
+    {% endif %}
+
+    <a href="{{ path('fos_user_profile_show') }}">
+        <i class="glyphicon glyphicon-user"></i>
+        <span class="menu-item">{{ 'Your account'|trans }}</span>
+    </a>
+
+    <a href="{{ path('post_new') }}">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span class="menu-item">{{ 'Add post'|trans }}</span>
+    </a>
+</div>

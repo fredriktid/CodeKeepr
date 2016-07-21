@@ -44,7 +44,9 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $userEntity->getUsername(),
+            'title' =>  $this->get('translator')->trans(
+                'My posts'
+            )
         ];
     }
 
@@ -80,7 +82,9 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $userEntity->getUsername(),
+            'title' => $this->get('translator')->trans(
+                'My private posts'
+            )
         ];
     }
 
@@ -116,7 +120,9 @@ class UserController extends Controller
 
         return [
             'posts' => $pagination,
-            'title' => $this->get('translator')->trans('Starred'),
+            'title' => $this->get('translator')->trans(
+                'My starred posts'
+            )
         ];
     }
 }

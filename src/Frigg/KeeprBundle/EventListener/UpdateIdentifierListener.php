@@ -14,24 +14,17 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class UpdateIdentifierListener
 {
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * UpdateIdentifierListener constructor.
      *
-     * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
     }
 
     /**
      * @param LifecycleEventArgs $arguments
      */
-    public function postPersist(LifecycleEventArgs $arguments)
+    public function prePersist(LifecycleEventArgs $arguments)
     {
         $entity = $arguments->getEntity();
         $this->setIdentifier($entity);
@@ -40,7 +33,7 @@ class UpdateIdentifierListener
     /**
      * @param LifecycleEventArgs $arguments
      */
-    public function postUpdate(LifecycleEventArgs $arguments)
+    public function preUpdate(LifecycleEventArgs $arguments)
     {
         $entity = $arguments->getEntity();
         $this->setIdentifier($entity);
@@ -57,10 +50,6 @@ class UpdateIdentifierListener
         }
 
         $entity->setIdentifier($entity->generateIdentifier());
-
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $em->persist($entity);
-        $em->flush();
 
         return $entity;
     }
