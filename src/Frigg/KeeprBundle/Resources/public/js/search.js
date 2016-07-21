@@ -4,7 +4,7 @@
 
         var context = this;
 
-        this.autocomplete = function() {
+        this.autocomplete = function(callback) {
             var spinnerText = '...',
                 delay = (function(){
                 var timer = 0;
@@ -30,6 +30,7 @@
                         },
                         success: function(data) {
                             $('#posts').html(data);
+                            callback();
                         },
                         error: function(data) {
                         }

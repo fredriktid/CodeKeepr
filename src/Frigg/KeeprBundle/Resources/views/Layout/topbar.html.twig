@@ -31,6 +31,13 @@
     {% endif %}
 
     <div class="menu-item">
+        <a href="{{ path('stats_index') }}">
+            <i class="glyphicon glyphicon-stats"></i>
+            <span class="menu-item-title">{{ 'Stats'|trans }}</span>
+        </a>
+    </div>
+
+    <div class="menu-item">
         <a href="{{ path('fos_user_profile_show') }}">
             <i class="glyphicon glyphicon-user"></i>
             <span class="menu-item-title">{{ 'Your account'|trans }}</span>

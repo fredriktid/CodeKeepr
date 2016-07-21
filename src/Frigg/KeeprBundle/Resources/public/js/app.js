@@ -12,14 +12,20 @@
             });
 
             this.find('input.autocomplete').each(function (index, value) {
-                $(this).codekeeprSearch().autocomplete();
+                $(this).codekeeprSearch().autocomplete(
+                    context.highlight
+                );
             });
 
-            this.find('pre code').each(function(i, block) {
-                hljs.highlightBlock(block);
-            });
+            this.highlight();
 
             return this;
+        };
+
+        this.highlight = function() {
+            $('pre code').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
         };
 
         this.setMode = function(mode) {
