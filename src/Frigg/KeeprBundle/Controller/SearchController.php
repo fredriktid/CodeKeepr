@@ -75,7 +75,7 @@ class SearchController extends Controller
      */
     public function listAction($type)
     {
-        $queryText = $this->get('request')->query->get('query', '*');
+        $queryText = $this->get('request')->query->get('query', '*') ?: '*';
         $currentPage = $this->get('request')->query->get('page', 1);
 
         $queryString = new Query\QueryString();
