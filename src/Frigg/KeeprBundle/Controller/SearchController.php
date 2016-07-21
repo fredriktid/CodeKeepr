@@ -2,11 +2,13 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Elastica\Filter\Range;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Elastica\Query;
 
 /**
  * Search controller.
@@ -64,7 +66,6 @@ class SearchController extends Controller
         ];
     }
 
-
     /**
      * Search and show list.
      *
@@ -74,8 +75,16 @@ class SearchController extends Controller
      */
     public function listAction($type)
     {
-        $query = $this->get('request')->query->get('query', '*');
-        $page = $this->get('request')->query->get('page', 1);
+        $queryText = $this->get('request')->query->get('query', '*');
+        $currentPage = $this->get('request')->query->get('page', 1);
+
+        $queryString = new Query\QueryString();
+        $queryString->setQuery($queryText);
+
+        $query = new Query();
+        $query->setSort(['created_at' => ['order' => 'desc']]);
+        $query->setQuery($queryString);
+        $query->setSize(99999);
 
         $finder = $this->get('fos_elastica.finder.website.' . $type);
         $results = $finder->find($query);
@@ -83,12 +92,59 @@ class SearchController extends Controller
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $results,
-            $page,
+            $currentPage,
             20
         );
 
         return [
-            'posts' => $pagination
+            'posts' => $pagination,
+            'current_page' => $currentPage,
+            'query_text' => $queryText,
+        ];
+    }
+
+    /**
+     * Posts by date
+     *
+     * @Route("/date/{dateString}", name="search_date")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:list.html.twig")
+     */
+    public function dateAction($dateString)
+    {
+        $queryText = $this->get('request')->query->get('query', '*');
+        $currentPage = $this->get('request')->query->get('page', 1);
+
+        $queryString = new Query\QueryString();
+        $queryString->setQuery($queryText);
+
+        $rangeLower = new Query\Filtered($queryString, new Range('created_at', [
+            'gte' => date('Y-m-d H:i:s', strtotime($dateString))
+        ]));
+
+        $rangeHigher = new Query\Filtered($rangeLower, new Range('created_at', [
+            'lte' => date('Y-m-d H:i:s', strtotime($dateString))
+        ]));
+
+        $query = new Query();
+        $query->setSort(['created_at' => ['order' => 'desc']]);
+        $query->setQuery($rangeHigher);
+        $query->setSize(99999);
+
+        $finder = $this->get('fos_elastica.finder.website.post');
+        $results = $finder->find($query);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $results,
+            $currentPage,
+            20
+        );
+
+        return [
+            'posts' => $pagination,
+            'current_page' => $currentPage,
+            'query_text' => $queryText,
         ];
     }
 

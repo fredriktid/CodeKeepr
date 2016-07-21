@@ -28,7 +28,6 @@ class StatsController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $postTimeline = $em->getRepository('FriggKeeprBundle:Post')->loadTimelineDatapoints('json');
         $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular(10);
         $activeUsers = $em->getRepository('FriggKeeprBundle:User')->loadMostActive(5);
 
