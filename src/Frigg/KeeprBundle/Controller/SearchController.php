@@ -64,8 +64,36 @@ class SearchController extends Controller
         ];
     }
 
+
     /**
-     * Search form.
+     * Search and show list.
+     *
+     * @Route("/list/{type}", name="search_list", defaults={"type" = "post"})
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:list.html.twig")
+     */
+    public function listAction($type)
+    {
+        $query = $this->get('request')->query->get('query', '');
+        $page = $this->get('request')->query->get('page', 1);
+
+        $finder = $this->get('fos_elastica.finder.website.' . $type);
+        $results = $finder->find($query);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $results,
+            $page,
+            20
+        );
+
+        return [
+            'posts' => $pagination
+        ];
+    }
+
+    /**
+     * jQuery Autocomplete
      *
      * @Route("/autocomplete/{type}", name="search_autocomplete", defaults={"type" = "post"})
      * @Method("GET")

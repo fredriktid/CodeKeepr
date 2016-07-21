@@ -78,10 +78,13 @@ pre {
     display: inline-block;
     font-size: 1.5em;
     float: right;
-    word-spacing: 0.5em;
 }
 
 #topbar .menu .menu-item {
+    margin-left: 0.5em;
+}
+
+#topbar .menu .menu-item-title {
     display: none;
 }
 
@@ -194,5 +197,24 @@ form#post-new ul.tags input.autocomplete {
     color: #555555;
     margin-left: 5px;
     padding: 5px;
+}
+
+input#search {
+    background: transparent;
+    padding: 0.5em;
+    font-size: 1.25em;
+    border-radius: 0;
+    color: #656565;
+    height: 50px;
+    outline: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-bottom: 1px solid #B1B1B1;
+    box-shadow: none;
+    margin-bottom: 1em;
 }
 

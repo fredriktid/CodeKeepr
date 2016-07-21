@@ -5,29 +5,37 @@
         var context = this;
 
         this.autocomplete = function() {
-            var searchType = $(this).data('type');
-            $(this).autocomplete({
-                source: function (request, response) {
-                    jQuery.ajax({
-                        url: '/search/autocomplete/' + searchType,
-                        dataType: 'json',
+            var spinnerText = '...',
+                delay = (function(){
+                var timer = 0;
+                return function(callback, ms){
+                    clearTimeout (timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+
+            this.bind('keyup', function() {
+                var query = $(this).val();
+                if (query.length < 2) {
+                    return false;
+                }
+
+                $('#posts').html(spinnerText);
+
+                delay(function() {
+                    $.ajax({
+                        url: '/search/list',
                         data: {
-                            query: request.term,
-                            method: 'json'
+                            'query': query
                         },
-                        success: function (data) {
-                            response(data);
+                        success: function(data) {
+                            $('#posts').html(data);
+                        },
+                        error: function(data) {
                         }
                     });
-                },
-                type: 'json',
-                select: function (event, ui) {
-                    if (searchType == 'post') {
-                        window.location.replace(ui.item.url);
-                    }
-                }
+                }, 200);
             });
-
         };
 
         this.data('context', this);
