@@ -103,7 +103,7 @@ pre {
 }
 
 .accordion-group .accordion-toggle {
-    display: block;
+    display: inline-block;
     padding: 0;
     color: #666;
     font-weight: bold;
@@ -218,3 +218,15 @@ input#search {
     margin-bottom: 1em;
 }
 
+a.star,
+a.star:hover,
+a.star:active,
+a.star:focus {
+    color: #666;
+}
+
+a.star:hover,
+a.star:active,
+a.star:focus {
+    text-decoration: none;
+}
