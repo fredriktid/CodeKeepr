@@ -16,26 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class LayoutController extends Controller
 {
     /**
-     * Sidebar template.
-     *
-     * @Route("/sidebar", name="layout_sidebar", defaults={"currentRoute": null})
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Layout:sidebar.html.twig")
-     */
-    public function sidebarAction($currentRoute)
-    {
-        $em = $this->get('doctrine.orm.entity_manager');
-        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular(10);
-        $popularUsers = $em->getRepository('FriggKeeprBundle:User')->loadMostActive(5);
-
-        return [
-            'current_route' => $currentRoute,
-            'tags' => $popularTags,
-            'users' => $popularUsers,
-        ];
-    }
-
-    /**
      * Security token.
      *
      * @Route("/token", name="layout_token")

@@ -33,7 +33,7 @@ class StarController extends Controller
         if (!$securityContext->isGranted('ROLE_USER')) {
             $message = $translator->trans('You must be logged in to star something');
             $session->getFlashBag()->add(
-                'error',
+                'warning',
                 $message
             );
 
@@ -48,7 +48,7 @@ class StarController extends Controller
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             $message = $translator->trans('Post not found');
             $session->getFlashBag()->add(
-                'error',
+                'warning',
                 $message
             );
 
@@ -60,7 +60,7 @@ class StarController extends Controller
         if (!$securityContext->isGranted('POST_STAR_NEW', $postEntity)) {
             $message = $translator->trans('Insufficient permissions to add star');
             $session->getFlashBag()->add(
-                'error',
+                'warning',
                 $message
             );
 
@@ -82,7 +82,7 @@ class StarController extends Controller
             $session->getFlashBag()->add(
                 'success',
                 $translator->trans(
-                    'Added star on "topic"',
+                    'Starred "topic"',
                     ['topic' => $postEntity->getTopic()]
                 )
             );

@@ -74,7 +74,7 @@ class SearchController extends Controller
      */
     public function listAction($type)
     {
-        $query = $this->get('request')->query->get('query', '');
+        $query = $this->get('request')->query->get('query', '*');
         $page = $this->get('request')->query->get('page', 1);
 
         $finder = $this->get('fos_elastica.finder.website.' . $type);
