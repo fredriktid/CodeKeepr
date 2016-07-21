@@ -9,7 +9,7 @@
 
             this.tags = $(this);
 
-            var $add = $('<a href="#" class="add_tag_link margin-bottom btn"><i class="icon-tag"></i> Add tag</a>');
+            var $add = $('<a href="#" class="add_tag_link margin-bottom btn btn-default"><i class="icon-tag"></i> Add tag</a>');
             var $new = $('<li></li>').append($add);
 
             $(this).find('li').each(function() {
@@ -50,7 +50,7 @@
 
         this.addDelete = function($form) {
 
-            var $deleteForm = $('<a href="#" class="btn btn-danger btn-tag-delete"><i class="icon-trash icon-white"></i></a>');
+            var $deleteForm = $('<a href="#" class="btn btn-danger btn-tag-delete"><i class="glyphicon glyphicon-trash"></i></a>');
             $form.prepend($deleteForm);
 
             $deleteForm.on('click', function(e) {

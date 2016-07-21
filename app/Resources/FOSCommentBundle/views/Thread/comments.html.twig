@@ -15,14 +15,11 @@
     {% endif %}
 
     {% if not fos_comment_can_comment_thread(thread) %}
-        <div class="row-fluid">
-        <div class="alert fade in">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             You must be <a href="{{ path('fos_user_security_login') }}">logged in</a> to comment and vote
         </div>
-            </div>
     {% endif %}
-
 {% endif %}
 
 {% for commentinfo in comments %}

@@ -1,7 +1,7 @@
 parameters:
     codekeepr.config: "%kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/config/codekeepr.yml"
     codekeepr.registration.class: Frigg\KeeprBundle\EventListener\RegistrationListener
-    codekeepr.activity.class: Frigg\KeeprBundle\EventListener\ActivityListener
+    codekeepr.listener.identifier.class: Frigg\KeeprBundle\EventListener\UpdateIdentifierListener
     codekeepr.post.twig.class: Frigg\KeeprBundle\Twig\PostExtension
     codekeepr.post.voter.class: Frigg\KeeprBundle\Security\Voter\PostVoter
     codekeepr.user.twig.class: Frigg\KeeprBundle\Twig\UserExtension
@@ -17,12 +17,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    codekeepr.activity:
-        class: %codekeepr.activity.class%
-        arguments: [@service_container]
+    codekeepr.listener.identifier:
+        class: %codekeepr.listener.identifier.class%
         tags:
-            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
-            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate, method: postUpdate }
 
     # twig extensions
     codekeepr.post.twig:
@@ -36,7 +35,6 @@ services:
         arguments: [@doctrine.orm.entity_manager, @security.context]
         tags:
             - { name: twig.extension }
-
 
     # voters
     codekeepr.post.voter:
@@ -54,4 +52,3 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: security.voter }
-

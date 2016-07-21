@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
@@ -24,7 +25,7 @@ class Language implements SanitizableIdentifierInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", unique=true, length=255)
+     * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
     private $identifier;
 
@@ -104,7 +105,7 @@ class Language implements SanitizableIdentifierInterface
      *
      * @return string
      */
-    public function generateSanitizedIdentifier()
+    public function generateIdentifier()
     {
         return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($this->getName())), '_');
     }
@@ -120,15 +121,15 @@ class Language implements SanitizableIdentifierInterface
     }
 
     /**
-     * Add Posts.
+     * Add Post.
      *
-     * @param Post $posts
+     * @param Post $post
      *
      * @return Language
      */
-    public function addPost(Post $posts)
+    public function addPost(Post $post)
     {
-        $this->Posts[] = $posts;
+        $this->Posts[] = $post;
 
         return $this;
     }
@@ -136,13 +137,13 @@ class Language implements SanitizableIdentifierInterface
     /**
      * Remove Posts.
      *
-     * @param Post $posts
+     * @param Post $post
      *
      * @return Language
      */
-    public function removePost(Post $posts)
+    public function removePost(Post $post)
     {
-        $this->Posts->removeElement($posts);
+        $this->Posts->removeElement($post);
 
         return $this;
     }
@@ -150,7 +151,7 @@ class Language implements SanitizableIdentifierInterface
     /**
      * Get Posts.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getPosts()
     {

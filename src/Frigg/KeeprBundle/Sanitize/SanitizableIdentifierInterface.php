@@ -12,7 +12,7 @@ interface SanitizableIdentifierInterface
      *
      * @return string
      */
-    public function generateSanitizedIdentifier();
+    public function generateIdentifier();
 
     /**
      * Sets an identifier
@@ -21,4 +21,11 @@ interface SanitizableIdentifierInterface
      * @return mixed
      */
     public function setIdentifier($identifier);
+
+    /**
+     * Returns current identifier
+     *
+     * @return string
+     */
+    public function getIdentifier();
 }

@@ -15,7 +15,7 @@ class StarRepository extends EntityRepository
     /**
      * @param Post $post
      * @param User $user
-     * @return true|null
+     * @return Star|null
      */
     public function isStarred(Post $post, User $user)
     {
