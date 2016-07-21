@@ -7,6 +7,8 @@
 
         this.init = function() {
 
+            console.log('INIT');
+
             this.find('.chosen').chosen({
                 disable_search_threshold: 5
             });

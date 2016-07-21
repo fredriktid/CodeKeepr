@@ -19,10 +19,9 @@ services:
 
     codekeepr.listener.identifier:
         class: %codekeepr.listener.identifier.class%
-        arguments: [@service_container]
         tags:
-            - { name: doctrine.event_listener, event: postPersist, method: postPersist }
-            - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate, method: postUpdate }
 
     # twig extensions
     codekeepr.post.twig:

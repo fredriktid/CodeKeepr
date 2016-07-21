@@ -1,0 +1,11 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<form action="/resetting/send-email" method="POST" class="fos_user_resetting_request">
+    <div class="form-group">
+        <label for="username">{{ 'Username or email address'|trans }}</label>
+        <input class="form-control" type="text" id="username" name="username" required="required">
+    </div>
+    <div>
+        <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" class="btn btn-default" />
+    </div>
+</form>

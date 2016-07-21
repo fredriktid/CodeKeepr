@@ -1,17 +1,16 @@
-{%  set full_view = (view is defined and view == 'full') %}
+{% set full_view = (view is defined and view == 'full') %}
+{% set comment_count = post|comment_count %}
+{% set tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
 <div class="accordion-group">
 	<div class="accordion-heading">
 		<div class="accordion-content">
-			<div class="pull-right">
-				{% include 'FriggKeeprBundle:Post:accordion/metadata.html.twig' %}
-			</div>
 			{% include 'FriggKeeprBundle:Post:accordion/topic.html.twig' %}
+			{% include 'FriggKeeprBundle:Post:accordion/metadata.html.twig' %}
 		</div>
 	</div>
 	<div id="{{ post.identifier }}" class="accordion-body collapse{% if full_view %} in{% endif %}">
 		<div class="accordion-inner">
 			{% include 'FriggKeeprBundle:Post:accordion/code.html.twig' %}
-			{% include 'FriggKeeprBundle:Post:accordion/toolbar.html.twig' %}
 		</div>
 	</div>
 </div>

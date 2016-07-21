@@ -8,32 +8,33 @@
 
 {% block body %}
     {% if error %}
-        <div class="alert fade in">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             {{ error.message|trans }}
         </div>
     {% endif %}
-    <form action="{{ path("fos_user_security_check") }}" method="post" class="well">
-        <div style="padding: 10px">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-            <div>
-                <label for="username">{{ 'Email'|trans }}</label>
-                <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-            </div>
-            <div>
-                <label for="username">{{ 'Password'|trans }}</label>
-                <input type="password" id="password" name="_password" required="required" />
-            </div>
-            <div>
-                <label class="checkbox">
-                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> {{ 'Remember me'|trans }}
-                </label>
-            </div>
-            <div>
-                <input type="submit" id="_submit" name="_submit" value="{{ 'Login'|trans }}" class="btn" />
-            </div>
-            <p class="margin-top">
-                <a href="{{ path('fos_user_resetting_request') }}">{{ 'Missing password? Reset here'|trans }}</a>
-            </p>
+
+    <form class="form" action="{{ path("fos_user_security_check") }}" method="post">
+        <input type="hidden" name="_csrf_token" value="{% render(controller('FriggKeeprBundle:Layout:getToken')) %}" />
+        <input type="hidden" id="remember_me" name="_remember_me" value="on">
+        <div class="form-group">
+            <label for="input-username">Email address</label>
+            <input id="input-username" name="_username" type="text" class="form-control input-medium" placeholder="Email">
         </div>
+        <div class="form-group">
+            <label for="input-password">Password</label>
+            <input id="input-password" name="_password" type="password" class="form-control input-medium" placeholder="Password">
+        </div>
+        <button name="_submit" type="submit" class="btn btn-default">{{ 'Login'|trans }}</button>
     </form>
+
+    <div class="margin-top">Other actions:</div>
+    <ul>
+        <li>
+            <a href="{{ path('fos_user_resetting_request') }}">{{ 'Forgot password?'|trans }}</a>
+        </li>
+        <li>
+            <a href="{{ path('fos_user_registration_register') }}">{{ 'Register account'|trans }}</a>
+        </li>
+    </ul>
 {% endblock %}
