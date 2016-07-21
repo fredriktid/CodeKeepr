@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class StatsController extends Controller
 {
     /**
-     * Add star to a post.
+     * Shows main statistics
      *
      * @Route("/", name="stats_index")
      * @Method("GET")
@@ -26,6 +26,15 @@ class StatsController extends Controller
      */
     public function indexAction()
     {
-        return [];
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $postTimeline = $em->getRepository('FriggKeeprBundle:Post')->loadTimelineDatapoints('json');
+        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular(10);
+        $activeUsers = $em->getRepository('FriggKeeprBundle:User')->loadMostActive(5);
+
+        return [
+            'popular_tags' => $popularTags,
+            'active_users' => $activeUsers
+        ];
     }
 }

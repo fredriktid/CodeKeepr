@@ -1,14 +1,10 @@
-{% if posts is defined %}
-    {% if posts.getTotalItemCount %}
-        <div class="accordion" id="accordion2">
-            {% for post in posts %}
-                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': post, 'view': 'line'}) }}
-            {% endfor %}
-            <div class="pull-right">
-                {{ knp_pagination_render(posts) }}
-            </div>
+{% if posts.getTotalItemCount %}
+    <div class="accordion" id="accordion2">
+        {% for post in posts %}
+            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': post, 'view': 'line'}) }}
+        {% endfor %}
+        <div class="pull-right">
+            {{ knp_pagination_render(posts) }}
         </div>
-    {% else %}
-        <p class="muted">{{ 'No posts found'|trans }}</p>
-    {% endif %}
+    </div>
 {% endif %}

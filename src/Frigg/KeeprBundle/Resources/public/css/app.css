@@ -40,8 +40,17 @@ pre {
     margin-bottom: 1em;
 }
 
-.margin-top {
-    margin-top: 1em;
+.box {
+    box-sizing: border-box;
+    padding: 1em;
+    background: #FFF;
+    border: 1px solid #EEEEEE;
+}
+
+.box h2,
+.box h3 {
+    color: #666666;
+    margin-top: 10px;
 }
 
 /* Topbar */

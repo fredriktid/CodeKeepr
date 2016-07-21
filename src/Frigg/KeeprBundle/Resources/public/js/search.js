@@ -16,10 +16,6 @@
 
             this.bind('keyup', function() {
                 var query = $(this).val();
-                if (query.length < 2) {
-                    return false;
-                }
-
                 $('#posts').html(spinnerText);
 
                 delay(function() {

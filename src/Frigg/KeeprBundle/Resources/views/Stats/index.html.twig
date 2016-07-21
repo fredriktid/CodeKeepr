@@ -4,5 +4,46 @@
 
 
 {% block body %}
-    Under development...
+    <div class="col-sm-12 col-md-6 box">
+        <h3>
+            Popular tags
+        </h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 10%">#</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in popular_tags %}
+                    <tr>
+                        <td>{{ tag.post_count }}</td>
+                        <td><a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">{{ tag.name }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-12 col-md-6 box">
+        <h3>
+            Active users
+        </h3>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th style="width: 10%">Posts</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in active_users %}
+                <tr>
+                    <td>{{ user.post_count }}</td>
+                    <td><a href="{{ path('user_posts', {'id': user.id}) }}">{{ user.email|generate_username }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

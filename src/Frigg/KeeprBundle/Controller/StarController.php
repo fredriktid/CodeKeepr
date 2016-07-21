@@ -82,7 +82,7 @@ class StarController extends Controller
             $session->getFlashBag()->add(
                 'success',
                 $translator->trans(
-                    'Added star on "topic"',
+                    'Starred "topic"',
                     ['topic' => $postEntity->getTopic()]
                 )
             );
