@@ -1,10 +1,12 @@
 {% extends "FriggKeeprBundle::layout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ 'Home'|trans }}{% endblock %}
 
 {% block body %}
     <input id="search" type="text" class="form-control autocomplete" placeholder="Search">
     <div id="posts">
-        {% include 'FriggKeeprBundle:Post:list.html.twig' %}
+        {% set query_text = (query_text is defined) ? query_text : '' %}
+        {% set current_page = (current_page is defined) ? current_page : 1 %}
+        {{ render_esi(controller('FriggKeeprBundle:Search:list', {'type': 'post'}, {'query': query_text, 'page': current_page})) }}
     </div>
 {% endblock %}

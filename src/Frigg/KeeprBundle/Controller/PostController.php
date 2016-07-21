@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Entity\Post;
 use Frigg\KeeprBundle\Form\PostType;
+use Elastica\Query;
 
 /**
  * Post controller.
@@ -29,20 +30,12 @@ class PostController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->get('doctrine.orm.entity_manager');
-        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPublic();
+        $queryText = $this->get('request')->query->get('query', '*');
         $currentPage = $this->get('request')->query->get('page', 1);
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $publicPosts,
-            $currentPage,
-            20
-        );
-
         return [
-            'posts' => $pagination,
-            'title' => $this->get('translator')->trans('Home'),
+            'query_text' => $queryText,
+            'current_page' => $currentPage
         ];
     }
 

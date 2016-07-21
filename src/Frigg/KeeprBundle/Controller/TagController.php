@@ -48,6 +48,8 @@ class TagController extends Controller
             'title' => $tagEntity->getName(),
             'tag_identifier' => $tagEntity->getIdentifier(),
             'posts' => $pagination,
+            'query_text' => $identifier,
+            'current_page' => $currentPage
         ];
     }
 }
