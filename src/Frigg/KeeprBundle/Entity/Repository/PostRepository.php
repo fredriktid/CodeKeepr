@@ -148,4 +148,9 @@ class PostRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function loadTimelineDatapoints($output)
+    {
+
+    }
 }
