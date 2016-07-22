@@ -8,22 +8,26 @@
 
 {% block body -%}
     {% include 'FriggKeeprBundle:Post:accordion.html.twig' with {'post': entity, 'view': 'full'} %}
-    {{ render_esi(controller('FriggKeeprBundle:Post:thread', {'threadId': 'post_' ~ entity.id})) }}
+    {% if entity.enableComments %}
+        {{ render_esi(controller('FriggKeeprBundle:Post:thread', {'threadId': 'post_' ~ entity.id})) }}
+    {% endif %}
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts '@FOSCommentBundle/Resources/assets/js/comments.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{%  endblock %}
+{% if entity.enableComments %}
+    {% block javascripts %}
+        {{ parent() }}
+        {% javascripts '@FOSCommentBundle/Resources/assets/js/comments.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {%  endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets
-        '@FOSCommentBundle/Resources/assets/css/comments.css'
-        '@FriggKeeprBundle/Resources/public/css/comments.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-    {% endstylesheets %}
-{% endblock %}
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets
+            '@FOSCommentBundle/Resources/assets/css/comments.css'
+            '@FriggKeeprBundle/Resources/public/css/comments.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
+    {% endblock %}
+{% endif %}

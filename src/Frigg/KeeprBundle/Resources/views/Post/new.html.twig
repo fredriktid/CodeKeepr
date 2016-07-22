@@ -2,7 +2,7 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block mode %}edit{%  endblock %}
+{% block mode %}edit{% endblock %}
 
 {% block body -%}
     {{ form_start(form, {'attr': {'id': 'post-new', 'class': 'form-horizontal'}}) }}
@@ -26,6 +26,11 @@
                 <div class="checkbox">
                     <label>
                         {{ form_widget(form.private) }} {{ 'Private'|trans }}
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form_widget(form.enable_comments) }} {{ 'Allow comments'|trans }}
                     </label>
                 </div>
             </div>

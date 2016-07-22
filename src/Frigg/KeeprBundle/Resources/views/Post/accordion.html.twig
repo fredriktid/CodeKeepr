@@ -1,6 +1,5 @@
 {% set full_view = (view is defined and view == 'full') %}
 {% set comment_count = post|comment_count %}
-{% set tags = (full_view) ? post.tags : post.tags|slice(0, 5)  %}
 <div class="accordion-group">
 	<div class="accordion-heading">
 		<div class="accordion-content">

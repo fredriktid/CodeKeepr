@@ -101,6 +101,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/Google_icon_2015_32px.png
             output: img/icons/google.png
+        codekeepr_icon:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/icon.png
+            output: img/icons/codekeepr.png
         # javascript
         chosen_js:
             inputs:

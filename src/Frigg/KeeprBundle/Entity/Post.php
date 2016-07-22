@@ -74,6 +74,11 @@ class Post implements SanitizableIdentifierInterface
     private $Stars;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $enable_comments;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -390,5 +395,21 @@ class Post implements SanitizableIdentifierInterface
     public function isPublic()
     {
         return !$this->private;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnableComments()
+    {
+        return $this->enable_comments;
+    }
+
+    /**
+     * @param mixed $enableComments
+     */
+    public function setEnableComments($enableComments)
+    {
+        $this->enable_comments = $enableComments;
     }
 }

@@ -24,11 +24,11 @@ security:
                 remember_me: true
             oauth:
                 resource_owners:
-                    github:          "/login/check-github"
-                    google:             "/login/check-google"
-                login_path:        /login
-                use_forward:       false
-                failure_path:      /login
+                    github: "/login/check-github"
+                    google: "/login/check-google"
+                login_path: /login
+                use_forward: false
+                failure_path: /login
                 oauth_user_provider:
                     service: codekeepr.oauth.user.provider.service
         main:

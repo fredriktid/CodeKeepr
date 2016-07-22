@@ -37,7 +37,6 @@ class OAuthUserProviderService extends FOSUBUserProvider
         if (null === $user) {
             $user = new User();
             $user->setEmail($email);
-            $user->setUsername($user->generateUsername());
             $user->setPassword(substr(str_shuffle(md5(time())), 0, 10));
             $user->setEnabled(true);
             $user->setRoles(['ROLE_USER']);
