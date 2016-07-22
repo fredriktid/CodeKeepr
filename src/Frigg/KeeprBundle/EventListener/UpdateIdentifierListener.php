@@ -11,7 +11,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  *
  * Class UpdateIdentifierListener.
  */
-class UpdateIdentifierListener
+class   UpdateIdentifierListener
 {
     /**
      * UpdateIdentifierListener constructor.

@@ -93,7 +93,14 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../vendor/friendsofsymfony/comment-bundle/FOS/CommentBundle/Resources/assets/css/comments.css
             output: css/comments.css
-
+        github_icon_mark_small:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/GitHub-Mark-32px.png
+            output: img/icons/github.png
+        google_icon_small:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/Google_icon_2015_32px.png
+            output: img/icons/google.png
         # javascript
         chosen_js:
             inputs:
@@ -228,3 +235,21 @@ fos_elastica:
                         provider: ~
                         listener: ~
                         finder: ~
+
+hwi_oauth:
+    firewall_names: [secured_area]
+    resource_owners:
+        github:
+            type:                github
+            client_id:           %oauth_github_id%
+            client_secret:       %oauth_github_secret%
+        google:
+            type:                google
+            client_id:           %oauth_google_id%
+            client_secret:       %oauth_google_secret%
+            scope:               "email profile"
+    fosub:
+        username_iterations: 30
+        properties:
+            github:    github_id
+
