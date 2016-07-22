@@ -26,6 +26,7 @@ security:
                 resource_owners:
                     github: "/login/check-github"
                     google: "/login/check-google"
+                    reddit: "/login/check-reddit"
                 login_path: /login
                 use_forward: false
                 failure_path: /login

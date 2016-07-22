@@ -12,6 +12,9 @@ github_login:
 google_login:
     path: /login/check-google
 
+reddit_login:
+    path: /login/check-reddit
+
 codekeeper_routing:
     resource: "@FriggKeeprBundle/Resources/config/routing.yml"
     prefix:   /

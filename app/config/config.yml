@@ -101,6 +101,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/Google_icon_2015_32px.png
             output: img/icons/google.png
+        reddit_icon_small:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/Reddit_32px.png
+            output: img/icons/reddit.png
         codekeepr_icon:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/icon.png
@@ -244,15 +248,23 @@ hwi_oauth:
     firewall_names: [secured_area]
     resource_owners:
         github:
-            type:                github
-            client_id:           %oauth_github_id%
-            client_secret:       %oauth_github_secret%
+            type:             github
+            client_id:        %oauth_github_id%
+            client_secret:    %oauth_github_secret%
         google:
-            type:                google
-            client_id:           %oauth_google_id%
-            client_secret:       %oauth_google_secret%
-            scope:               "email profile"
+            type:             google
+            client_id:        %oauth_google_id%
+            client_secret:    %oauth_google_secret%
+            scope:            "email profile"
+        reddit:
+            type:             reddit
+            client_id:        %oauth_reddit_id%
+            client_secret:    %oauth_reddit_secret%
+            state:            "fah3buofjabcua3f"
+            scope:            "identity"
     fosub:
         username_iterations: 30
         properties:
-            github:    github_id
+            github: github_id
+            google: google_id
+            reddit: reddit_id

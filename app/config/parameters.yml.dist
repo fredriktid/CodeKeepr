@@ -22,3 +22,5 @@ parameters:
     oauth_github_secret: 'default'
     oauth_google_id: 'default'
     oauth_google_secret: 'default'
+    oauth_reddit_id: 'default'
+    oauth_reddit_secret: 'default'
