@@ -29,13 +29,13 @@
                             'query': query
                         },
                         success: function(data) {
-                            $('#posts').html(data).slideDown('fast');
+                            $('#posts').html(data).show();
                             callback();
                         },
                         error: function(data) {
                         }
                     });
-                }, 200);
+                }, 100);
             });
         };
 
