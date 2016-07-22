@@ -6,7 +6,7 @@
 
         this.autocomplete = function(callback) {
             var spinnerText = '',
-                delay = (function(){
+                delay = (function() {
                 var timer = 0;
                 return function(callback, ms){
                     clearTimeout (timer);
@@ -35,7 +35,7 @@
                         error: function(data) {
                         }
                     });
-                }, 100);
+                }, 200);
             });
         };
 

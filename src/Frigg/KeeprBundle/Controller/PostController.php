@@ -22,25 +22,6 @@ use Elastica\Query;
 class PostController extends Controller
 {
     /**
-     * Loads all public posts.
-     *
-     * @Route("/", name="post")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:index.html.twig")
-     */
-    public function indexAction()
-    {
-        $queryText = $this->get('request')->query->get('query', '*');
-        $currentPage = $this->get('request')->query->get('page', 1);
-
-        return [
-            'title' => $this->get('translator')->trans('Home'),
-            'query_text' => $queryText,
-            'current_page' => $currentPage
-        ];
-    }
-
-    /**
      * Public posts by date.
      *
      * @Route("/date/{date}", name="post_date")
@@ -50,6 +31,8 @@ class PostController extends Controller
     public function dateAction($date)
     {
         $timestamp = strtotime($date);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
         $interval = [
             'begin' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
             'end' => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
@@ -59,11 +42,12 @@ class PostController extends Controller
         $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPeriod($interval['begin'], $interval['end']);
         $currentPage = $this->get('request')->query->get('page', 1);
 
+
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $publicPosts,
             $currentPage,
-            20
+            $pageLimit
         );
 
         return [
