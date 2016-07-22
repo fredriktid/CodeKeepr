@@ -163,7 +163,7 @@ class SearchController extends Controller
             foreach ($results as $object) {
                 $collection[] = array(
                     'label' => $object->__toString(),
-                    'url' => $this->generateUrl('search', [
+                    'url' => $this->generateUrl('search_index', [
                         'query' => $object->__toString(),
                     ]),
                 );
