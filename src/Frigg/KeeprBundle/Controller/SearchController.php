@@ -144,4 +144,39 @@ class SearchController extends Controller
             'query_text' => $queryText,
         ];
     }
+
+    /**
+     * jQuery Autocomplete
+     *
+     * @Route("/autocomplete/{type}", name="search_autocomplete", defaults={"type" = "post"})
+     * @Method("GET")
+     */
+    public function autocompleteAction($type)
+    {
+        $query = $this->get('request')->query->get('query', '');
+        $method = $this->get('request')->query->get('method', 'json');
+
+        $collection = array();
+        if ($query) {
+            $finder = $this->get('fos_elastica.finder.website.'.$type);
+            $results = $finder->find($query.'*', 5);
+            foreach ($results as $object) {
+                $collection[] = array(
+                    'label' => $object->__toString(),
+                    'url' => $this->generateUrl('search', [
+                        'query' => $object->__toString(),
+                    ]),
+                );
+            }
+        }
+
+        switch ($method) {
+            default:
+            case 'json':
+                $response = new Response(json_encode($collection));
+                $response->headers->set('Content-Type', 'application/json');
+
+                return $response;
+        }
+    }
 }
