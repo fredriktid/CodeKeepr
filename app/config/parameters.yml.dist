@@ -18,7 +18,7 @@ parameters:
 
     codekeepr.page.limit: 20
 
-    oauth_github_id: ~
-    oauth_github_secret: ~
-    oauth_google_id: ~
-    oauth_google_secret: ~
+    oauth_github_id: 'default'
+    oauth_github_secret: 'default'
+    oauth_google_id: 'default'
+    oauth_google_secret: 'default'

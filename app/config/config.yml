@@ -252,4 +252,3 @@ hwi_oauth:
         username_iterations: 30
         properties:
             github:    github_id
-
