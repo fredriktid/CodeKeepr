@@ -15,3 +15,5 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    codekeepr.page.limit: 20

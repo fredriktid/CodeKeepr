@@ -32,6 +32,8 @@ class UserController extends Controller
             );
         }
 
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
         $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadByUser($userEntity);
         $currentPage = $this->get('request')->query->get('page', 1);
 
@@ -39,7 +41,7 @@ class UserController extends Controller
         $pagination = $paginator->paginate(
             $publicPosts,
             $currentPage,
-            20
+            $pageLimit
         );
 
         return [
@@ -70,6 +72,8 @@ class UserController extends Controller
             throw new AccessDeniedException();
         }
 
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
         $privatePosts = $em->getRepository('FriggKeeprBundle:Post')->loadPrivate($userEntity);
         $currentPage = $this->get('request')->query->get('page', 1);
 
@@ -77,7 +81,7 @@ class UserController extends Controller
         $pagination = $paginator->paginate(
             $privatePosts,
             $currentPage,
-            20
+            $pageLimit
         );
 
         return [
@@ -108,6 +112,8 @@ class UserController extends Controller
             throw new AccessDeniedException();
         }
 
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
         $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadStarred($userEntity);
         $currentPage = $this->get('request')->query->get('page', 1);
 
@@ -115,7 +121,7 @@ class UserController extends Controller
         $pagination = $paginator->paginate(
             $publicPosts,
             $currentPage,
-            20
+            $pageLimit
         );
 
         return [

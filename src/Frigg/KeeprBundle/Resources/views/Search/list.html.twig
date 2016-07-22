@@ -1,0 +1,10 @@
+{% if entries.getTotalItemCount %}
+    <div class="accordion" id="accordion2">
+        {% for entry in entries %}
+            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': entry, 'view': 'line'}) }}
+        {% endfor %}
+        <div class="pull-right">
+            {{ knp_pagination_render(entries) }}
+        </div>
+    </div>
+{% endif %}

@@ -1,3 +1,3 @@
 home:
     pattern:  /
-    defaults: { _controller: FriggKeeprBundle:Post:index }
+    defaults: { _controller: FriggKeeprBundle:Search:index }
