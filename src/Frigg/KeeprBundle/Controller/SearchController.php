@@ -79,14 +79,14 @@ class SearchController extends Controller
         $currentPage = $this->get('request')->query->get('page', 1);
 
         $queryString = new Query\QueryString();
-        $queryString->setQuery($queryText);
+        $queryString->setQuery(sprintf('*%s*', $queryText));
 
         $query = new Query();
-        $query->setSort(['created_at' => ['order' => 'desc']]);
-        $query->setQuery($queryString);
-        $query->setSize(99999);
+        $query->setSort(['created_at' => ['order' => 'desc']])
+            ->setQuery($queryString)
+            ->setSize(99999);
 
-        $finder = $this->get('fos_elastica.finder.website.' . $type);
+        $finder = $this->get(sprintf('fos_elastica.finder.website.%s', $type));
         $results = $finder->find($query);
 
         $paginator = $this->get('knp_paginator');
