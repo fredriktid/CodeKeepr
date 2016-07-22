@@ -10,7 +10,7 @@
 {% for owner in hwi_oauth_resource_owners() %}
     <a class="btn btn-default" href="{{ hwi_oauth_login_url(owner) }}" style="font-weight: bold">
         {% if icons[owner] is defined  %}
-            <img src="{{ asset(icons[owner]) }}" alt="{{ owner|capitalize }}" style="width: 22px; margin: 0 2px 2px 0px;">
+            <img src="{{ asset(icons[owner]) }}" alt="{{ owner|capitalize }}" style="height: 22px; margin: 0 2px 2px 0px;">
         {% endif %}
         Login with {{ owner|capitalize }}
     </a>
