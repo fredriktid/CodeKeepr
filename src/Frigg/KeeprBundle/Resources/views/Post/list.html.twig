@@ -4,7 +4,7 @@
             {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': post, 'view': 'line'}) }}
         {% endfor %}
         <div class="pull-right">
-            {{ knp_pagination_render(posts, null, {'query': query_text}) }}
+
         </div>
     </div>
 {% endif %}
