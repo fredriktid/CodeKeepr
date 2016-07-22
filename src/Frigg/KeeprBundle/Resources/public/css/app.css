@@ -155,7 +155,6 @@ pre {
 }
 
 .accordion-group textarea.code {
-    height: 480px;
     font-family: 'Source Code Pro', sans-serif;
     font-size: 14px;
     line-height: 14px;

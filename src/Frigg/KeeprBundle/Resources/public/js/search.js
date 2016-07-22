@@ -5,7 +5,7 @@
         var context = this;
 
         this.autocomplete = function(callback) {
-            var spinnerText = '...',
+            var spinnerText = '',
                 delay = (function(){
                 var timer = 0;
                 return function(callback, ms){
@@ -16,7 +16,11 @@
 
             this.bind('keyup', function() {
                 var query = $(this).val();
-                $('#posts').html(spinnerText);
+                if (query.length < 1) {
+                    return false;
+                }
+
+                $('#posts').hide();
 
                 delay(function() {
                     $.ajax({
@@ -25,7 +29,7 @@
                             'query': query
                         },
                         success: function(data) {
-                            $('#posts').html(data);
+                            $('#posts').html(data).slideDown('fast');
                             callback();
                         },
                         error: function(data) {

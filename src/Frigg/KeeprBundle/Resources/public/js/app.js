@@ -42,7 +42,7 @@
             switch (this.mode) {
 
                 case 'main':
-                    this.find('input#search').select();
+                    //this.find('input#search').select();
                     break;
 
                 case 'edit':

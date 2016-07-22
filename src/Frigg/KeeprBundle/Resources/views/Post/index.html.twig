@@ -1,10 +1,10 @@
 {% extends "FriggKeeprBundle::layout.html.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title|trans }}{% endblock %}
 
 {% block body %}
     <input id="search" type="text" class="form-control autocomplete" placeholder="Search">
     <div id="posts">
-        {% include 'FriggKeeprBundle:Post:list.html.twig' %}
+        {{ render_esi(controller('FriggKeeprBundle:Search:list', {'type': 'post'}, {'query': query_text, 'page': current_page})) }}
     </div>
 {% endblock %}

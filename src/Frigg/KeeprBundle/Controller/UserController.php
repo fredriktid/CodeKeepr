@@ -83,7 +83,7 @@ class UserController extends Controller
         return [
             'posts' => $pagination,
             'title' => $this->get('translator')->trans(
-                'My private posts'
+                'Private posts'
             )
         ];
     }
@@ -121,7 +121,7 @@ class UserController extends Controller
         return [
             'posts' => $pagination,
             'title' => $this->get('translator')->trans(
-                'My starred posts'
+                'Starred posts'
             )
         ];
     }

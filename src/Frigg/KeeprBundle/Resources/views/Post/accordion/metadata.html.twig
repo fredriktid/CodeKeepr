@@ -5,32 +5,33 @@
 </div>
 <div class="accordion-metadata">
 
+    {% set is_starred = (app.user and post|is_starred) %}
+    <a href="{{ path('star_switch', {'id': post.id}) }}" title="{{ is_starred ? 'Unstar'|trans : 'Star'|trans }}" class="star">
+        <i class="glyphicon {{ is_starred ? 'glyphicon-star' : 'glyphicon-star-empty' }}"></i>
+    </a>
+
     {% if is_granted('POST_EDIT', post) %}
-        <a href="{{ path('post_edit', {'id': post.id}) }}" title="{{ 'Edit'|trans }}">
-            <span class="badge">
-                <i class="glyphicon glyphicon-edit"></i>
-            </span>
+        <a href="{{ path('post_edit', {'id': post.id}) }}" title="{{ 'Edit'|trans }}" class="star">
+            <i class="glyphicon glyphicon-edit"></i>
         </a>
     {% endif %}
 
-    {% if is_granted('POST_DELETE', post) %}
-        <a href="{{ path('post_delete_confirm', {'id': post.id}) }}" title="{{ 'Delete'|trans }}">
-            <span class="badge">
-                <i class="glyphicon glyphicon-trash"></i>
-            </span>
+    {% if is_granted('POST_DELETE', post) and full_view %}
+        <a href="{{ path('post_delete_confirm', {'id': post.id}) }}" title="{{ 'Delete'|trans }}" class="star">
+            <i class="glyphicon glyphicon-trash"></i>
         </a>
     {% endif %}
 
     {% if not full_view %}
-        <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}">
-            <span class="badge">
+        <a class="star" href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Permanent link'|trans }}">
+            <span class="">
                 <i class="glyphicon glyphicon-fullscreen"></i>
             </span>
         </a>
     {% endif %}
 
     {% if comment_count %}
-        <a href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
+        <a class="star" href="{{ path('post_show', {'id': post.id, 'identifier': post.identifier}) }}" title="{{ 'Comments'|trans }}">
             <i class="glyphicon glyphicon-comment"></i>
             {{ comment_count }}
         </a>

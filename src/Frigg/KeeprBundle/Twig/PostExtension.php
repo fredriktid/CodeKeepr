@@ -47,6 +47,7 @@ class PostExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFilter('is_starred', [$this, 'isStarred']),
             new \Twig_SimpleFilter('comment_count', [$this, 'commentCount']),
+            new \Twig_SimpleFilter('html_decode', array($this, 'htmlEntityDecode')),
         ];
     }
 
@@ -76,5 +77,14 @@ class PostExtension extends \Twig_Extension
             $postEntity,
             $currentUserEntity
         );
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    public function htmlEntityDecode($value)
+    {
+        return html_entity_decode($value);
     }
 }

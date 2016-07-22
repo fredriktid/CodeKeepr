@@ -32,14 +32,8 @@ class StarController extends Controller
 
         if (!$securityContext->isGranted('ROLE_USER')) {
             $message = $translator->trans('You must be logged in to star something');
-            $session->getFlashBag()->add(
-                'warning',
-                $message
-            );
-
-            throw new AccessDeniedException(
-                $message
-            );
+            $session->getFlashBag()->add('warning', $message);
+            throw new AccessDeniedException($message);
         }
 
         $em = $this->get('doctrine.orm.entity_manager');
@@ -47,26 +41,14 @@ class StarController extends Controller
         /** @var Post $postEntity */
         if (!$postEntity = $em->getRepository('FriggKeeprBundle:Post')->findOneById($id)) {
             $message = $translator->trans('Post not found');
-            $session->getFlashBag()->add(
-                'warning',
-                $message
-            );
-
-            throw new NotFoundHttpException(
-                $message
-            );
+            $session->getFlashBag()->add('warning', $message);
+            throw new NotFoundHttpException($message);
         }
 
         if (!$securityContext->isGranted('POST_STAR_NEW', $postEntity)) {
             $message = $translator->trans('Insufficient permissions to add star');
-            $session->getFlashBag()->add(
-                'warning',
-                $message
-            );
-
-            throw new AccessDeniedException(
-                $message
-            );
+            $session->getFlashBag()->add('warning', $message);
+            throw new AccessDeniedException($message);
         }
 
         $securityToken = $securityContext->getToken();
@@ -79,23 +61,15 @@ class StarController extends Controller
             $starEntity->setPost($postEntity);
             $em->persist($starEntity);
             $em->flush();
-            $session->getFlashBag()->add(
-                'success',
-                $translator->trans(
-                    'Starred "topic"',
-                    ['topic' => $postEntity->getTopic()]
-                )
-            );
+            $session->getFlashBag()->add('success', $translator->trans('Starred "topic"',
+                ['topic' => $postEntity->getTopic()]
+            ));
         } else {
             $em->remove($starEntity);
             $em->flush();
-            $session->getFlashBag()->add(
-                'info',
-                $translator->trans(
-                    'Unstarred "topic"',
-                    ['topic' => $postEntity->getTopic()]
-                )
-            );
+            $session->getFlashBag()->add('info', $translator->trans('Unstarred "topic"',
+                ['topic' => $postEntity->getTopic()]
+            ));
         }
 
         if ($referer = $this->get('request')->headers->get('referer')) {

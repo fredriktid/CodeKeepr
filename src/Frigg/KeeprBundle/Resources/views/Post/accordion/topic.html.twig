@@ -1,8 +1,3 @@
-{% set is_starred = (app.user and post|is_starred) %}
-<a href="{{ path('star_switch', {'id': post.id}) }}" title="{{ is_starred ? 'Unstar'|trans : 'Star'|trans }}" class="star">
-    <i class="glyphicon {{ is_starred ? 'glyphicon-star' : 'glyphicon-star-empty' }}"></i>
-</a>
-
 {% if post.private %}
     <a href="{{ path('post_edit', {'id': post.id}) }}" title="Status: Private" class="star">
         <i class="glyphicon glyphicon-lock star"></i>

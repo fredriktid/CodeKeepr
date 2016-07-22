@@ -26,7 +26,7 @@ class PostController extends Controller
      *
      * @Route("/", name="post")
      * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
+     * @Template("FriggKeeprBundle:Post:index.html.twig")
      */
     public function indexAction()
     {
@@ -34,6 +34,7 @@ class PostController extends Controller
         $currentPage = $this->get('request')->query->get('page', 1);
 
         return [
+            'title' => $this->get('translator')->trans('Home'),
             'query_text' => $queryText,
             'current_page' => $currentPage
         ];
