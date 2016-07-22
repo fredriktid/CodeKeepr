@@ -77,11 +77,10 @@ class PostController extends Controller
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
-            // if the tag already exists we need to remove the new one from the form collection
-            // and then associate the existing tag with this post instead
+            /** @var Tag $tag */
             foreach ($entity->getTags() as $tag) {
                 /** @var Tag $currentTag */
-                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->generateIdentifier())) {
                     $entity->getTags()->removeElement($tag);
                     $entity->addTag($currentTag);
                     $currentTag->addPost($entity);
@@ -287,11 +286,10 @@ class PostController extends Controller
                 }
             }
 
-            // if the tag already exists we need to remove the new one from the form collection
-            // and then associate the existing tag with the this post instead
+            /** @var Tag $tag */
             foreach ($postEntity->getTags() as $tag) {
                 /** @var Tag $currentTag */
-                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->generateIdentifier())) {
                     $postEntity->getTags()->removeElement($tag);
                     $postEntity->addTag($currentTag);
                     $currentTag->addPost($postEntity);
