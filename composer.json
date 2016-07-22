@@ -24,7 +24,8 @@
         "friendsofsymfony/elastica-bundle": "3.0.*@dev",
         "friendsofsymfony/comment-bundle": "~2.0",
         "friendsofsymfony/rest-bundle": "~1.4",
-        "jms/serializer-bundle": "dev-master"
+        "jms/serializer-bundle": "dev-master",
+        "hwi/oauth-bundle": "^0.4.1"
     },
     "scripts": {
         "post-install-cmd": [

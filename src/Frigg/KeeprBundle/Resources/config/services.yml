@@ -6,9 +6,13 @@ parameters:
     codekeepr.post.voter.class: Frigg\KeeprBundle\Security\Voter\PostVoter
     codekeepr.user.twig.class: Frigg\KeeprBundle\Twig\UserExtension
     codekeepr.user.voter.class: Frigg\KeeprBundle\Security\Voter\UserVoter
-
+    codekeepr.ouath.user.provider.class: Frigg\KeeprBundle\Service\OAuthUserProviderService
 
 services:
+    # services
+    codekeepr.oauth.user.provider.service:
+        class: %codekeepr.ouath.user.provider.class%
+        arguments: ['@fos_user.user_manager', { github: github_id }]
 
     # event listeners
     codekeepr.registration:
@@ -20,8 +24,8 @@ services:
     codekeepr.listener.identifier:
         class: %codekeepr.listener.identifier.class%
         tags:
-            - { name: doctrine.event_listener, event: prePersist, method: postPersist }
-            - { name: doctrine.event_listener, event: preUpdate, method: postUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
 
     # twig extensions
     codekeepr.post.twig:

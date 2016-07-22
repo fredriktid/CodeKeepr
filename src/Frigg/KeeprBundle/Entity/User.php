@@ -32,6 +32,26 @@ class User extends BaseUser
     private $Stars;
 
     /**
+     * @ORM\Column(name="github_id", type="string", length=255, nullable=true)
+     */
+    private $githubId;
+
+    /**
+     * @ORM\Column(name="googleId", type="string", length=255, nullable=true)
+     */
+    private $googleId;
+
+    /**
+     * @var
+     */
+    private $githubToken;
+
+    /**
+     * @var
+     */
+    private $googleToken;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -191,5 +211,99 @@ class User extends BaseUser
     public function getStars()
     {
         return $this->Stars;
+    }
+
+    /**
+     * @param string $githubId
+     * @return User
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
+    }
+
+    /**
+     * @param string $githubAccessToken
+     * @return User
+     */
+    public function setGithubAccessToken($githubAccessToken)
+    {
+        $this->githubToken = $githubAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGithubToken()
+    {
+        return $this->githubToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGithubAccessToken()
+    {
+        return $this->githubToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    /**
+     * @param mixed $googleId
+     */
+    public function setGoogleId($googleId)
+    {
+        $this->googleId = $googleId;
+    }
+
+    /**
+     * @param $accessToken
+     */
+    public function setGoogleToken($accessToken)
+    {
+        $this->googleToken = $accessToken;
+    }
+
+    /**
+     * @param $accessToken
+     */
+    public function setGoogleAccessToken($accessToken)
+    {
+        $this->googleToken = $accessToken;
+    }
+
+    /**
+     * @param mixed $githubToken
+     */
+    public function setGithubToken($githubToken)
+    {
+        $this->githubToken = $githubToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGoogleToken()
+    {
+        return $this->googleToken;
     }
 }

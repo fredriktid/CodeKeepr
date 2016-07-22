@@ -73,7 +73,6 @@ class PostController extends Controller
         if ($form->isValid()) {
             $em = $this->get('doctrine.orm.entity_manager');
 
-            // set user
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
@@ -88,12 +87,10 @@ class PostController extends Controller
                     continue;
                 }
 
-                // but if it doest exist, associate and persist new tag
                 $tag->addPost($entity);
                 $em->persist($tag);
             }
 
-            // lastly persist and save the new post entity
             $em->persist($entity);
             $em->flush();
 
