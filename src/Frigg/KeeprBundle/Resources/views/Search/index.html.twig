@@ -3,7 +3,7 @@
 {% block title %}{{ 'Home'|trans }}{% endblock %}
 
 {% block body %}
-    <input id="search" type="text" class="form-control autocomplete" placeholder="Search">
+    <input id="search" type="text" class="form-control" placeholder="Search">
     <div id="posts">
         {{ render_esi(controller('FriggKeeprBundle:Search:list', {'type': 'post'}, {'query': query_text, 'page': current_page})) }}
     </div>

@@ -11,10 +11,12 @@
                 disable_search_threshold: 5
             });
 
+            this.find('input#search').codekeeprSearch().list(
+                context.highlight
+            );
+
             this.find('input.autocomplete').each(function (index, value) {
-                $(this).codekeeprSearch().autocomplete(
-                    context.highlight
-                );
+                $(this).codekeeprSearch().autocomplete();
             });
 
             this.highlight();

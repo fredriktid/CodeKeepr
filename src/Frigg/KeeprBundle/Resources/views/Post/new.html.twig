@@ -42,7 +42,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <ul class="tags" data-prototype="{{ form_widget(form.Tags.vars.prototype.name)|e }}">
                     {% for tag in form.Tags %}
-                        <li>{{ form_widget(tag.name, {'attr': {'readonly': edit_tag}}) }}</li>
+                        <li>{{ form_widget(tag.name, {'attr': {'readonly': edit_tag, 'class': 'autocomplete', 'data-type': 'tag'}}) }}</li>
                     {% endfor %}
                 </ul>
             </div>
