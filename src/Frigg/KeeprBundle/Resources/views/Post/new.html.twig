@@ -39,7 +39,7 @@
         <div class="form-group form-group-sm">
             <label class="col-sm-2 control-label" for="code">Code</label>
             <div class="col-sm-10">
-                {{ form_widget(form.content, {'attr': {'id': 'code', 'class': 'form-control code', 'placeholder': 'And paste your code here'|trans}}) }}
+                {{ form_widget(form.content, {'attr': {'id': 'code', 'class': 'form-control code', 'placeholder': 'Paste your code here...'|trans}}) }}
             </div>
         </div>
 
@@ -55,7 +55,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-default'}}) }}
+                {{ form_widget(form.submit, {'label': 'Add post'|trans, 'attr': {'class': 'btn btn-primary btn-lg'}}) }}
             </div>
         </div>
     {{ form_end(form) }}
