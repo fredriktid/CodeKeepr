@@ -9,7 +9,7 @@
 
             this.tags = $(this);
 
-            var $add = $('<a href="#" class="add_tag_link margin-bottom btn btn-default"><i class="icon-tag"></i> Add tag</a>');
+            var $add = $('<a href="#" class="add_tag_link margin-bottom btn btn-default"><i class="glyphicon glyphicon-tag"></i> Add tag</a>');
             var $new = $('<li></li>').append($add);
 
             $(this).find('li').each(function() {
