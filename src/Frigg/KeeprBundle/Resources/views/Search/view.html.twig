@@ -3,16 +3,17 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body -%}
-    {% if collection.getTotalItemCount %}
-        <div class="accordion" id="accordion2">
-            {% for item in collection %}
-                {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': item, 'view': 'line'}) }}
-            {% endfor %}
-            <div class="pull-right">
-                {{ knp_pagination_render(collection) }}
+    <input id="search" type="text" class="form-control" placeholder="Search">
+    <div id="posts">
+        {% if entries.getTotalItemCount %}
+            <div class="accordion" id="accordion2">
+                {% for entry in entries %}
+                    {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': entry, 'view': 'line'}) }}
+                {% endfor %}
+                <div class="pull-right">
+                    {{ knp_pagination_render(entries) }}
+                </div>
             </div>
-        </div>
-    {% else %}
-        <p class="muted">{{ 'No posts found'|trans }}</p>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

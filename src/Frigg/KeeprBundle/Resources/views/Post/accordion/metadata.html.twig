@@ -1,5 +1,5 @@
 <div class="accordion-author">
-    <a href="{{ path('post_date', {'date': post.createdAt.format('Y-m-d')}) }}">
+    <a href="{{ path('search_date', {'dateString': post.createdAt.format('Y-m-d')}) }}">
         {{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('user_posts', {'id': post.user.id}) }}">{{ post.user.username }}
     </a>
 </div>

@@ -103,45 +103,55 @@ class SearchController extends Controller
      *
      * @Route("/date/{dateString}", name="search_date")
      * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:list.html.twig")
+     * @Template("FriggKeeprBundle:Search:view.html.twig")
      */
     public function dateAction($dateString)
     {
+        $dateTs = strtotime($dateString);
         $queryText = $this->get('request')->query->get('query', '*');
         $currentPage = $this->get('request')->query->get('page', 1);
-
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
         $queryString = new Query\QueryString();
         $queryString->setQuery($queryText);
 
         $rangeLower = new Query\Filtered($queryString, new Range('created_at', [
-            'gte' => date('Y-m-d H:i:s', strtotime($dateString))
+            'gte' => date('Y-m-d', $dateTs)
         ]));
 
         $rangeHigher = new Query\Filtered($rangeLower, new Range('created_at', [
-            'lte' => date('Y-m-d H:i:s', strtotime($dateString))
+            'lte' => date('Y-m-d', strtotime('+1 day', $dateTs))
         ]));
 
         $query = new Query();
-        $query->setSort(['created_at' => ['order' => 'desc']]);
         $query->setQuery($rangeHigher);
         $query->setSize(99999);
+        $query->setSort([
+            'created_at' => ['order' => 'desc']]
+        );
 
+        /** @var PaginatedFinderInterface $finder */
         $finder = $this->get('fos_elastica.finder.website.post');
-        $results = $finder->find($query);
+        $entries = $finder->find($query);
 
+        /** @var Paginator $paginator */
         $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $results,
+
+        /** @var SlidingPagination $pager */
+        $pager = $paginator->paginate(
+            $entries,
             $currentPage,
             $pageLimit
         );
 
+        $pager->setUsedRoute('search_date');
+        $pager->setParam('dateString', $dateString);
+        $pager->setParam('query', $queryText);
+        $pager->setParam('page', $currentPage);
+
         return [
-            'posts' => $pagination,
-            'current_page' => $currentPage,
-            'query_text' => $queryText,
+            'title' => date('Y-m-d', $dateTs),
+            'entries' => $pager
         ];
     }
 
