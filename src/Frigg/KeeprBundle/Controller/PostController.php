@@ -103,8 +103,13 @@ class PostController extends Controller
         }
 
         return [
+            'mode' => 'new',
             'entity' => $entity,
             'form' => $form->createView(),
+            'edit_tags' => true,
+            'title' => $this->get('translator')->trans(
+                'Add post'
+            )
         ];
     }
 
@@ -146,10 +151,13 @@ class PostController extends Controller
         $form = $this->createCreateForm($entity);
 
         return [
-            'edit_tag' => true,
-            'title' => $this->get('translator')->trans('Add code'),
+            'mode' => 'new',
             'entity' => $entity,
             'form' => $form->createView(),
+            'edit_tags' => true,
+            'title' => $this->get('translator')->trans(
+                'Add post'
+            ),
         ];
     }
 
@@ -215,13 +223,13 @@ class PostController extends Controller
         $editForm = $this->createEditForm($postEntity);
 
         return [
-            'edit_tag' => false,
+            'mode' => 'edit',
             'entity' => $postEntity,
             'form' => $editForm->createView(),
+            'edit_tags' => false,
             'title' => $this->get('translator')->trans(
-                'Edit "topic"',
-                ['topic' => $postEntity->getTopic()]
-            ),
+                'Edit post'
+            )
         ];
     }
 

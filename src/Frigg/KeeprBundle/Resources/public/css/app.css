@@ -201,6 +201,7 @@ form#post-new textarea.code {
     padding: 0.5em;
     background: #23241f;
     color: #f8f8f2;
+    font-size: 14px;
     font-family: 'Source Code Pro', Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
