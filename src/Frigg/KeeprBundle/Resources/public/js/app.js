@@ -47,11 +47,6 @@
                     //this.find('input#search').select();
                     break;
 
-                case 'edit':
-                    this.find('input.title').select();
-                    this.find('.tags').codekeeprTags().buildForm();
-                    break;
-
                 default:
                     // ...
             }

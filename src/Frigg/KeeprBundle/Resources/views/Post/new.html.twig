@@ -2,21 +2,21 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block mode %}edit{% endblock %}
+{% block mode %}{{ mode }}{% endblock %}
 
 {% block body -%}
     {{ form_start(form, {'attr': {'id': 'post-new', 'class': 'form-horizontal'}}) }}
         <div class="form-group form-group-lg">
-            <label class="col-sm-2 control-label" for="title">Title</label>
+            <label class="col-sm-2 control-label" for="frigg_keeprbundle_post_topic">Title</label>
             <div class="col-sm-10">
-                {{ form_widget(form.topic, {'attr': {'id': 'title', 'class': 'form-control'}}) }}
+                {{ form_widget(form.topic, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
 
         <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label" for="highlighting">Highlighting</label>
+            <label class="col-sm-2 control-label" for="frigg_keeprbundle_post_Language">Highlighting</label>
             <div class="col-sm-10">
-                {{ form_widget(form.Language, {'attr': {'id': 'highlighting', 'class': 'form-control', 'data-placeholder': 'Syntax highlighting'|trans}}) }}
+                {{ form_widget(form.Language, {'attr': {'class': 'form-control', 'data-placeholder': 'Syntax highlighting'|trans}}) }}
             </div>
         </div>
 
@@ -47,7 +47,9 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <ul class="tags" data-prototype="{{ form_widget(form.Tags.vars.prototype.name)|e }}">
                     {% for tag in form.Tags %}
-                        <li>{{ form_widget(tag.name, {'attr': {'readonly': edit_tag, 'class': 'autocomplete', 'data-type': 'tag'}}) }}</li>
+                        <li>
+                            {{ form_widget(tag.name, {'attr': {'readonly': (not edit_tags), 'class': 'autocomplete', 'data-type': 'tag'}}) }}
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -55,13 +57,17 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                {{ form_widget(form.submit, {'label': 'Add post'|trans, 'attr': {'class': 'btn btn-primary btn-lg'}}) }}
+                {{ form_widget(form.submit, {'label': title, 'attr': {'class': 'btn btn-primary btn-lg'}}) }}
             </div>
         </div>
     {{ form_end(form) }}
 {% endblock %}
 
-{% block stylesheets %}
+{% block javascripts %}
     {{ parent() }}
-    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('form#post-new').codekeeprPostNew().setMode('{{ mode }}').init();
+        });
+    </script>
 {% endblock %}
