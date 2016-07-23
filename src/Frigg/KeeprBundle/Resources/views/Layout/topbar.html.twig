@@ -2,10 +2,12 @@
     <a href="{{ path('home') }}">{{ 'CodeKeepr'|trans }}</a>
 </h1>
 
-<div class="crumb hidden-sm hidden-xs">
-    <i class="glyphicon glyphicon-chevron-right"></i>
-    {{ crumb }}
-</div>
+{% if crumb is defined and crumb %}
+    <div class="crumb hidden-sm hidden-xs">
+        <i class="glyphicon glyphicon-chevron-right"></i>
+            {{ crumb|html_decode|capitalize }}
+    </div>
+{% endif %}
 
 <div class="menu">
     {% if is_granted('ROLE_USER') %}

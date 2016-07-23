@@ -15,7 +15,7 @@
                         {{ form_errors(form) }}
                         {{ form_errors(form.body) }}
                     </div>
-                    {{ form_widget(form.body, {'attr': {'class': 'full-border-box'}}) }}
+                    {{ form_widget(form.body, {'attr': {'class': 'form-control', 'rows': 6}}) }}
 
                     {{ form_rest(form) }}
                 {% endblock %}

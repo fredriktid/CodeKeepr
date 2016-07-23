@@ -2,11 +2,16 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Elastica\Filter\Range;
+use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
+use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Knp\Component\Pager\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Elastica\Query;
 
 /**
  * Search controller.
@@ -16,37 +21,21 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController extends Controller
 {
     /**
-     * Perform search with Elastica.
+     * Main search page
      *
-     * @Route("/", name="search")
+     * @Route("/", name="search_index")
      * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
+     * @Template("FriggKeeprBundle:Search:index.html.twig")
      */
-    public function viewAction()
+    public function indexAction()
     {
-        $postFinder = $this->get('fos_elastica.finder.website.post');
-        $query = $this->get('request')->query->get('query');
-        $page = $this->get('request')->query->get('page', 1);
-        $limit = 20;
-
-        $posts = [];
-        if ($query) {
-            $paginator = $this->get('knp_paginator');
-            $posts = $paginator->paginate(
-                $postFinder->createPaginatorAdapter($query),
-                $page,
-                $limit
-            );
-        }
+        $queryText = $this->get('request')->query->get('query', '*');
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         return [
-            'query' => $query,
-            'posts' => $posts,
-            'limit' => $limit,
-            'title' => $this->get('translator')->trans(
-                'Search: "query"',
-                ['query' => $query]
-            ),
+            'title' => $this->get('translator')->trans('Home'),
+            'query_text' => $queryText,
+            'current_page' => $currentPage
         ];
     }
 
@@ -64,31 +53,95 @@ class SearchController extends Controller
         ];
     }
 
-
     /**
      * Search and show list.
      *
      * @Route("/list/{type}", name="search_list", defaults={"type" = "post"})
      * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:list.html.twig")
+     * @Template("FriggKeeprBundle:Search:list.html.twig")
      */
     public function listAction($type)
     {
-        $query = $this->get('request')->query->get('query', '*');
-        $page = $this->get('request')->query->get('page', 1);
+        $queryText = $this->get('request')->query->get('query', '');
+        $currentPage = $this->get('request')->query->get('page', 1);
 
-        $finder = $this->get('fos_elastica.finder.website.' . $type);
+        $queryString = new Query\QueryString();
+        $queryString->setQuery(sprintf('*%s*', $queryText));
+
+        $query = new Query();
+        $query->setSort(['created_at' => ['order' => 'desc']])
+            ->setQuery($queryString)
+            ->setSize(99999);
+
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
+        /** @var PaginatedFinderInterface $finder */
+        $finder = $this->get(sprintf('fos_elastica.finder.website.%s', $type));
+        $entries = $finder->find($query);
+
+        /** @var Paginator $paginator */
+        $paginator = $this->get('knp_paginator');
+
+        /** @var SlidingPagination $pager */
+        $pager = $paginator->paginate(
+            $entries,
+            $currentPage,
+            $pageLimit
+        );
+
+        $pager->setUsedRoute('search_index');
+        $pager->setParam('query', (strlen($queryText)) ? $queryText : '*');
+        $pager->setParam('page', $currentPage);
+
+        return [
+            'entries' => $pager,
+        ];
+    }
+
+    /**
+     * Posts by date
+     *
+     * @Route("/date/{dateString}", name="search_date")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Post:list.html.twig")
+     */
+    public function dateAction($dateString)
+    {
+        $queryText = $this->get('request')->query->get('query', '*');
+        $currentPage = $this->get('request')->query->get('page', 1);
+
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
+        $queryString = new Query\QueryString();
+        $queryString->setQuery($queryText);
+
+        $rangeLower = new Query\Filtered($queryString, new Range('created_at', [
+            'gte' => date('Y-m-d H:i:s', strtotime($dateString))
+        ]));
+
+        $rangeHigher = new Query\Filtered($rangeLower, new Range('created_at', [
+            'lte' => date('Y-m-d H:i:s', strtotime($dateString))
+        ]));
+
+        $query = new Query();
+        $query->setSort(['created_at' => ['order' => 'desc']]);
+        $query->setQuery($rangeHigher);
+        $query->setSize(99999);
+
+        $finder = $this->get('fos_elastica.finder.website.post');
         $results = $finder->find($query);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $results,
-            $page,
-            20
+            $currentPage,
+            $pageLimit
         );
 
         return [
-            'posts' => $pagination
+            'posts' => $pagination,
+            'current_page' => $currentPage,
+            'query_text' => $queryText,
         ];
     }
 
@@ -110,7 +163,7 @@ class SearchController extends Controller
             foreach ($results as $object) {
                 $collection[] = array(
                     'label' => $object->__toString(),
-                    'url' => $this->generateUrl('search', [
+                    'url' => $this->generateUrl('search_index', [
                         'query' => $object->__toString(),
                     ]),
                 );

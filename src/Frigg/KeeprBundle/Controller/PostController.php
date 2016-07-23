@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Frigg\KeeprBundle\Entity\Post;
 use Frigg\KeeprBundle\Form\PostType;
+use Elastica\Query;
 
 /**
  * Post controller.
@@ -20,32 +21,6 @@ use Frigg\KeeprBundle\Form\PostType;
  */
 class PostController extends Controller
 {
-    /**
-     * Loads all public posts.
-     *
-     * @Route("/", name="post")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Post:paginator.html.twig")
-     */
-    public function indexAction()
-    {
-        $em = $this->get('doctrine.orm.entity_manager');
-        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPublic();
-        $currentPage = $this->get('request')->query->get('page', 1);
-
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $publicPosts,
-            $currentPage,
-            20
-        );
-
-        return [
-            'posts' => $pagination,
-            'title' => $this->get('translator')->trans('Home'),
-        ];
-    }
-
     /**
      * Public posts by date.
      *
@@ -56,6 +31,8 @@ class PostController extends Controller
     public function dateAction($date)
     {
         $timestamp = strtotime($date);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
         $interval = [
             'begin' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
             'end' => mktime(23, 59, 59, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
@@ -65,11 +42,12 @@ class PostController extends Controller
         $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPeriod($interval['begin'], $interval['end']);
         $currentPage = $this->get('request')->query->get('page', 1);
 
+
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $publicPosts,
             $currentPage,
-            20
+            $pageLimit
         );
 
         return [
@@ -95,15 +73,13 @@ class PostController extends Controller
         if ($form->isValid()) {
             $em = $this->get('doctrine.orm.entity_manager');
 
-            // set user
             $currentUser = $this->get('security.context')->getToken()->getUser();
             $entity->setUser($currentUser);
 
-            // if the tag already exists we need to remove the new one from the form collection
-            // and then associate the existing tag with this post instead
+            /** @var Tag $tag */
             foreach ($entity->getTags() as $tag) {
                 /** @var Tag $currentTag */
-                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->generateIdentifier())) {
                     $entity->getTags()->removeElement($tag);
                     $entity->addTag($currentTag);
                     $currentTag->addPost($entity);
@@ -111,12 +87,10 @@ class PostController extends Controller
                     continue;
                 }
 
-                // but if it doest exist, associate and persist new tag
                 $tag->addPost($entity);
                 $em->persist($tag);
             }
 
-            // lastly persist and save the new post entity
             $em->persist($entity);
             $em->flush();
 
@@ -309,11 +283,10 @@ class PostController extends Controller
                 }
             }
 
-            // if the tag already exists we need to remove the new one from the form collection
-            // and then associate the existing tag with the this post instead
+            /** @var Tag $tag */
             foreach ($postEntity->getTags() as $tag) {
                 /** @var Tag $currentTag */
-                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->getIdentifier())) {
+                if ($currentTag = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag->generateIdentifier())) {
                     $postEntity->getTags()->removeElement($tag);
                     $postEntity->addTag($currentTag);
                     $currentTag->addPost($postEntity);

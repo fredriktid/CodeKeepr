@@ -5,6 +5,11 @@
 {% block body %}
     <input id="search" type="text" class="form-control autocomplete" placeholder="Search">
     <div id="posts">
-        {% include 'FriggKeeprBundle:Post:list.html.twig' %}
+        {% for post in posts %}
+            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': post, 'view': 'line'}) }}
+        {% endfor %}
+        <div class="pull-right">
+            {{ knp_pagination_render(posts) }}
+        </div>
     </div>
 {% endblock %}
