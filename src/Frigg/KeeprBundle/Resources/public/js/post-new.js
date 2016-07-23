@@ -8,6 +8,8 @@
         this.init = function() {
             this.find('input#frigg_keeprbundle_post_topic').focus();
 
+            this.find('.tags').codekeeprTags().buildForm();
+
             return this;
         };
 
