@@ -105,10 +105,18 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/Reddit_32px.png
             output: img/icons/reddit.png
-        codekeepr_icon:
+        codekeepr_icon_large:
             inputs:
-                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/icon.png
-            output: img/icons/codekeepr.png
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/icon_large.png
+            output: img/icon_large.png
+        codekeepr_icon_small:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/icon_small.png
+            output: img/icon_small.png
+        codekeepr_favicon:
+            inputs:
+                - %kernel.root_dir%/../src/Frigg/KeeprBundle/Resources/public/images/favicon.ico
+            output: img/favicon.ico
         # javascript
         chosen_js:
             inputs:
