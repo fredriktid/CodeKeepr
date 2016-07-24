@@ -29,12 +29,12 @@ class SearchController extends Controller
      */
     public function indexAction()
     {
-        $queryText = $this->get('request')->query->get('query', '*');
+        $queryString = $this->get('request')->query->get('query', '');
         $currentPage = $this->get('request')->query->get('page', 1);
 
         return [
             'title' => $this->get('translator')->trans('Home'),
-            'query_text' => $queryText,
+            'query_text' => $queryString,
             'current_page' => $currentPage
         ];
     }
@@ -62,16 +62,17 @@ class SearchController extends Controller
      */
     public function postsAction()
     {
-        $queryText = $this->get('request')->query->get('query', '');
+        $queryString = $this->get('request')->query->get('query');
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
-        $queryString = new Query\QueryString();
-        $queryString->setQuery(sprintf('*%s*', $queryText));
+        $wildCardString = (!$queryString) ? '*' : sprintf('*%s*', $queryString);
+        $stringQuery = new Query\QueryString();
+        $stringQuery->setQuery($wildCardString);
 
         $query = new Query();
         $query->setSort(['created_at' => ['order' => 'desc']])
-            ->setQuery($queryString)
+            ->setQuery($stringQuery)
             ->setSize(99999);
 
         $entries = $this->get('fos_elastica.finder.website.post')
@@ -85,7 +86,7 @@ class SearchController extends Controller
         );
 
         $pager->setUsedRoute('search_index');
-        $pager->setParam('query', (strlen($queryText)) ? $queryText : '*');
+        $pager->setParam('query', (strlen($queryString)) ? $queryString : '*');
         $pager->setParam('page', $currentPage);
 
         return [
@@ -109,10 +110,10 @@ class SearchController extends Controller
         $dateTs = strtotime($query);
         $dateFormat = date('Y-m-d', $dateTs);
 
-        $queryString = new Query\QueryString();
-        $queryString->setQuery('*');
+        $stringQuery = new Query\QueryString();
+        $stringQuery->setQuery('*');
 
-        $rangeLower = new Query\Filtered($queryString, new Range('created_at', [
+        $rangeLower = new Query\Filtered($stringQuery, new Range('created_at', [
             'gte' => $dateFormat
         ]));
 
