@@ -229,6 +229,10 @@ fos_elastica:
                             type: "nested"
                             properties:
                                 name: { type: "string", boost: 3 }
+                        User:
+                            type: "object"
+                            properties:
+                                id: { type: "integer" }
                         created_at: { "type": "date", "store": true }
                         language:
                     persistence:
