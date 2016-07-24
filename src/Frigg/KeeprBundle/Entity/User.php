@@ -37,19 +37,29 @@ class User extends BaseUser
     private $githubId;
 
     /**
-     * @ORM\Column(name="googleId", type="string", length=255, nullable=true)
-     */
-    private $googleId;
-
-    /**
-     * @var
+     * @ORM\Column(name="github_token", type="string", length=255, nullable=true)
      */
     private $githubToken;
 
     /**
-     * @var
+     * @ORM\Column(name="google_id", type="string", length=255, nullable=true)
+     */
+    private $googleId;
+
+    /**
+     * @ORM\Column(name="google_token", type="string", length=255, nullable=true)
      */
     private $googleToken;
+
+    /**
+     * @ORM\Column(name="reddit_id", type="string", length=255, nullable=true)
+     */
+    private $redditId;
+
+    /**
+     * @ORM\Column(name="reddit_token", type="string", length=255, nullable=true)
+     */
+    private $redditToken;
 
     /**
      * User constructor.
@@ -268,35 +278,45 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $googleId
-     */
-    public function setGoogleId($googleId)
-    {
-        $this->googleId = $googleId;
-    }
-
-    /**
-     * @param $accessToken
-     */
-    public function setGoogleToken($accessToken)
-    {
-        $this->googleToken = $accessToken;
-    }
-
-    /**
-     * @param $accessToken
-     */
-    public function setGoogleAccessToken($accessToken)
-    {
-        $this->googleToken = $accessToken;
-    }
-
-    /**
-     * @param mixed $githubToken
+     * @param $githubToken
+     * @return User
      */
     public function setGithubToken($githubToken)
     {
         $this->githubToken = $githubToken;
+
+        return $this;
+    }
+
+    /**
+     * @param $googleId
+     * @return User
+     */
+    public function setGoogleId($googleId)
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    /**
+     * @param $accessToken
+     * @return User
+     */
+    public function setGoogleToken($accessToken)
+    {
+        $this->googleToken = $accessToken;
+
+        return $this;
+    }
+
+    /**
+     * @param $accessToken
+     * @return User
+     */
+    public function setGoogleAccessToken($accessToken)
+    {
+        return $this->setGoogleToken($accessToken);
     }
 
     /**
@@ -305,5 +325,52 @@ class User extends BaseUser
     public function getGoogleToken()
     {
         return $this->googleToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRedditId()
+    {
+        return $this->redditId;
+    }
+
+    /**
+     * @param $redditId
+     * @return User
+     */
+    public function setRedditId($redditId)
+    {
+        $this->redditId = $redditId;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRedditToken()
+    {
+        return $this->redditToken;
+    }
+
+    /**
+     * @param $redditToken
+     * @return User
+     */
+    public function setRedditToken($redditToken)
+    {
+        $this->redditToken = $redditToken;
+
+        return $this;
+    }
+
+    /**
+     * @param $redditToken
+     * @return User
+     */
+    public function setRedditAccessToken($redditToken)
+    {
+        return $this->setRedditToken($redditToken);
     }
 }

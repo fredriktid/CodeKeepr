@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Filter\Range;
 use FOS\ElasticaBundle\Finder\PaginatedFinderInterface;
+use Frigg\KeeprBundle\Entity\Tag;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -49,7 +50,7 @@ class SearchController extends Controller
     public function formAction($query = null)
     {
         return [
-            'query' => $query,
+            'query' => $query
         ];
     }
 
@@ -64,6 +65,7 @@ class SearchController extends Controller
     {
         $queryText = $this->get('request')->query->get('query', '');
         $currentPage = $this->get('request')->query->get('page', 1);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
 
         $queryString = new Query\QueryString();
         $queryString->setQuery(sprintf('*%s*', $queryText));
@@ -73,17 +75,11 @@ class SearchController extends Controller
             ->setQuery($queryString)
             ->setSize(99999);
 
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
-
-        /** @var PaginatedFinderInterface $finder */
-        $finder = $this->get(sprintf('fos_elastica.finder.website.%s', $type));
-        $entries = $finder->find($query);
-
-        /** @var Paginator $paginator */
-        $paginator = $this->get('knp_paginator');
+        $entries = $this->get(sprintf('fos_elastica.finder.website.%s', $type))
+            ->find($query);
 
         /** @var SlidingPagination $pager */
-        $pager = $paginator->paginate(
+        $pager = $this->get('knp_paginator')->paginate(
             $entries,
             $currentPage,
             $pageLimit
@@ -94,7 +90,7 @@ class SearchController extends Controller
         $pager->setParam('page', $currentPage);
 
         return [
-            'entries' => $pager,
+            'entries' => $pager
         ];
     }
 
@@ -108,6 +104,8 @@ class SearchController extends Controller
     public function dateAction($dateString)
     {
         $dateTs = strtotime($dateString);
+        $dateFormat = date('Y-m-d', $dateTs);
+
         $queryText = $this->get('request')->query->get('query', '*');
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
@@ -116,11 +114,11 @@ class SearchController extends Controller
         $queryString->setQuery($queryText);
 
         $rangeLower = new Query\Filtered($queryString, new Range('created_at', [
-            'gte' => date('Y-m-d', $dateTs)
+            'gte' => $dateFormat
         ]));
 
         $rangeHigher = new Query\Filtered($rangeLower, new Range('created_at', [
-            'lte' => date('Y-m-d', strtotime('+1 day', $dateTs))
+            'lte' => $dateFormat
         ]));
 
         $query = new Query();
@@ -130,15 +128,11 @@ class SearchController extends Controller
             'created_at' => ['order' => 'desc']]
         );
 
-        /** @var PaginatedFinderInterface $finder */
-        $finder = $this->get('fos_elastica.finder.website.post');
-        $entries = $finder->find($query);
-
-        /** @var Paginator $paginator */
-        $paginator = $this->get('knp_paginator');
+        $entries = $this->get('fos_elastica.finder.website.post')
+            ->find($query);
 
         /** @var SlidingPagination $pager */
-        $pager = $paginator->paginate(
+        $pager = $this->get('knp_paginator')->paginate(
             $entries,
             $currentPage,
             $pageLimit
@@ -150,7 +144,54 @@ class SearchController extends Controller
         $pager->setParam('page', $currentPage);
 
         return [
-            'title' => date('Y-m-d', $dateTs),
+            'title' => $dateFormat,
+            'entries' => $pager
+        ];
+    }
+
+    /**
+     * Posts by tag
+     *
+     * @Route("/tag/{tag}", name="search_tag")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Search:view.html.twig")
+     */
+    public function tagAction($tag)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        /** @var Tag $tagEntity */
+        if (!$tagEntity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($tag)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find tag')
+            );
+        }
+
+        $currentPage = $this->get('request')->query->get('page', 1);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
+        $tagsQuery = new Query\Terms();
+        $tagsQuery->setTerms('Tags', [$tagEntity->getId()]);
+
+        $boolQuery = new Query\BoolQuery();
+        $boolQuery->addShould($tagsQuery);
+
+        $entries = $this->get('fos_elastica.finder.website.post')
+            ->find($boolQuery);
+
+        /** @var SlidingPagination $pager */
+        $pager = $this->get('knp_paginator')->paginate(
+            $entries,
+            $currentPage,
+            $pageLimit
+        );
+
+        $pager->setUsedRoute('search_date');
+        $pager->setParam('tag', $tag);
+        $pager->setParam('page', $currentPage);
+
+        return [
+            'title' => $tagEntity->getIdentifier(),
             'entries' => $pager
         ];
     }

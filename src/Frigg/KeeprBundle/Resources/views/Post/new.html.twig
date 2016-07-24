@@ -25,12 +25,17 @@
             <div class="col-sm-10">
                 <div class="checkbox">
                     <label>
-                        {{ form_widget(form.private) }} {{ 'Private'|trans }}
+                        {{ form_widget(form.enable_comments) }} {{ 'Allow comments'|trans }}
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        {{ form_widget(form.enable_comments) }} {{ 'Allow comments'|trans }}
+                        {{ form_widget(form.hidden) }} {{ 'Hidden'|trans }}
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form_widget(form.private) }} {{ 'Private'|trans }}
                     </label>
                 </div>
             </div>
@@ -39,7 +44,7 @@
         <div class="form-group form-group-sm">
             <label class="col-sm-2 control-label" for="code">Code</label>
             <div class="col-sm-10">
-                {{ form_widget(form.content, {'attr': {'id': 'code', 'class': 'form-control code', 'placeholder': 'Paste your code here...'|trans}}) }}
+                {{ form_widget(form.content, {'attr': {'id': 'code', 'class': 'form-control code', 'placeholder': 'Paste your code here...'|trans, 'spellcheck': 'false'}}) }}
             </div>
         </div>
 

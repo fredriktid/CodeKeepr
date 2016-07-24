@@ -1,18 +1,16 @@
 <?php
 
-namespace Frigg\KeeprBundle\Service;
+namespace Frigg\KeeprBundle\Security\OAuth;
 
-use Doctrine\ORM\EntityManager;
 use Frigg\KeeprBundle\Entity\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
 /**
  * Class OAuthUserProviderService
  * @package Frigg\KeeprBundle\Service
  */
-class OAuthUserProviderService extends FOSUBUserProvider
+class OAuthUserProvider extends FOSUBUserProvider
 {
     /**
      * @param UserResponseInterface $response

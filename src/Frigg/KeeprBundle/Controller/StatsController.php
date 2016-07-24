@@ -28,8 +28,8 @@ class StatsController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->loadPopular(10);
-        $activeUsers = $em->getRepository('FriggKeeprBundle:User')->loadMostActive(5);
+        $popularTags = $em->getRepository('FriggKeeprBundle:Tag')->findPopularByPostCount(10);
+        $activeUsers = $em->getRepository('FriggKeeprBundle:User')->findActiveByPostCount(5);
 
         return [
             'popular_tags' => $popularTags,

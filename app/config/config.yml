@@ -217,6 +217,7 @@ fos_elastica:
         default: { host: localhost, port: 9200 }
     indexes:
         website:
+            index_name: website_%kernel.environment%
             client: default
             types:
                 post:
@@ -240,6 +241,7 @@ fos_elastica:
                             delete: true
                             is_indexable_callback: "isPublic"
                         finder: ~
+
                 tag:
                     mappings:
                         id:
@@ -268,7 +270,6 @@ hwi_oauth:
             type:             reddit
             client_id:        %oauth_reddit_id%
             client_secret:    %oauth_reddit_secret%
-            state:            "fah3buofjabcua3f"
             scope:            "identity"
     fosub:
         username_iterations: 30

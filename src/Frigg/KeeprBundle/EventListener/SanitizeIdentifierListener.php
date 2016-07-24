@@ -3,15 +3,14 @@
 namespace Frigg\KeeprBundle\EventListener;
 
 use Frigg\KeeprBundle\Sanitize\SanitizableIdentifierInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
- * Updates valid entities with a safe, sanitized identifier (usually used as a slug)
+ * Sanitizes valid entities with a safe identifier (usually used as a slug)
  *
- * Class UpdateIdentifierListener.
+ * Class SanitizeIdentifierListener.
  */
-class   UpdateIdentifierListener
+class SanitizeIdentifierListener
 {
     /**
      * UpdateIdentifierListener constructor.
