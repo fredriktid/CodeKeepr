@@ -1,5 +1,5 @@
 <div class="accordion-author">
-    <a href="{{ path('search_date', {'dateString': post.createdAt.format('Y-m-d')}) }}">
+    <a href="{{ path('search_date', {'query': post.createdAt.format('Y-m-d')}) }}">
         {{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('user_posts', {'id': post.user.id}) }}">{{ post.user.username }}
     </a>
 </div>
@@ -49,7 +49,7 @@
     {% endif %}
 
     {% for tag in post.tags %}
-        <a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">
+        <a href="{{ path('search_tag', {'query': tag.identifier}) }}">
             <span class="badge">
                 {{ tag.name }}
             </span>

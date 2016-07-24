@@ -228,7 +228,7 @@ fos_elastica:
                         Tags:
                             type: "nested"
                             properties:
-                                name: { boost: 3 }
+                                name: { type: "string", boost: 3 }
                         created_at: { "type": "date", "store": true }
                         language:
                     persistence:

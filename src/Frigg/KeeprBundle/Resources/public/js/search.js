@@ -17,11 +17,12 @@
             $(this).autocomplete({
                 source: function (request, response) {
                     jQuery.ajax({
-                        url: '/search/autocomplete/' + searchType,
+                        url: '/search/autocomplete',
                         dataType: 'json',
                         data: {
                             query: request.term,
-                            method: 'json'
+                            method: 'json',
+                            type: searchType
                         },
                         success: function (data) {
                             response(data);
@@ -50,7 +51,7 @@
 
                 delay(function() {
                     $.ajax({
-                        url: '/search/list',
+                        url: '/search/posts',
                         data: {
                             'query': query
                         },

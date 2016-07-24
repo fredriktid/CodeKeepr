@@ -18,8 +18,8 @@
             <tbody>
                 {% for tag in popular_tags %}
                     <tr>
-                        <td><a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">{{ tag.post_count }}</a></td>
-                        <td><a href="{{ path('tag_posts', {'identifier': tag.identifier}) }}">{{ tag.name }}</a></td>
+                        <td><a href="{{ path('search_tag', {'query': tag.identifier}) }}">{{ tag.post_count }}</a></td>
+                        <td><a href="{{ path('search_tag', {'query': tag.identifier}) }}">{{ tag.name }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
