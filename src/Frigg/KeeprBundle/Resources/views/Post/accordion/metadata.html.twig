@@ -1,8 +1,9 @@
 <div class="accordion-author">
-    <a href="{{ path('search_date', {'query': post.createdAt.format('Y-m-d')}) }}">
-        {{ post.createdAt.format('Y-m-d') }}</a> {{ 'by'|trans }} <a href="{{ path('user_posts', {'id': post.user.id}) }}">{{ post.user.username }}
-    </a>
+    <a href="{{ path('search_date', {'query': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a>
+    {{ 'by'|trans }}
+    <a href="{{ path('search_user', {'query': post.user.id}) }}">{{ post.user.username }}</a>
 </div>
+
 <div class="accordion-metadata">
     {% set is_starred = (app.user and post|is_starred) %}
     <a href="{{ path('star_switch', {'id': post.id}) }}" title="{{ is_starred ? 'Unstar'|trans : 'Star'|trans }}" class="star">

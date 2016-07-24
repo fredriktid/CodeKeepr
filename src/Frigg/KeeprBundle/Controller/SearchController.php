@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Filter\Range;
 use Frigg\KeeprBundle\Entity\Tag;
+use Frigg\KeeprBundle\Entity\User;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -64,7 +65,7 @@ class SearchController extends Controller
         $queryText = $this->get('request')->query->get('query', '');
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
-        
+
         $queryString = new Query\QueryString();
         $queryString->setQuery(sprintf('*%s*', $queryText));
 
@@ -198,6 +199,58 @@ class SearchController extends Controller
 
         return [
             'title' => $tagEntity->getName(),
+            'entries' => $pager
+        ];
+    }
+
+    /**
+     * Posts by tag
+     *
+     * @Route("/user", name="search_user")
+     * @Method("GET")
+     * @Template("FriggKeeprBundle:Search:view.html.twig")
+     */
+    public function userAction()
+    {
+        $query = (int) $this->get('request')->query->get('query');
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        /** @var User $userEntity */
+        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->findOneById($query)) {
+            throw $this->createNotFoundException(
+                $this->get('translator')->trans('Unable to find user')
+            );
+        }
+
+        $currentPage = $this->get('request')->query->get('page', 1);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
+
+        $matchQuery = new Query\Match();
+        $matchQuery->setField('User.id', $userEntity->getId());
+
+        $boolQuery = new Query\BoolQuery();
+        $boolQuery->addMust($matchQuery);
+
+        $query = new Query($boolQuery);
+        $query->setSize(99999);
+        $query->setSort(['created_at' => ['order' => 'desc']]);
+
+        $entries = $this->get('fos_elastica.finder.website.post')
+            ->find($query);
+
+        /** @var SlidingPagination $pager */
+        $pager = $this->get('knp_paginator')->paginate(
+            $entries,
+            $currentPage,
+            $pageLimit
+        );
+
+        $pager->setUsedRoute('search_user');
+        $pager->setParam('query', $query);
+        $pager->setParam('page', $currentPage);
+
+        return [
+            'title' => $userEntity->getUsername(),
             'entries' => $pager
         ];
     }
