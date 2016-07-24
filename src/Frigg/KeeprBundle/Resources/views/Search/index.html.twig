@@ -5,6 +5,6 @@
 {% block body %}
     <input id="search" type="text" class="form-control" placeholder="Search">
     <div id="posts">
-        {{ render_esi(controller('FriggKeeprBundle:Search:list', {'type': 'post'}, {'query': query_text, 'page': current_page})) }}
+        {{ render_esi(controller('FriggKeeprBundle:Search:posts', {}, {'query': query_text, 'page': current_page})) }}
     </div>
 {% endblock %}
