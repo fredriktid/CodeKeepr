@@ -266,10 +266,11 @@ class SearchController extends Controller
     {
         $query = $this->get('request')->query->get('query', '');
         $method = $this->get('request')->query->get('method', 'json');
+        $type = $this->get('request')->query->get('type', 'post');
 
         $collection = array();
         if ($query) {
-            $finder = $this->get('fos_elastica.finder.website.post');
+            $finder = $this->get('fos_elastica.finder.website.' . $type);
             $results = $finder->find($query.'*', 5);
             foreach ($results as $object) {
                 $collection[] = array(
