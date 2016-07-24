@@ -60,7 +60,7 @@ class PostVoter extends BaseVoter implements VoterInterface
                     }
                     break;
                 case 'POST_SHOW':
-                    if ($postEntity->isPublic()) {
+                    if (!$postEntity->getPrivate()) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
 

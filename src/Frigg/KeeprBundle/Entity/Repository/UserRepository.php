@@ -13,7 +13,7 @@ class UserRepository extends EntityRepository
      * @param $limit
      * @return array
      */
-    public function loadMostActive($limit)
+    public function findActiveByPostCount($limit)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

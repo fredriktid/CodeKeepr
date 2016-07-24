@@ -22,6 +22,7 @@ class PostType extends AbstractType
             ->add('content')
             ->add('private')
             ->add('enable_comments')
+            ->add('hidden')
             ->add('Tags', 'collection', [
                 'type' => new TagType(),
                 'allow_add' => true,

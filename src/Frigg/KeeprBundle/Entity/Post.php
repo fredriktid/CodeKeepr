@@ -79,6 +79,11 @@ class Post implements SanitizableIdentifierInterface
     private $enable_comments;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $hidden;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -352,6 +357,8 @@ class Post implements SanitizableIdentifierInterface
     public function removeStar(Star $star)
     {
         $this->Stars->removeElement($star);
+
+        return $this;
     }
 
     /**
@@ -394,11 +401,11 @@ class Post implements SanitizableIdentifierInterface
      */
     public function isPublic()
     {
-        return !$this->private;
+        return (!$this->getPrivate() && !$this->getHidden());
     }
 
     /**
-     * @return mixed
+     * @return book
      */
     public function getEnableComments()
     {
@@ -406,10 +413,29 @@ class Post implements SanitizableIdentifierInterface
     }
 
     /**
-     * @param mixed $enableComments
+     * @param bool $enableComments
      */
     public function setEnableComments($enableComments)
     {
         $this->enable_comments = $enableComments;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * @param bool $hidden
+     * @return Post
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
+
+        return $this;
     }
 }

@@ -15,7 +15,7 @@ class PostRepository extends EntityRepository
     /**
      * @return array
      */
-    public function loadPublic()
+    public function findPublicPosts()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -31,9 +31,10 @@ class PostRepository extends EntityRepository
     }
 
     /**
+     * @param UserInterface $user
      * @return array
      */
-    public function loadPrivate($user)
+    public function findPrivateByUser(UserInterface $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -54,7 +55,7 @@ class PostRepository extends EntityRepository
      * @param Tag $tag
      * @return array
      */
-    public function loadByTag(Tag $tag)
+    public function findPublicByTag(Tag $tag)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -76,7 +77,7 @@ class PostRepository extends EntityRepository
      * @param UserInterface $user
      * @return array
      */
-    public function loadByUser(UserInterface $user)
+    public function findPublicByUser(UserInterface $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -97,7 +98,7 @@ class PostRepository extends EntityRepository
      * @param UserInterface $user
      * @return array
      */
-    public function loadStarred(UserInterface $user)
+    public function findStarredByUser(UserInterface $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -118,7 +119,7 @@ class PostRepository extends EntityRepository
      * @param $toTs
      * @return array
      */
-    public function loadPeriod($fromTs, $toTs)
+    public function findInTimePeriod($fromTs, $toTs)
     {
         $period = [
             'from_time' => new \DateTime(

@@ -32,6 +32,7 @@ class PostController extends Controller
     {
         $timestamp = strtotime($date);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
+        $currentPage = $this->get('request')->query->get('page', 1);
 
         $interval = [
             'begin' => mktime(0, 0, 0, date('n', $timestamp), date('j', $timestamp), date('Y', $timestamp)),
@@ -39,9 +40,12 @@ class PostController extends Controller
         ];
 
         $em = $this->get('doctrine.orm.entity_manager');
-        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadPeriod($interval['begin'], $interval['end']);
-        $currentPage = $this->get('request')->query->get('page', 1);
+        $repository = $em->getRepository('FriggKeeprBundle:Post');
 
+        $publicPosts = $repository->findInTimePeriod(
+            $interval['begin'],
+            $interval['end']
+        );
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(

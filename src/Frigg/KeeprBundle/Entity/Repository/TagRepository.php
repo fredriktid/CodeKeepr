@@ -12,7 +12,7 @@ class TagRepository extends EntityRepository
     /**
      * @return array
      */
-    public function loadPublic()
+    public function findPublicTags()
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -27,7 +27,7 @@ class TagRepository extends EntityRepository
      * @param int $limit
      * @return array
      */
-    public function loadPopular($limit = 15)
+    public function findPopularByPostCount($limit = 15)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

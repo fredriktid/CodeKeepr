@@ -19,10 +19,8 @@ class StarRepository extends EntityRepository
      */
     public function isStarred(Post $post, User $user)
     {
-        $em = $this->getEntityManager();
-
         /** @var Star $star */
-        $star = $em->getRepository('FriggKeeprBundle:Star')->findOneBy([
+        $star = $this->findOneBy([
             'Post' => $post->getId(),
             'User' => $user->getId(),
         ]);

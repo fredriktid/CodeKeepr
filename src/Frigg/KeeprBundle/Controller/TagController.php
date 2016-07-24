@@ -34,10 +34,11 @@ class TagController extends Controller
             );
         }
 
+        $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
-        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->loadByTag($tagEntity);
-        $currentPage = $this->get('request')->query->get('page', 1);
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')
+            ->findPublicByTag($tagEntity);
 
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
