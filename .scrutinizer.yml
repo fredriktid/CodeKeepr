@@ -23,7 +23,7 @@ build:
     environment:
         ruby: 2.0.0-p481
         php:
-            version: 7.0
+            version: 7.0.8
             ini:
                 max_execution_time: 3600
                 memory_limit: -1
