@@ -16,6 +16,7 @@ security:
             logout: true
             remember_me:
                 key: %secret%
+                always_remember_me: true
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
@@ -50,4 +51,3 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
-
