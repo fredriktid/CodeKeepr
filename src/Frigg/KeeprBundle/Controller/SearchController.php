@@ -2,16 +2,22 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
+use Elastica\Filter\BoolAnd;
+use Elastica\Query;
 use Elastica\Filter\Range;
+use Elastica\Filter\Nested as FilterNested;
+use Elastica\Filter\Terms as FilterTerms;
+use Elastica\Aggregation\Terms;
+use Elastica\Aggregation\Nested;
 use Frigg\KeeprBundle\Entity\Tag;
 use Frigg\KeeprBundle\Entity\User;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-use Elastica\Query;
 
 /**
  * Search controller.
@@ -30,12 +36,14 @@ class SearchController extends Controller
     public function indexAction()
     {
         $queryString = $this->get('request')->query->get('query', '');
+        $queryFilters = $this->get('request')->query->get('filters', []);
         $currentPage = $this->get('request')->query->get('page', 1);
 
         return [
             'title' => $this->get('translator')->trans('Home'),
             'query_text' => $queryString,
-            'current_page' => $currentPage
+            'current_page' => $currentPage,
+            'query_filters' => $queryFilters
         ];
     }
 
@@ -63,34 +71,43 @@ class SearchController extends Controller
     public function postsAction()
     {
         $queryString = $this->get('request')->query->get('query');
+        $queryFilters = $this->get('request')->query->get('filters', []);
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
-        $wildCardString = (!$queryString) ? '*' : sprintf('*%s*', $queryString);
+        $wildCardString = (!$queryString || $queryString === '*') ? '*' : sprintf('*%s*', $queryString);
         $stringQuery = new Query\QueryString();
         $stringQuery->setQuery($wildCardString);
 
-        $query = new Query();
-        $query->setSort(['created_at' => ['order' => 'desc']])
-            ->setQuery($stringQuery)
-            ->setSize(99999);
+        if (is_array($queryFilters) && count($queryFilters)) {
+            foreach ($queryFilters as $filter) {
+                list($filterField, $filterValue) = array_map('trim', explode(':', $filter));
 
-        $entries = $this->get('fos_elastica.finder.website.post')
-            ->find($query);
+            }
+        }
 
-        /** @var SlidingPagination $pager */
-        $pager = $this->get('knp_paginator')->paginate(
-            $entries,
-            $currentPage,
-            $pageLimit
-        );
+        $query = new Query($stringQuery);
+        $query->setSize(99999)
+            ->setSort(['created_at' => ['order' => 'desc']]);
 
-        $pager->setUsedRoute('search_index');
-        $pager->setParam('query', (strlen($queryString)) ? $queryString : '*');
-        $pager->setParam('page', $currentPage);
+        $tagsAggreate = new Terms('Tags');
+        $tagsAggreate->setField('Tags.name.untouched');
+        $tagsAggreate->setSize(20);
+
+        $nestedAggregate = new Nested('tags', 'Tags');
+        $nestedAggregate->addAggregation($tagsAggreate);
+        $query->addAggregation($nestedAggregate);
+
+        $pager = $this->get('fos_elastica.finder.website.post')
+            ->findPaginated($query)
+            ->setCurrentPage($currentPage)
+            ->setMaxPerPage($pageLimit);
 
         return [
-            'entries' => $pager
+            'pager' => $pager,
+            'query' => $queryString,
+            'filters' => $queryFilters,
+            'current_page' => $currentPage
         ];
     }
 
@@ -103,11 +120,11 @@ class SearchController extends Controller
      */
     public function dateAction()
     {
-        $query = $this->get('request')->query->get('query', 0);
+        $queryString = $this->get('request')->query->get('query', 0);
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
-        $dateTs = strtotime($query);
+        $dateTs = strtotime($queryString);
         $dateFormat = date('Y-m-d', $dateTs);
 
         $stringQuery = new Query\QueryString();
@@ -121,12 +138,9 @@ class SearchController extends Controller
             'lte' => $dateFormat
         ]));
 
-        $query = new Query();
-        $query->setQuery($rangeHigher);
-        $query->setSize(99999);
-        $query->setSort([
-            'created_at' => ['order' => 'desc']]
-        );
+        $query = new Query($rangeHigher);
+        $query->setSize(99999)
+            ->setSort(['created_at' => ['order' => 'desc']]);
 
         $entries = $this->get('fos_elastica.finder.website.post')
             ->find($query);
@@ -181,8 +195,8 @@ class SearchController extends Controller
         $nestedQuery->setQuery($boolQuery);
 
         $query = new Query($nestedQuery);
-        $query->setSize(99999);
-        $query->setSort(['created_at' => ['order' => 'desc']]);
+        $query->setSize(99999)
+            ->setSort(['created_at' => ['order' => 'desc']]);
 
         $entries = $this->get('fos_elastica.finder.website.post')
             ->find($query);
@@ -233,8 +247,8 @@ class SearchController extends Controller
         $boolQuery->addMust($matchQuery);
 
         $query = new Query($boolQuery);
-        $query->setSize(99999);
-        $query->setSort(['created_at' => ['order' => 'desc']]);
+        $query->setSize(99999)
+            ->setSort(['created_at' => ['order' => 'desc']]);
 
         $entries = $this->get('fos_elastica.finder.website.post')
             ->find($query);

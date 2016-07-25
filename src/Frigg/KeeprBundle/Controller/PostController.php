@@ -40,15 +40,12 @@ class PostController extends Controller
         ];
 
         $em = $this->get('doctrine.orm.entity_manager');
-        $repository = $em->getRepository('FriggKeeprBundle:Post');
-
-        $publicPosts = $repository->findInTimePeriod(
+        $publicPosts = $em->getRepository('FriggKeeprBundle:Post')->findInTimePeriod(
             $interval['begin'],
             $interval['end']
         );
 
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->get('knp_paginator')->paginate(
             $publicPosts,
             $currentPage,
             $pageLimit

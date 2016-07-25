@@ -1,10 +1,24 @@
-{% if entries.getTotalItemCount %}
-    <div class="accordion" id="accordion2">
-        {% for entry in entries %}
-            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': entry, 'view': 'line'}) }}
-        {% endfor %}
-        <div class="pull-right">
-            {{ knp_pagination_render(entries) }}
+{% if pager.count %}
+    {% if pager.adapter.aggregations.tags.Tags.buckets is defined %}
+        <div id="tags">
+            {% for aggregate in  pager.adapter.aggregations.tags.Tags.buckets %}
+                <button class="btn btn-{{ ('Tags:' ~aggregate.key in filters) ? 'primary' : 'info' }}" type="button">
+                    <a href="{{ path('search_index', {'query': query, 'filters': filters|merge(['Tags:' ~ aggregate.key])}) }}">
+                        {{ aggregate.key }} <span class="badge">{{ aggregate.doc_count }}</span>
+                    </a>
+                </button>
+            {% endfor %}
         </div>
+    {% endif %}
+
+    <div class="accordion" id="accordion2">
+        {% for hit in pager %}
+            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': hit, 'view': 'line'}) }}
+        {% endfor %}
+        {% if pager.haveToPaginate %}
+            <div class="pull-right">
+                {#{ pagerfanta(pager) }#}
+            </div>
+        {% endif %}
     </div>
 {% endif %}

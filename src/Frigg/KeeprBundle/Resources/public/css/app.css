@@ -44,6 +44,27 @@ code, kbd, pre, samp {
     margin-bottom: 1em;
 }
 
+#tags {
+    margin: 0 0 1em 0;
+}
+
+#tags .btn {
+    margin: 2px 0;
+}
+
+#tags .btn a,
+#tags .btn a:focus,
+#tags .btn a:active,
+#tags .btn a:hover {
+    color: #FFFFFF;
+}
+
+#tags .btn a:focus,
+#tags .btn a:active,
+#tags .btn a:hover {
+    text-decoration: none;
+}
+
 .box {
     box-sizing: border-box;
     padding: 1em;
