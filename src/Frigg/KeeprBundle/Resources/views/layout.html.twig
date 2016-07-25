@@ -26,6 +26,9 @@
     </head>
     <body>
         {% set currentRoute = app.request.attributes.get('_route') %}
+        {% if app.environment == 'prod' %}
+            {% include 'FriggKeeprBundle:Layout:analytics.html.twig' %}
+        {% endif %}
         <div id="topbar" class="col-md-12">
             {% include 'FriggKeeprBundle:Layout:topbar.html.twig' with {'crumb': block('title') } %}
         </div>
