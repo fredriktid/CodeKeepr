@@ -3,6 +3,7 @@
 namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Filter\BoolAnd;
+use Elastica\Filter\Term;
 use Elastica\Query;
 use Elastica\Filter\Range;
 use Elastica\Filter\Nested as FilterNested;
@@ -94,14 +95,14 @@ class SearchController extends Controller
                 $nestedQuery = new Query\Nested();
                 $nestedQuery->setPath('Tags');
                 $nestedQuery->setQuery($nestedBoolQuery);
-
                 $boolQuery->addMust($nestedQuery);
             }
         }
-
+        
         $query = new Query($boolQuery);
         $query->setSize(99999)
-            ->setSort(['created_at' => ['order' => 'desc']]);
+            ->addSort('_score')
+            ->addSort(['created_at' => ['order' => 'desc']]);
 
         $tagsAggreate = new Terms('Tags');
         $tagsAggreate->setField('Tags.name.untouched');
