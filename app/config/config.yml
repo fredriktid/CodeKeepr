@@ -228,7 +228,13 @@ fos_elastica:
                         Tags:
                             type: "nested"
                             properties:
-                                name: { type: "string", boost: 3 }
+                                name:
+                                    type: "string"
+                                    boost: 3
+                                    fields:
+                                        untouched:
+                                            type: "string"
+                                            index: "not_analyzed"
                         User:
                             type: "object"
                             properties:

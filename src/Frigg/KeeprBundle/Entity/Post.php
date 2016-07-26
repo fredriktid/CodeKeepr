@@ -353,6 +353,7 @@ class Post implements SanitizableIdentifierInterface
      * Remove Stars.
      *
      * @param Star $star
+     * @return Post
      */
     public function removeStar(Star $star)
     {
@@ -405,7 +406,7 @@ class Post implements SanitizableIdentifierInterface
     }
 
     /**
-     * @return book
+     * @return bool
      */
     public function getEnableComments()
     {

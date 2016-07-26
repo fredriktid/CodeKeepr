@@ -3,8 +3,8 @@
 {% block title %}{{ 'Home'|trans }}{% endblock %}
 
 {% block body %}
-    <input id="search" type="text" class="form-control" placeholder="Search">
+    <input name="query" id="search" type="text" class="form-control"{% if query_text|length %} value="{{ query_text }}"{% else %} placeholder="Search"{% endif %}>
     <div id="posts">
-        {{ render_esi(controller('FriggKeeprBundle:Search:posts', {}, {'query': query_text, 'page': current_page})) }}
+        {{ render_esi(controller('FriggKeeprBundle:Search:posts', {}, {'query': query_text, 'page': current_page, 'filters': query_filters})) }}
     </div>
 {% endblock %}

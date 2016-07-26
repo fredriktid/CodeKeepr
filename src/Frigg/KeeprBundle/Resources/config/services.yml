@@ -6,6 +6,7 @@ parameters:
     codekeepr.post.voter.class: Frigg\KeeprBundle\Security\Voter\PostVoter
     codekeepr.user.twig.class: Frigg\KeeprBundle\Twig\UserExtension
     codekeepr.user.voter.class: Frigg\KeeprBundle\Security\Voter\UserVoter
+    codekeepr.user.search.class: Frigg\KeeprBundle\Twig\SearchExtension
     codekeepr.ouath.user.provider.class: Frigg\KeeprBundle\Security\OAuth\OAuthUserProvider
 
 services:
@@ -40,6 +41,10 @@ services:
         tags:
             - { name: twig.extension }
 
+    codekeepr.search.twig:
+        class: %codekeepr.user.search.class%
+        tags:
+            - { name: twig.extension }
     # voters
     codekeepr.post.voter:
         class: %codekeepr.post.voter.class%
