@@ -75,18 +75,31 @@ class SearchController extends Controller
         $currentPage = $this->get('request')->query->get('page', 1);
         $pageLimit = $this->getParameter('codekeepr.page.limit');
 
+        $boolQuery = new Query\Bool();
+
         $wildCardString = (!$queryString || $queryString === '*') ? '*' : sprintf('*%s*', $queryString);
         $stringQuery = new Query\QueryString();
         $stringQuery->setQuery($wildCardString);
+        $boolQuery->addMust($stringQuery);
 
         if (is_array($queryFilters) && count($queryFilters)) {
             foreach ($queryFilters as $filter) {
                 list($filterField, $filterValue) = array_map('trim', explode(':', $filter));
+                $matchQuery = new Query\Match();
+                $matchQuery->setField($filterField, $filterValue);
 
+                $nestedBoolQuery = new Query\BoolQuery();
+                $nestedBoolQuery->addMust($matchQuery);
+
+                $nestedQuery = new Query\Nested();
+                $nestedQuery->setPath('Tags');
+                $nestedQuery->setQuery($nestedBoolQuery);
+
+                $boolQuery->addMust($nestedQuery);
             }
         }
 
-        $query = new Query($stringQuery);
+        $query = new Query($boolQuery);
         $query->setSize(99999)
             ->setSort(['created_at' => ['order' => 'desc']]);
 
