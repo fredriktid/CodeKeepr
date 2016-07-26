@@ -51,7 +51,7 @@
 
     {% set filters = (filters is defined) ? filters : [] %}
     {% for tag in post.tags %}
-        <a href="{{ path('search_index', {'filters': ['Tags.name:' ~ tag.identifier]}) }}">
+        <a href="{{ path('search_index', {'filters': ['Tags.name:' ~ tag.name]}) }}">
             <span class="badge">
                 {{ tag.name }}
             </span>
