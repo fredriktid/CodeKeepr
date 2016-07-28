@@ -1,7 +1,7 @@
 <div class="accordion-author">
-    <a href="{{ path('search_date', {'query': post.createdAt.format('Y-m-d')}) }}">{{ post.createdAt.format('Y-m-d') }}</a>
+    <a href="{{ path('search_index', {'ranges': ['created_at:gte:' ~ post.createdAt.format('Y-m-d'), 'created_at:lte:' ~ post.createdAt.format('Y-m-d')]}) }}">{{ post.createdAt.format('Y-m-d') }}</a>
     {{ 'by'|trans }}
-    <a href="{{ path('search_user', {'query': post.user.id}) }}">{{ post.user.username }}</a>
+    <a href="{{ path('search_index', {'objects': ['User.id:' ~ post.user.id]}) }}">{{ post.user.username }}</a>
 </div>
 
 <div class="accordion-metadata">
@@ -10,7 +10,7 @@
         <i class="glyphicon {{ is_starred ? 'glyphicon-star' : 'glyphicon-star-empty' }}"></i>
     </a>
 
-    {% if post.private %}
+    {% if post.hidden %}
         <a href="{{ path('post_edit', {'id': post.id}) }}" title="Hidden" class="star">
             <i class="glyphicon glyphicon-sunglasses"></i>
         </a>
@@ -28,7 +28,7 @@
         </a>
     {% endif %}
 
-    {% if is_granted('POST_DELETE', post) and full_view %}
+    {% if is_granted('POST_DELETE', post) %}
         <a href="{{ path('post_delete_confirm', {'id': post.id}) }}" title="{{ 'Delete'|trans }}" class="star">
             <i class="glyphicon glyphicon-trash"></i>
         </a>
@@ -49,9 +49,8 @@
         </a>
     {% endif %}
 
-    {% set filters = (filters is defined) ? filters : [] %}
     {% for tag in post.tags %}
-        <a href="{{ path('search_index', {'filters': ['Tags.name:' ~ tag.name]}) }}">
+        <a href="{{ path('search_index', {'nested': ['Tags.name:' ~ tag.name]}) }}">
             <span class="badge">
                 {{ tag.name }}
             </span>

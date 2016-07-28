@@ -1,26 +1,24 @@
-{% if pager.count %}
-    {% if pager.adapter.aggregations.tags.Tags.buckets is defined %}
-        <div id="tags">
-            {% for aggregate in  pager.adapter.aggregations.tags.Tags.buckets %}
-                {% set tagFilter = 'Tags.name:' ~ aggregate.key %}
-                {% set filterExists = (tagFilter in filters) %}
-                {% set filterSwitch = (filterExists) ? filters|filter_remove(tagFilter) : filters|filter_add(tagFilter) %}
+{% if pager.adapter.aggregations.tags.Tags.buckets is defined %}
+    <div id="tags">
+        {% for aggregate in  pager.adapter.aggregations.tags.Tags.buckets %}
+            {% set nestedMatch = 'Tags.name:' ~ aggregate.key %}
+            {% set nestedExists = (nestedMatch in nested) %}
+            {% set nestedQuery = (nestedExists) ? nested|filter_remove(nestedMatch) : nested|filter_add(nestedMatch) %}
 
-                <a href="{{ path('search_index', {'query': query, 'filters': filterSwitch}) }}" class="btn btn-{{ (filterExists) ? 'primary' : 'info' }}" type="button">
-                    {{ aggregate.key }} <span class="badge">{{ aggregate.doc_count }}</span>
-                </a>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <div class="accordion" id="accordion2">
-        {% for hit in pager %}
-            {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': hit, 'view': 'line'}) }}
+            <a href="{{ path('search_index', {'query': query, 'nested': nestedQuery}) }}" class="btn btn-{{ (nestedExists) ? 'primary' : 'info' }}" type="button">
+                {{ aggregate.key }} <span class="badge">{{ aggregate.doc_count }}</span>
+            </a>
         {% endfor %}
-        {% if pager.haveToPaginate %}
-            <div class="pull-right pagerfanta">
-                {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'search_index', 'routeParams' : {'query': query, 'filters': filters}}) }}
-            </div>
-        {% endif %}
     </div>
 {% endif %}
+
+<div class="accordion" id="accordion2">
+    {% for hit in pager %}
+        {{ include('FriggKeeprBundle:Post:accordion.html.twig', {'post': hit, 'view': 'line'}) }}
+    {% endfor %}
+    {% if pager.haveToPaginate %}
+        <div class="pull-right pagerfanta">
+            {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'search_index', 'routeParams' : {'query': query, 'nested': nested}}) }}
+        </div>
+    {% endif %}
+</div>

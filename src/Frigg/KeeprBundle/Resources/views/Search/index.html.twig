@@ -5,6 +5,12 @@
 {% block body %}
     <input name="query" id="search" type="text" class="form-control"{% if query_text|length %} value="{{ query_text }}"{% else %} placeholder="Search"{% endif %}>
     <div id="posts">
-        {{ render_esi(controller('FriggKeeprBundle:Search:posts', {}, {'query': query_text, 'page': current_page, 'filters': query_filters})) }}
+        {{ render_esi(controller('FriggKeeprBundle:Search:posts', {}, {
+            'query': query_text,
+            'page': current_page,
+            'nested': query_nested,
+            'ranges': query_ranges,
+            'objects': query_objects
+        })) }}
     </div>
 {% endblock %}

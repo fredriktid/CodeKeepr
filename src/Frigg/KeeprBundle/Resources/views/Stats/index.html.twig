@@ -18,8 +18,8 @@
             <tbody>
                 {% for tag in popular_tags %}
                     <tr>
-                        <td><a href="{{ path('search_index', {'filters': ['Tags.name:' ~ tag.identifier]}) }}">{{ tag.post_count }}</a></td>
-                        <td><a href="{{ path('search_index', {'filters': ['Tags.name:' ~ tag.identifier]}) }}">{{ tag.name }}</a></td>
+                        <td><a href="{{ path('search_index', {'nested': ['Tags.name:' ~ tag.identifier]}) }}">{{ tag.post_count }}</a></td>
+                        <td><a href="{{ path('search_index', {'nested': ['Tags.name:' ~ tag.identifier]}) }}">{{ tag.name }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -39,8 +39,8 @@
             <tbody>
             {% for user in active_users %}
                 <tr>
-                    <td><a href="{{ path('user_posts', {'id': user.id}) }}">{{ user.post_count }}</a></td>
-                    <td><a href="{{ path('user_posts', {'id': user.id}) }}">{{ user.email|generate_username }}</a></td>
+                    <td><a href="{{ path('search_index', {'objects': ['User.id:' ~ user.id]}) }}">{{ user.post_count }}</a></td>
+                    <td><a href="{{ path('search_index', {'objects': ['User.id:' ~ user.id]}) }}">{{ user.email|generate_username }}</a></td>
                 </tr>
             {% endfor %}
             </tbody>

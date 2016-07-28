@@ -2,22 +2,14 @@
 
 namespace Frigg\KeeprBundle\Controller;
 
-use Elastica\Filter\BoolAnd;
-use Elastica\Filter\Term;
 use Elastica\Query;
-use Elastica\Filter\Range;
-use Elastica\Filter\Nested as FilterNested;
-use Elastica\Filter\Terms as FilterTerms;
 use Elastica\Aggregation\Terms;
 use Elastica\Aggregation\Nested;
-use Frigg\KeeprBundle\Entity\Tag;
-use Frigg\KeeprBundle\Entity\User;
-use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -34,17 +26,21 @@ class SearchController extends Controller
      * @Method("GET")
      * @Template("FriggKeeprBundle:Search:index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $queryString = $this->get('request')->query->get('query', '');
-        $queryFilters = $this->get('request')->query->get('filters', []);
-        $currentPage = $this->get('request')->query->get('page', 1);
+        $queryString = $request->query->get('query', '');
+        $queryNested = $request->query->get('nested', []);
+        $queryRanges = $request->query->get('ranges', []);
+        $queryObjects = $request->query->get('objects', []);
+        $currentPage = $request->query->get('page', 1);
 
         return [
             'title' => $this->get('translator')->trans('Home'),
             'query_text' => $queryString,
             'current_page' => $currentPage,
-            'query_filters' => $queryFilters
+            'query_nested' => $queryNested,
+            'query_ranges' => $queryRanges,
+            'query_objects' => $queryObjects
         ];
     }
 
@@ -65,53 +61,50 @@ class SearchController extends Controller
     /**
      * Search and show list.
      *
+     * @param Request $request
      * @Route("/posts", name="search_posts")
      * @Method("GET")
      * @Template("FriggKeeprBundle:Search:posts.html.twig")
      */
-    public function postsAction()
+    public function postsAction(Request $request)
     {
-        $queryString = $this->get('request')->query->get('query');
-        $queryFilters = $this->get('request')->query->get('filters', []);
-        $currentPage = $this->get('request')->query->get('page', 1);
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
-
-        $boolQuery = new Query\Bool();
+        $queryString = $request->query->get('query');
+        $queryNested = $request->query->get('nested', []);
+        $queryRanges = $request->query->get('ranges', []);
+        $queryObjects = $request->query->get('objects', []);
+        $currentPage = $request->query->get('page', 1);
 
         $wildCardString = (!$queryString || $queryString === '*') ? '*' : sprintf('*%s*', $queryString);
-        $stringQuery = new Query\QueryString();
-        $stringQuery->setQuery($wildCardString);
-        $boolQuery->addMust($stringQuery);
 
-        if (is_array($queryFilters) && count($queryFilters)) {
-            foreach ($queryFilters as $filter) {
-                list($filterField, $filterValue) = array_map('trim', explode(':', $filter));
-                $matchQuery = new Query\Match();
-                $matchQuery->setField($filterField, $filterValue);
+        $queryBuilder = $this->get('codekeepr.elastica.query.builder')
+            ->setQueryString($wildCardString)
+            ->setNested($queryNested)
+            ->setRanges($queryRanges)
+            ->setObjects($queryObjects);
 
-                $nestedBoolQuery = new Query\BoolQuery();
-                $nestedBoolQuery->addMust($matchQuery);
+        $boolQuery = $queryBuilder
+            ->setBoolQuery(new Query\Bool())
+            ->mustQueryString()
+            ->mustFilterNested()
+            ->mustFilterObjects()
+            ->mustFilterRange()
+            ->getBoolQuery();
 
-                $nestedQuery = new Query\Nested();
-                $nestedQuery->setPath('Tags');
-                $nestedQuery->setQuery($nestedBoolQuery);
-                $boolQuery->addMust($nestedQuery);
-            }
-        }
-        
         $query = new Query($boolQuery);
         $query->setSize(99999)
             ->addSort('_score')
             ->addSort(['created_at' => ['order' => 'desc']]);
 
         $tagsAggreate = new Terms('Tags');
-        $tagsAggreate->setField('Tags.name.untouched');
-        $tagsAggreate->setSize(20);
+        $tagsAggreate
+            ->setField('Tags.name.untouched')
+            ->setSize(20);
 
         $nestedAggregate = new Nested('tags', 'Tags');
         $nestedAggregate->addAggregation($tagsAggreate);
         $query->addAggregation($nestedAggregate);
 
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
         $pager = $this->get('fos_elastica.finder.website.post')
             ->findPaginated($query)
             ->setCurrentPage($currentPage)
@@ -120,167 +113,9 @@ class SearchController extends Controller
         return [
             'pager' => $pager,
             'query' => $queryString,
-            'filters' => $queryFilters,
+            'nested' => $queryNested,
+            'objects' => $queryObjects,
             'current_page' => $currentPage
-        ];
-    }
-
-    /**
-     * Posts by date
-     *
-     * @Route("/date", name="search_date")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Search:view.html.twig")
-     */
-    public function dateAction()
-    {
-        $queryString = $this->get('request')->query->get('query', 0);
-        $currentPage = $this->get('request')->query->get('page', 1);
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
-
-        $dateTs = strtotime($queryString);
-        $dateFormat = date('Y-m-d', $dateTs);
-
-        $stringQuery = new Query\QueryString();
-        $stringQuery->setQuery('*');
-
-        $rangeLower = new Query\Filtered($stringQuery, new Range('created_at', [
-            'gte' => $dateFormat
-        ]));
-
-        $rangeHigher = new Query\Filtered($rangeLower, new Range('created_at', [
-            'lte' => $dateFormat
-        ]));
-
-        $query = new Query($rangeHigher);
-        $query->setSize(99999)
-            ->setSort(['created_at' => ['order' => 'desc']]);
-
-        $entries = $this->get('fos_elastica.finder.website.post')
-            ->find($query);
-
-        /** @var SlidingPagination $pager */
-        $pager = $this->get('knp_paginator')->paginate(
-            $entries,
-            $currentPage,
-            $pageLimit
-        );
-
-        $pager->setUsedRoute('search_date');
-        $pager->setParam('query', $query);
-        $pager->setParam('page', $currentPage);
-
-        return [
-            'title' => $dateFormat,
-            'entries' => $pager
-        ];
-    }
-
-    /**
-     * Posts by tag
-     *
-     * @Route("/tag", name="search_tag")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Search:view.html.twig")
-     */
-    public function tagAction()
-    {
-        $query = $this->get('request')->query->get('query', 0);
-        $em = $this->get('doctrine.orm.entity_manager');
-
-        /** @var Tag $tagEntity */
-        if (!$tagEntity = $em->getRepository('FriggKeeprBundle:Tag')->findOneByIdentifier($query)) {
-            throw $this->createNotFoundException(
-                $this->get('translator')->trans('Unable to find tag')
-            );
-        }
-
-        $currentPage = $this->get('request')->query->get('page', 1);
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
-
-        $matchQuery = new Query\Match();
-        $matchQuery->setField('Tags.name', $tagEntity->getName());
-
-        $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust($matchQuery);
-
-        $nestedQuery = new Query\Nested();
-        $nestedQuery->setPath('Tags');
-        $nestedQuery->setQuery($boolQuery);
-
-        $query = new Query($nestedQuery);
-        $query->setSize(99999)
-            ->setSort(['created_at' => ['order' => 'desc']]);
-
-        $entries = $this->get('fos_elastica.finder.website.post')
-            ->find($query);
-
-        /** @var SlidingPagination $pager */
-        $pager = $this->get('knp_paginator')->paginate(
-            $entries,
-            $currentPage,
-            $pageLimit
-        );
-
-        $pager->setUsedRoute('search_tag');
-        $pager->setParam('query', $query);
-        $pager->setParam('page', $currentPage);
-
-        return [
-            'title' => $tagEntity->getName(),
-            'entries' => $pager
-        ];
-    }
-
-    /**
-     * Posts by tag
-     *
-     * @Route("/user", name="search_user")
-     * @Method("GET")
-     * @Template("FriggKeeprBundle:Search:view.html.twig")
-     */
-    public function userAction()
-    {
-        $query = (int) $this->get('request')->query->get('query');
-        $em = $this->get('doctrine.orm.entity_manager');
-
-        /** @var User $userEntity */
-        if (!$userEntity = $em->getRepository('FriggKeeprBundle:User')->findOneById($query)) {
-            throw $this->createNotFoundException(
-                $this->get('translator')->trans('Unable to find user')
-            );
-        }
-
-        $currentPage = $this->get('request')->query->get('page', 1);
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
-
-        $matchQuery = new Query\Match();
-        $matchQuery->setField('User.id', $userEntity->getId());
-
-        $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust($matchQuery);
-
-        $query = new Query($boolQuery);
-        $query->setSize(99999)
-            ->setSort(['created_at' => ['order' => 'desc']]);
-
-        $entries = $this->get('fos_elastica.finder.website.post')
-            ->find($query);
-
-        /** @var SlidingPagination $pager */
-        $pager = $this->get('knp_paginator')->paginate(
-            $entries,
-            $currentPage,
-            $pageLimit
-        );
-
-        $pager->setUsedRoute('search_user');
-        $pager->setParam('query', $query);
-        $pager->setParam('page', $currentPage);
-
-        return [
-            'title' => $userEntity->getUsername(),
-            'entries' => $pager
         ];
     }
 
@@ -290,23 +125,23 @@ class SearchController extends Controller
      * @Route("/autocomplete", name="search_autocomplete")
      * @Method("GET")
      */
-    public function autocompleteAction()
+    public function autocompleteAction(Request $request)
     {
-        $query = $this->get('request')->query->get('query', '');
-        $method = $this->get('request')->query->get('method', 'json');
-        $type = $this->get('request')->query->get('type', 'post');
+        $query = $request->query->get('query', '');
+        $method = $request->query->get('method', 'json');
+        $type = $request->query->get('type', 'post');
 
-        $collection = array();
+        $collection = [];
         if ($query) {
             $finder = $this->get('fos_elastica.finder.website.' . $type);
             $results = $finder->find($query.'*', 5);
             foreach ($results as $object) {
-                $collection[] = array(
+                $collection[] = [
                     'label' => $object->__toString(),
                     'url' => $this->generateUrl('search_index', [
                         'query' => $object->__toString(),
-                    ]),
-                );
+                    ])
+                ];
             }
         }
 

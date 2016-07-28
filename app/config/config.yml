@@ -251,7 +251,6 @@ fos_elastica:
                             delete: true
                             is_indexable_callback: "isPublic"
                         finder: ~
-
                 tag:
                     mappings:
                         id:

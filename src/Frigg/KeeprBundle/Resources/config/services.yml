@@ -8,12 +8,17 @@ parameters:
     codekeepr.user.voter.class: Frigg\KeeprBundle\Security\Voter\UserVoter
     codekeepr.user.search.class: Frigg\KeeprBundle\Twig\SearchExtension
     codekeepr.ouath.user.provider.class: Frigg\KeeprBundle\Security\OAuth\OAuthUserProvider
+    codekeepr.elastica.query.builder.class: Frigg\KeeprBundle\Elastica\QueryBuilder
 
 services:
     # services
     codekeepr.oauth.user.provider.service:
         class: %codekeepr.ouath.user.provider.class%
         arguments: ['@fos_user.user_manager', { github: github_id }]
+
+    codekeepr.elastica.query.builder:
+        class: %codekeepr.elastica.query.builder.class%
+        arguments: []
 
     # event listeners
     codekeepr.registration:
