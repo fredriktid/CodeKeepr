@@ -18,7 +18,15 @@
     {% endfor %}
     {% if pager.haveToPaginate %}
         <div class="pull-right pagerfanta">
-            {{ pagerfanta(pager, 'twitter_bootstrap3', {'routeName': 'search_index', 'routeParams' : {'query': query, 'nested': nested}}) }}
+            {{ pagerfanta(pager, 'twitter_bootstrap3', {
+                'routeName': 'search_index',
+                'routeParams' : {
+                    'query': query,
+                    'nested': nested,
+                    'ranges': ranges,
+                    'objects': objects
+                }
+            }) }}
         </div>
     {% endif %}
 </div>
