@@ -3,7 +3,7 @@
 namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Query;
-use Elastica\Aggregation;
+use Frigg\KeeprBundle\Elastica\Value\Aggregation as AggregationValue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -58,7 +58,7 @@ class SearchController extends Controller
     }
 
     /**
-     * Search and show list.
+     * Search posts
      *
      * @param Request $request
      * @Route("/posts", name="search_posts")
@@ -72,6 +72,7 @@ class SearchController extends Controller
         $queryRanges = $request->query->get('ranges', []);
         $queryObjects = $request->query->get('objects', []);
         $currentPage = $request->query->get('page', 1);
+        $pageLimit = $this->getParameter('codekeepr.page.limit');
 
         $wildCardString = (!$queryString || $queryString === '*') ? '*' : sprintf('*%s*', $queryString);
 
@@ -82,7 +83,11 @@ class SearchController extends Controller
             ->addSortBy(['created_at' => ['order' => 'desc']])
             ->setNested($queryNested)
             ->setRanges($queryRanges)
-            ->setObjects($queryObjects);
+            ->setObjects($queryObjects)
+            ->addAggregation('nested', new AggregationValue([
+                'field' => 'Tags.name.untouched',
+                'size' => 20
+            ]));
 
         $query = $queryBuilder
             ->setBoolQuery(new Query\BoolQuery())
@@ -92,16 +97,6 @@ class SearchController extends Controller
             ->mustFilterRange()
             ->buildQuery();
 
-        $tagsAggreate = new Aggregation\Terms('Tags');
-        $tagsAggreate
-            ->setField('Tags.name.untouched')
-            ->setSize(20);
-
-        $nestedAggregate = new Aggregation\Nested('tags', 'Tags');
-        $nestedAggregate->addAggregation($tagsAggreate);
-        $query->addAggregation($nestedAggregate);
-
-        $pageLimit = $this->getParameter('codekeepr.page.limit');
         $pager = $this->get('fos_elastica.finder.website.post')
             ->findPaginated($query)
             ->setCurrentPage($currentPage)
