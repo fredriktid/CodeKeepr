@@ -4,6 +4,8 @@ namespace Frigg\KeeprBundle\Elastica;
 
 use Elastica\Filter;
 use Elastica\Query;
+use Elastica\Aggregation;
+use Frigg\KeeprBundle\Elastica\Value\Aggregation as AggregationValue;
 
 /**
  * Class QueryBuilder
@@ -22,6 +24,11 @@ class QueryBuilder
     protected $boolQuery;
 
     /**
+     * @var string
+     */
+    protected $queryString;
+
+    /**
      * @var integer
      */
     protected $size;
@@ -30,11 +37,6 @@ class QueryBuilder
      * @var array
      */
     protected $sortBy = [];
-
-    /**
-     * @var string
-     */
-    protected $queryString;
 
     /**
      * @var array
@@ -51,9 +53,13 @@ class QueryBuilder
      */
     protected $objects = [];
 
+    /**
+     * @var array
+     */
+    protected $aggregation = [];
 
     /**
-     * @return mixed
+     * @return Query
      */
     public function getQuery()
     {
@@ -72,6 +78,17 @@ class QueryBuilder
     }
 
     /**
+     * @param string $queryString
+     * @return QueryBuilder
+     */
+    public function setQueryString($queryString)
+    {
+        $this->queryString = $queryString;
+
+        return $this;
+    }
+
+    /**
      * @param integer $size
      * @return QueryBuilder
      */
@@ -83,23 +100,12 @@ class QueryBuilder
     }
 
     /**
-     * @param array $sortBy
+     * @param mixed $sortBy
      * @return QueryBuilder
      */
     public function addSortBy($sortBy)
     {
         $this->sortBy[] = $sortBy;
-
-        return $this;
-    }
-
-    /**
-     * @param string $queryString
-     * @return QueryBuilder
-     */
-    public function setQueryString($queryString)
-    {
-        $this->queryString = $queryString;
 
         return $this;
     }
@@ -133,6 +139,18 @@ class QueryBuilder
     public function setObjects(array $objects)
     {
         $this->objects = $objects;
+
+        return $this;
+    }
+
+    /**
+     * @param string $type
+     * @param AggregationValue $aggregation
+     * @return QueryBuilder
+     */
+    public function addAggregation($type, AggregationValue $aggregation)
+    {
+        $this->aggregation[$type][] = $aggregation;
 
         return $this;
     }
@@ -219,17 +237,57 @@ class QueryBuilder
     }
 
     /**
+     * Build elastic query object
      *
+     * @return Query
      */
     public function buildQuery()
     {
         $this->query = new Query($this->boolQuery);
+
+        $this->applyQuerySize()
+            ->applyQuerySortBy()
+            ->applyQueryNestedAggregation();
+
+        return $this->query;
+    }
+    
+    protected function applyQuerySize()
+    {
         $this->query->setSize($this->size);
 
-        foreach($this->sortBy as $sortBy) {
+        return $this;
+    }
+
+    protected function applyQuerySortBy()
+    {
+        foreach ($this->sortBy as $sortBy) {
             $this->query->addSort($sortBy);
         }
 
-        return $this->query;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function applyQueryNestedAggregation()
+    {
+        if (!isset($this->aggregation['nested'])) {
+            return $this;
+        }
+
+        /** @var AggregationValue $aggObject */
+        foreach ($this->aggregation['nested'] as $aggObject) {
+            $termsAgg = new Aggregation\Terms($aggObject->getName());
+            $termsAgg->setField($aggObject->getField());
+            $termsAgg->setSize($aggObject->getSize());
+
+            $nestedAgg = new Aggregation\Nested($aggObject->getName(), $aggObject->getPath());
+            $nestedAgg->addAggregation($termsAgg);
+            $this->query->addAggregation($nestedAgg);
+        }
+
+        return $this;
     }
 }

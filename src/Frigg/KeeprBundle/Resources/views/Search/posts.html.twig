@@ -1,11 +1,11 @@
-{% if pager.adapter.aggregations.tags.Tags.buckets is defined %}
+{% if pager.adapter.aggregations.Tags.Tags.buckets is defined %}
     <div id="tags">
-        {% for aggregate in  pager.adapter.aggregations.tags.Tags.buckets %}
+        {% for aggregate in pager.adapter.aggregations.Tags.Tags.buckets %}
             {% set nestedMatch = 'Tags.name:' ~ aggregate.key %}
             {% set nestedExists = (nestedMatch in nested) %}
             {% set nestedQuery = (nestedExists) ? nested|filter_remove(nestedMatch) : nested|filter_add(nestedMatch) %}
 
-            <a href="{{ path('search_index', {'query': query, 'nested': nestedQuery}) }}" class="btn btn-{{ (nestedExists) ? 'primary' : 'info' }}" type="button">
+            <a href="{{ path('search_index', {'query': query, 'nested': nestedQuery, 'ranges': ranges, 'objects': objects}) }}" class="btn btn-{{ (nestedExists) ? 'primary' : 'info' }}" type="button">
                 {{ aggregate.key }} <span class="badge">{{ aggregate.doc_count }}</span>
             </a>
         {% endfor %}
