@@ -12,9 +12,24 @@ use Elastica\Query;
 class QueryBuilder
 {
     /**
-     * @var Query\Bool
+     * @var Query $query
+     */
+    protected $query;
+
+    /**
+     * @var Query\BoolQuery
      */
     protected $boolQuery;
+
+    /**
+     * @var integer
+     */
+    protected $size;
+
+    /**
+     * @var array
+     */
+    protected $sortBy = [];
 
     /**
      * @var string
@@ -36,21 +51,44 @@ class QueryBuilder
      */
     protected $objects = [];
 
+
     /**
-     * @return Query\Bool
+     * @return mixed
      */
-    public function getBoolQuery()
+    public function getQuery()
     {
-        return $this->boolQuery;
+        return $this->query;
     }
 
     /**
-     * @param Query\Bool $boolQuery
+     * @param Query\BoolQuery $boolQuery
      * @return QueryBuilder
      */
-    public function setBoolQuery(Query\Bool $boolQuery)
+    public function setBoolQuery(Query\BoolQuery $boolQuery)
     {
         $this->boolQuery = $boolQuery;
+
+        return $this;
+    }
+
+    /**
+     * @param integer $size
+     * @return QueryBuilder
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    /**
+     * @param array $sortBy
+     * @return QueryBuilder
+     */
+    public function addSortBy($sortBy)
+    {
+        $this->sortBy[] = $sortBy;
 
         return $this;
     }
@@ -106,9 +144,9 @@ class QueryBuilder
      */
     public function mustQueryString()
     {
-        $stringQuery = new Query\QueryString();
-        $stringQuery->setQuery($this->queryString);
-        $this->boolQuery->addMust($stringQuery);
+        $this->boolQuery->addMust(
+            new Query\QueryString($this->queryString)
+        );
 
         return $this;
     }
@@ -167,16 +205,31 @@ class QueryBuilder
      *
      * @return QueryBuilder
      */
-    public function mustFilterObjects()
+    public function mustMatchObjects()
     {
         foreach ($this->objects as $objectData) {
             list($objectField, $objectValue) = explode(':', $objectData);
 
-            $matchQuery = new Query\Match();
-            $matchQuery->setField($objectField, $objectValue);
-            $this->boolQuery->addMust($matchQuery);
+            $this->boolQuery->addMust(
+                new Query\Match($objectField, $objectValue)
+            );
         }
 
         return $this;
+    }
+
+    /**
+     *
+     */
+    public function buildQuery()
+    {
+        $this->query = new Query($this->boolQuery);
+        $this->query->setSize($this->size);
+
+        foreach($this->sortBy as $sortBy) {
+            $this->query->addSort($sortBy);
+        }
+
+        return $this->query;
     }
 }

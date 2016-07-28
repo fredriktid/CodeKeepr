@@ -3,8 +3,7 @@
 namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Query;
-use Elastica\Aggregation\Terms;
-use Elastica\Aggregation\Nested;
+use Elastica\Aggregation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -78,29 +77,27 @@ class SearchController extends Controller
 
         $queryBuilder = $this->get('codekeepr.elastica.query.builder')
             ->setQueryString($wildCardString)
+            ->setSize(99999)
+            ->addSortBy('_score')
+            ->addSortBy(['created_at' => ['order' => 'desc']])
             ->setNested($queryNested)
             ->setRanges($queryRanges)
             ->setObjects($queryObjects);
 
-        $boolQuery = $queryBuilder
-            ->setBoolQuery(new Query\Bool())
+        $query = $queryBuilder
+            ->setBoolQuery(new Query\BoolQuery())
             ->mustQueryString()
             ->mustFilterNested()
-            ->mustFilterObjects()
+            ->mustMatchObjects()
             ->mustFilterRange()
-            ->getBoolQuery();
+            ->buildQuery();
 
-        $query = new Query($boolQuery);
-        $query->setSize(99999)
-            ->addSort('_score')
-            ->addSort(['created_at' => ['order' => 'desc']]);
-
-        $tagsAggreate = new Terms('Tags');
+        $tagsAggreate = new Aggregation\Terms('Tags');
         $tagsAggreate
             ->setField('Tags.name.untouched')
             ->setSize(20);
 
-        $nestedAggregate = new Nested('tags', 'Tags');
+        $nestedAggregate = new Aggregation\Nested('tags', 'Tags');
         $nestedAggregate->addAggregation($tagsAggreate);
         $query->addAggregation($nestedAggregate);
 
@@ -113,6 +110,7 @@ class SearchController extends Controller
         return [
             'pager' => $pager,
             'query' => $queryString,
+            'ranges' => $queryRanges,
             'nested' => $queryNested,
             'objects' => $queryObjects,
             'current_page' => $currentPage
