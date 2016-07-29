@@ -21,7 +21,7 @@ abstract class AbstractValue
     {
         if (is_array($values)) {
             foreach ($values as $key => $value) {
-                $this->setData($key, $value);
+                $this->setValue($key, $value);
             }
         }
     }
@@ -32,7 +32,7 @@ abstract class AbstractValue
      */
     public function __get($key)
     {
-        return $this->getData($key);
+        return $this->getValue($key);
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class AbstractValue
      */
     public function __set($key, $value)
     {
-        return $this->setData($key, $value);
+        return $this->setValue($key, $value);
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractValue
      * @param $value
      * @return $this
      */
-    public function setData($key, $value)
+    public function setValue($key, $value)
     {
         $this->values[$key] = $value;
 
@@ -61,7 +61,7 @@ abstract class AbstractValue
      * @param $key
      * @return mixed|null
      */
-    public function getData($key)
+    public function getValue($key)
     {
         return (array_key_exists($key, $this->values)) ? $this->values[$key] : null;
     }

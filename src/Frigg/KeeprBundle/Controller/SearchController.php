@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Controller;
 
 use Elastica\Query;
 use Frigg\KeeprBundle\Elastica\Value\Aggregation as AggregationValue;
+use Frigg\KeeprBundle\Elastica\Value\Aggregation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -84,9 +85,17 @@ class SearchController extends Controller
             ->setNested($queryNested)
             ->setRanges($queryRanges)
             ->setObjects($queryObjects)
-            ->addAggregation('nested', new AggregationValue([
+            ->addAggregation('terms', new AggregationValue([
+                'field' => 'User.id',
+                'size' => 20
+            ]))
+            ->addAggregation('nested_terms', new AggregationValue([
                 'field' => 'Tags.name.untouched',
                 'size' => 20
+            ]))
+            ->addAggregation('date_histogram', new AggregationValue([
+                'field' => 'created_at',
+                'interval' => 'day'
             ]));
 
         $query = $queryBuilder

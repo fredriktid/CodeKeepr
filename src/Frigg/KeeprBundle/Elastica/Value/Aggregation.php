@@ -15,9 +15,14 @@ class Aggregation extends AbstractValue
      */
     public function getPath()
     {
-        $field = $this->getData('field');
+        $field = $this->getValue('field');
 
-        return substr($field, 0, strpos($field, '.'));
+        if ($separator = strpos($field, '.')) {
+            return substr($field, 0, $separator);
+
+        }
+
+        return $field;
     }
 
     /**
@@ -35,7 +40,7 @@ class Aggregation extends AbstractValue
      */
     public function getSize()
     {
-        return (int) $this->getData('size');
+        return (int) $this->getValue('size');
     }
 
     /**
@@ -43,6 +48,14 @@ class Aggregation extends AbstractValue
      */
     public function getField()
     {
-        return $this->getData('field');
+        return $this->getValue('field');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getInterval()
+    {
+        return $this->getValue('interval');
     }
 }
