@@ -245,21 +245,29 @@ class QueryBuilder
     {
         $this->query = new Query($this->boolQuery);
 
-        $this->applyQuerySize()
-            ->applyQuerySortBy()
-            ->applyQueryNestedAggregation();
+        $this->applySize()
+            ->applySortBy()
+            ->aggregateOnTerms()
+            ->aggregateOnNestedTerms()
+            ->aggregateOnDateHistogram();
 
         return $this->query;
     }
-    
-    protected function applyQuerySize()
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function applySize()
     {
         $this->query->setSize($this->size);
 
         return $this;
     }
 
-    protected function applyQuerySortBy()
+    /**
+     * @return QueryBuilder
+     */
+    protected function applySortBy()
     {
         foreach ($this->sortBy as $sortBy) {
             $this->query->addSort($sortBy);
@@ -269,16 +277,28 @@ class QueryBuilder
     }
 
     /**
-     * @return $this
+     * @return QueryBuilder
      */
-    protected function applyQueryNestedAggregation()
+    protected function aggregateOnTerms()
     {
-        if (!isset($this->aggregation['nested'])) {
-            return $this;
+        /** @var AggregationValue $aggObject */
+        foreach ($this->aggregation['terms'] as $aggObject) {
+            $termsAgg = new Aggregation\Terms($aggObject->getName());
+            $termsAgg->setField($aggObject->getField());
+            $termsAgg->setSize($aggObject->getSize());
+            $this->query->addAggregation($termsAgg);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function aggregateOnNestedTerms()
+    {
         /** @var AggregationValue $aggObject */
-        foreach ($this->aggregation['nested'] as $aggObject) {
+        foreach ($this->aggregation['nested_terms'] as $aggObject) {
             $termsAgg = new Aggregation\Terms($aggObject->getName());
             $termsAgg->setField($aggObject->getField());
             $termsAgg->setSize($aggObject->getSize());
@@ -286,6 +306,25 @@ class QueryBuilder
             $nestedAgg = new Aggregation\Nested($aggObject->getName(), $aggObject->getPath());
             $nestedAgg->addAggregation($termsAgg);
             $this->query->addAggregation($nestedAgg);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function aggregateOnDateHistogram()
+    {
+        /** @var AggregationValue $aggObject */
+        foreach ($this->aggregation['date_histogram'] as $aggObject) {
+            $histogram = new Aggregation\DateHistogram(
+                $aggObject->getName(),
+                $aggObject->getField(),
+                $aggObject->getInterval()
+            );
+            $histogram->setOrder('_count', 'desc');
+            $this->query->addAggregation($histogram);
         }
 
         return $this;
