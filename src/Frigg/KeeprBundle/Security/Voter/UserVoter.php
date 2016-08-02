@@ -47,10 +47,8 @@ class UserVoter extends BaseVoter implements VoterInterface
                 case 'USER_STAR_SHOW':
                 case 'USER_PRIVATE_POSTS':
                 case 'USER_POSTS':
-                    if (is_object($this->currentUser)) {
-                        if ($userEntity->getId() == $this->currentUser->getId()) {
-                            return VoterInterface::ACCESS_GRANTED;
-                        }
+                    if (is_object($this->currentUser) && $userEntity->getId() == $this->currentUser->getId()) {
+                        return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
                 case 'USER_STAR_NEW':
@@ -62,5 +60,7 @@ class UserVoter extends BaseVoter implements VoterInterface
 
             return VoterInterface::ACCESS_DENIED;
         }
+
+        return VoterInterface::ACCESS_ABSTAIN;
     }
 }

@@ -53,10 +53,8 @@ class PostVoter extends BaseVoter implements VoterInterface
                     break;
                 case 'POST_DELETE':
                 case 'POST_EDIT':
-                    if (is_object($this->currentUser)) {
-                        if ($this->currentUser->getId() == $postEntity->getUser()->getId()) {
-                            return VoterInterface::ACCESS_GRANTED;
-                        }
+                    if (is_object($this->currentUser) && $this->currentUser->getId() == $postEntity->getUser()->getId()) {
+                        return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
                 case 'POST_SHOW':
@@ -64,15 +62,15 @@ class PostVoter extends BaseVoter implements VoterInterface
                         return VoterInterface::ACCESS_GRANTED;
                     }
 
-                    if (is_object($this->currentUser)) {
-                        if ($this->currentUser->getId() == $postEntity->getUser()->getId()) {
-                            return VoterInterface::ACCESS_GRANTED;
-                        }
+                    if (is_object($this->currentUser) && $this->currentUser->getId() == $postEntity->getUser()->getId()) {
+                        return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
             }
 
             return VoterInterface::ACCESS_DENIED;
         }
+
+        return VoterInterface::ACCESS_ABSTAIN;
     }
 }
