@@ -4,6 +4,7 @@ namespace Frigg\KeeprBundle\Security\Voter;
 
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * Class BaseVoter.
@@ -30,12 +31,16 @@ class BaseVoter
     }
 
     /**
-     * @param AbstractToken $token
+     * @param TokenInterface $token
      */
-    protected function loadRolesFromToken($token)
+    protected function loadRolesFromToken(TokenInterface $token)
     {
-        /* @var UserInterface currentUser */
         $this->currentUser = $token->getUser();
+
+        if (!($token instanceof AbstractToken)) {
+            return;
+        }
+
         foreach ($token->getRoles() as $role) {
             $this->currentUserRoles[] = $role;
         }
