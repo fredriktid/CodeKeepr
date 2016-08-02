@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Security\Voter;
 
+use Frigg\KeeprBundle\Entity\Post;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -27,7 +28,7 @@ class PostVoter extends BaseVoter implements VoterInterface
      */
     public function vote(TokenInterface $token, $postEntity, array $attributes)
     {
-        if (!$this->supportsClass($postEntity)) {
+        if (!($postEntity instanceof Post)) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 
@@ -47,13 +48,13 @@ class PostVoter extends BaseVoter implements VoterInterface
                 case 'POST_STAR_NEW':
                 case 'POST_STAR_REMOVE':
                 case 'POST_NEW':
-                    if (is_object($this->currentUser)) {
+                    if ($this->isLoggedIn()) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
                 case 'POST_DELETE':
                 case 'POST_EDIT':
-                    if (is_object($this->currentUser) && $this->currentUser->getId() == $postEntity->getUser()->getId()) {
+                    if ($this->isOwnedByUserId($postEntity->getUser()->getId())) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
@@ -62,7 +63,7 @@ class PostVoter extends BaseVoter implements VoterInterface
                         return VoterInterface::ACCESS_GRANTED;
                     }
 
-                    if (is_object($this->currentUser) && $this->currentUser->getId() == $postEntity->getUser()->getId()) {
+                    if ($this->isOwnedByUserId($postEntity->getUser()->getId())) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;

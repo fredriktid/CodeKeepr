@@ -2,6 +2,7 @@
 
 namespace Frigg\KeeprBundle\Security\Voter;
 
+use Frigg\KeeprBundle\Entity\User;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -47,12 +48,12 @@ class UserVoter extends BaseVoter implements VoterInterface
                 case 'USER_STAR_SHOW':
                 case 'USER_PRIVATE_POSTS':
                 case 'USER_POSTS':
-                    if (is_object($this->currentUser) && $userEntity->getId() == $this->currentUser->getId()) {
+                    if ($this->isOwnedByUserId($userEntity->getId())) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;
                 case 'USER_STAR_NEW':
-                    if (is_object($this->currentUser)) {
+                    if ($this->isLoggedIn()) {
                         return VoterInterface::ACCESS_GRANTED;
                     }
                     break;

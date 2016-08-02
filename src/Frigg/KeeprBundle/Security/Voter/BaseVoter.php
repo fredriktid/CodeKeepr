@@ -65,4 +65,25 @@ class BaseVoter
     {
         return 0 === strpos($this->className(get_called_class()), $this->className(get_class($entity)));
     }
+
+    /**
+     * @param int $userId
+     * @return bool
+     */
+    protected function isOwnedByUserId($userId)
+    {
+        if (!$this->isLoggedIn()) {
+            return false;
+        }
+
+        return $this->currentUser->getId() == $userId;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isLoggedIn()
+    {
+        return is_object($this->currentUser);
+    }
 }
