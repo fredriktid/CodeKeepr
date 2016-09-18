@@ -24,3 +24,7 @@ parameters:
     oauth_google_secret: 'default'
     oauth_reddit_id: 'default'
     oauth_reddit_secret: 'default'
+
+    elastica_host: ~
+    elastica_port: ~
+    elastica_transport: ~
